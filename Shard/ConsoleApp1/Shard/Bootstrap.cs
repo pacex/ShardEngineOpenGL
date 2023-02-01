@@ -311,6 +311,12 @@ namespace Shard
                         phys.drawDebugColliders();
                     }
 
+                    // Let Game draw to the screen
+                    runningGame.draw();
+
+                    // Let GameObjects draw to the screen
+                    GameObjectManager.getInstance().drawUpdate();
+
                 }
 
                 // Render the screen.

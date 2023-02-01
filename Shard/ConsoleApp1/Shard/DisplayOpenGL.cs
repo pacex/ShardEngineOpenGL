@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
+using OpenTK.Mathematics;
 using OpenTK.Windowing.Desktop;
 
 namespace Shard
@@ -29,7 +30,7 @@ namespace Shard
         public override void initialize()
         {
 
-            _window = new WindowGL();
+            _window = new WindowGL(Color4.Teal);
             _window.Initialize();
         }
 

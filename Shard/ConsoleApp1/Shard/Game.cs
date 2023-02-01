@@ -25,6 +25,10 @@ namespace Shard
 
         public abstract void initialize();
         public abstract void update();
+        public virtual void draw()
+        {
+
+        }
 
         public virtual bool isRunning()
         {
