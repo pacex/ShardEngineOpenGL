@@ -8,22 +8,21 @@ using System.Threading.Tasks;
 
 namespace Shard
 {
-    class WindowGL : GameWindow
+    class WindowGL : NativeWindow
     {
-        public WindowGL() : base(GameWindowSettings.Default, NativeWindowSettings.Default)
+        public WindowGL() : base(NativeWindowSettings.Default)
         {
         }
 
         public void Initialize()
         {
             base.Context?.MakeCurrent();
-            OnLoad();
             OnResize(new ResizeEventArgs(base.Size));
         }
 
         public void Display()
         {
-            SwapBuffers();
+            base.Context.SwapBuffers();
         }
 
         public void ProcessWindowEvents()
