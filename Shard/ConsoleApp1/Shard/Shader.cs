@@ -74,6 +74,11 @@ namespace Shard
             GL.UseProgram(Handle);
         }
 
+        public int GetAttribLocation(string attribName)
+        {
+            return GL.GetAttribLocation(Handle, attribName);
+        }
+
 
 
         private bool disposedValue = false;
