@@ -30,7 +30,7 @@ namespace Shard
         public override void initialize()
         {
 
-            _window = new WindowGL(Color4.Teal);
+            _window = new WindowGL(Color4.Black);
             _window.Initialize();
         }
 

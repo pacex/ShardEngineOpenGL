@@ -11,6 +11,17 @@ namespace Shard
 {
     class Shader : IDisposable
     {
+        private static Shader defaultShader = null;
+
+        public static Shader GetDefaultShader()
+        {
+            if (defaultShader == null)
+                defaultShader = new Shader("Shaders/default.vert", "Shaders/default.frag");
+
+            return defaultShader;
+        }
+
+
         public int Handle { get; private set; }
 
         public Shader(string vertexPath, string fragmentPath)

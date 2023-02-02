@@ -30,43 +30,11 @@ namespace Shard
             GL.ClearColor(clearColor);
 
 
-            shader = new Shader("Shaders/default.vert", "Shaders/default.frag");
+            shader = Shader.GetDefaultShader();
         }
 
         public void Display()
         {
-
-            // Debug code Hello triangle
-            float[] vertices = {
-                -0.5f, -0.5f, 0.0f, //Bottom-left vertex
-                 0.5f, -0.5f, 0.0f, //Bottom-right vertex
-                 0.0f,  0.5f, 0.0f  //Top vertex
-            };
-
-            int vertexArrayObject;
-            vertexArrayObject = GL.GenVertexArray();
-            GL.BindVertexArray(vertexArrayObject);
-
-            int vertexBufferObject;
-            vertexBufferObject = GL.GenBuffer();
-            GL.BindBuffer(BufferTarget.ArrayBuffer, vertexBufferObject);
-            GL.BufferData(BufferTarget.ArrayBuffer, vertices.Length * sizeof(float), vertices, BufferUsageHint.StaticDraw);
-
-            GL.VertexAttribPointer(shader.GetAttribLocation("aPosition"), 3, VertexAttribPointerType.Float, false, 3 * sizeof(float), 0);
-            GL.EnableVertexAttribArray(0);
-
-            GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
-            GL.BindVertexArray(0);
-
-
-
-            shader.Use();
-            GL.BindVertexArray(vertexArrayObject);
-            GL.DrawArrays(PrimitiveType.Triangles, 0, 3);
-
-            
-
-
             base.Context.SwapBuffers();
         }
 
