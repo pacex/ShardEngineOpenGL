@@ -88,6 +88,11 @@ namespace Shard
             return displayEngine;
         }
 
+        public static DisplayOpenGL GetDisplayOpenGL()
+        {
+            return (DisplayOpenGL)displayEngine;
+        }
+
         public static Sound getSound()
         {
             return soundEngine;

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.IO;
 using OpenTK.Graphics.OpenGL;
 using OpenTK.Compute.OpenCL;
+using OpenTK.Mathematics;
 
 namespace Shard
 {
@@ -19,6 +20,16 @@ namespace Shard
                 defaultShader = new Shader("Shaders/default.vert", "Shaders/default.frag");
 
             return defaultShader;
+        }
+
+        public static void SetDefaultShader()
+        {
+            DisplayOpenGL display = (DisplayOpenGL)Bootstrap.getDisplay();
+            Matrix4 mvp = display.Projection * display.View * display.Model;
+
+            GetDefaultShader().Use();
+            int mvpLocation = GL.GetUniformLocation(defaultShader.Handle, "mvp");
+            GL.UniformMatrix4(mvpLocation, false, ref mvp);
         }
 
 

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using OpenTK.Graphics.OpenGL;
+using OpenTK.Mathematics;
 
 namespace Shard
 {
@@ -12,8 +13,12 @@ namespace Shard
 
         private float[] vertices;
         private uint[] indices;
-        private Shader shader;
         private Mesh mesh;
+
+        private float rot;
+
+        Matrix4 mat;
+
 
         public void handleInput(InputEvent inp, string eventType)
         {
@@ -34,19 +39,26 @@ namespace Shard
                 1, 2, 3    // second triangle
             };
 
-            shader = Shader.GetDefaultShader();
 
             mesh = new Mesh(MeshPreset.UnitQuad);
+
+            Bootstrap.GetDisplayOpenGL().Projection = Matrix4.Identity;
+            Bootstrap.GetDisplayOpenGL().View = Matrix4.Identity;
+            Bootstrap.GetDisplayOpenGL().Model = Matrix4.Identity;
+
         }
 
         public override void update()
         {
-            
+            rot += 0.01f;
+            mat = Transform3D.buildTransformMatrix(Vector3.Zero, new Vector3(0.0f, 0.0f, rot), Vector3.One);
         }
 
         public override void draw()
         {
-            shader.Use();
+            Bootstrap.GetDisplayOpenGL().Model = mat;
+
+            Shader.SetDefaultShader();
             mesh.Draw();
         }
     }

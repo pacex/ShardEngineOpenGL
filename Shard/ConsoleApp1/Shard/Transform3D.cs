@@ -8,13 +8,33 @@
 *   
 */
 
+using OpenTK.Mathematics;
+
 namespace Shard
 {
+    
+
+
     class Transform3D : Transform
     {
         private double z;
         private double rotx, roty;
-        private int scalez;
+        private double scalez;
+
+        public static Matrix4 buildTransformMatrix(Vector3 translation, Vector3 rotation, Vector3 scale)
+        {
+            Matrix4 rx, ry, rz, s, t;
+
+            Matrix4.CreateRotationZ(rotation.Z, out rz);
+            Matrix4.CreateRotationY(rotation.Y, out ry);
+            Matrix4.CreateRotationX(rotation.X, out rx);
+
+            Matrix4.CreateScale(scale.X, scale.Y, scale.Z, out s);
+
+            Matrix4.CreateTranslation(translation.X, translation.Y, translation.Z, out t);
+
+            return t * (rz * ry * rx) * s;
+        }
 
         public Transform3D(GameObject o) : base(o)
         {
@@ -28,12 +48,27 @@ namespace Shard
 
 
 
-        public int Scalez
+        public double Scalez
         {
             get => scalez;
             set => scalez = value;
         }
         public double Rotx { get => rotx; set => rotx = value; }
         public double Roty { get => roty; set => roty = value; }
+
+        public Matrix4 getMatrix()
+        {
+            Matrix4 rx, ry, rz, s, t;
+
+            Matrix4.CreateRotationZ((float)Rotz, out rz);
+            Matrix4.CreateRotationY((float)Roty, out ry);
+            Matrix4.CreateRotationX((float)Rotx, out rx);
+
+            Matrix4.CreateScale((float)Scalex, (float)Scaley, (float)Scalez, out s);
+
+            Matrix4.CreateTranslation((float)X, (float)Y, (float)Z, out t);
+
+            return t * (rz * ry * rx) * s;
+        }
     }
 }

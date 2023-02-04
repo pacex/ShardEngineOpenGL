@@ -16,8 +16,6 @@ namespace Shard
     {
         private Color4 clearColor;
 
-        Shader shader;
-
         public WindowGL(Color4 clearColor) : base(NativeWindowSettings.Default)
         {
             this.clearColor = clearColor;
@@ -28,9 +26,6 @@ namespace Shard
             base.Context?.MakeCurrent();
             OnResize(new ResizeEventArgs(base.Size));
             GL.ClearColor(clearColor);
-
-
-            shader = Shader.GetDefaultShader();
         }
 
         public void Display()
@@ -52,7 +47,6 @@ namespace Shard
         protected override void OnClosing(CancelEventArgs e)
         {
             base.OnClosing(e);
-            shader.Dispose();
         }
 
     }

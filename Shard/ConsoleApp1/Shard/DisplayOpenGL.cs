@@ -15,6 +15,10 @@ namespace Shard
     {
         private WindowGL _window;
 
+        public Matrix4 Model;
+        public Matrix4 View;
+        public Matrix4 Projection;
+
 
         public override void clearDisplay()
         {
