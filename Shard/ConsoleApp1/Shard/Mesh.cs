@@ -40,10 +40,10 @@ namespace Shard
 
                 case MeshPreset.UnitQuad:
                     vertices = new float[] {
-                        0.5f,  0.5f, 0.0f,  // top right
-                        0.5f, -0.5f, 0.0f,  // bottom right
-                        -0.5f, -0.5f, 0.0f,  // bottom left
-                        -0.5f,  0.5f, 0.0f   // top left
+                        0.5f, 0.5f, 0.0f,   0.0f, 0.0f, -1.0f,  1.0f, 1.0f, 0.0f, 1.0f,     1.0f, 1.0f,// top right
+                        0.5f, -0.5f, 0.0f,  0.0f, 0.0f, -1.0f,  1.0f, 0.0f, 0.0f, 1.0f,     1.0f, 0.0f,// bottom right
+                        -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, -1.0f,  0.0f, 0.0f, 0.0f, 1.0f,     0.0f, 0.0f,// bottom left
+                        -0.5f, 0.5f, 0.0f,  0.0f, 0.0f, -1.0f,  0.0f, 1.0f, 0.0f, 1.0f,     0.0f, 1.0f// top left
                     };
 
                     indices = new uint[] {
@@ -69,14 +69,23 @@ namespace Shard
             vertexArrayObject = GL.GenVertexArray();
             GL.BindVertexArray(vertexArrayObject);
 
-            int vertexBufferObject;
-            vertexBufferObject = GL.GenBuffer();
-            GL.BindBuffer(BufferTarget.ArrayBuffer, vertexBufferObject);
+            int[] vertexBufferObject = new int[4];
+            GL.GenBuffers(4, vertexBufferObject);
+            GL.BindBuffer(BufferTarget.ArrayBuffer, vertexBufferObject[0]);
             GL.BufferData(BufferTarget.ArrayBuffer, vertices.Length * sizeof(float), vertices, BufferUsageHint.StaticDraw);
 
-
-            GL.VertexAttribPointer(Shader.GetDefaultShader().GetAttribLocation("aPosition"), 3, VertexAttribPointerType.Float, false, 3 * sizeof(float), 0);
+            // Vertex Attributes: (0) vec3 pos, (1) vec3 normal, (2) vec4 color, (3) vec2 uv
+            GL.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, 12 * sizeof(float), 0 * sizeof(float));
             GL.EnableVertexAttribArray(0);
+
+            GL.VertexAttribPointer(1, 3, VertexAttribPointerType.Float, false, 12 * sizeof(float), 3 * sizeof(float));
+            GL.EnableVertexAttribArray(1);
+
+            GL.VertexAttribPointer(2, 4, VertexAttribPointerType.Float, false, 12 * sizeof(float), 6 * sizeof(float));
+            GL.EnableVertexAttribArray(2);
+
+            GL.VertexAttribPointer(3, 2, VertexAttribPointerType.Float, false, 12 * sizeof(float), 10 * sizeof(float));
+            GL.EnableVertexAttribArray(3);
 
             GL.BindVertexArray(0);
             GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
