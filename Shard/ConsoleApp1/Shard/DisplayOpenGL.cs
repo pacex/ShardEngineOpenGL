@@ -13,7 +13,7 @@ namespace Shard
 {
     class DisplayOpenGL : Display
     {
-        private WindowGL _window;
+        public WindowGL Window { get; private set; }
 
         public Matrix4 Model;
         public Matrix4 View;
@@ -22,20 +22,20 @@ namespace Shard
 
         public override void clearDisplay()
         {
-            GL.Clear(ClearBufferMask.ColorBufferBit);
-            _window.ProcessWindowEvents();
+            GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+            Window.ProcessWindowEvents();
         }
 
         public override void display()
         {
-            _window.Display();
+            Window.Display();
         }
 
         public override void initialize()
         {
 
-            _window = new WindowGL(Color4.Black);
-            _window.Initialize();
+            Window = new WindowGL(Color4.Black);
+            Window.Initialize();
         }
 
         public override void showText(string text, double x, double y, int size, int r, int g, int b)

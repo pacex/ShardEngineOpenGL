@@ -40,10 +40,15 @@ namespace Shard
             };
 
 
-            mesh = new Mesh(MeshPreset.UnitQuad);
+            mesh = new Mesh();
 
-            Bootstrap.GetDisplayOpenGL().Projection = Matrix4.Identity;
-            Bootstrap.GetDisplayOpenGL().View = Matrix4.Identity;
+            Vector2i windowSize = Bootstrap.GetDisplayOpenGL().Window.Size;
+
+            Bootstrap.GetDisplayOpenGL().Projection = Matrix4.CreatePerspectiveFieldOfView(0.4f * (float)Math.PI, (float)windowSize.X / (float)windowSize.Y, 0.1f, 256.0f);
+            Bootstrap.GetDisplayOpenGL().View = Matrix4.LookAt(new Vector3(-3,0,1), Vector3.Zero, Vector3.UnitZ);
+
+            //Bootstrap.GetDisplayOpenGL().Projection = Matrix4.Identity;
+            //Bootstrap.GetDisplayOpenGL().View = Matrix4.Identity;
             Bootstrap.GetDisplayOpenGL().Model = Matrix4.Identity;
 
         }

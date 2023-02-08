@@ -26,6 +26,8 @@ namespace Shard
             base.Context?.MakeCurrent();
             OnResize(new ResizeEventArgs(base.Size));
             GL.ClearColor(clearColor);
+            GL.Enable(EnableCap.DepthTest);
+            GL.DepthFunc(DepthFunction.Less);
         }
 
         public void Display()
@@ -36,6 +38,11 @@ namespace Shard
         public void ProcessWindowEvents()
         {
             NativeWindow.ProcessWindowEvents(base.IsEventDriven);
+        }
+
+        public Vector2i GetWindowSize()
+        {
+            return base.Size;
         }
 
         protected override void OnResize(ResizeEventArgs e)

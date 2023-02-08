@@ -25,11 +25,12 @@ namespace Shard
         public static void SetDefaultShader()
         {
             DisplayOpenGL display = (DisplayOpenGL)Bootstrap.getDisplay();
-            Matrix4 mvp = display.Projection * display.View * display.Model;
 
             GetDefaultShader().Use();
-            int mvpLocation = GL.GetUniformLocation(defaultShader.Handle, "mvp");
-            GL.UniformMatrix4(mvpLocation, false, ref mvp);
+            GL.UniformMatrix4(GL.GetUniformLocation(defaultShader.Handle, "model"), false, ref display.Model);
+            GL.UniformMatrix4(GL.GetUniformLocation(defaultShader.Handle, "view"), false, ref display.View);
+            GL.UniformMatrix4(GL.GetUniformLocation(defaultShader.Handle, "proj"), false, ref display.Projection);
+
         }
 
 
