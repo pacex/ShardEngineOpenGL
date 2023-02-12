@@ -58,7 +58,6 @@ namespace Shard
             rotate(0);
         }
 
-
         public void recalculateCentre()
         {
 

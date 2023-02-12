@@ -107,6 +107,10 @@ namespace Shard
         {
         }
 
+        public virtual void drawUpdate()
+        {
+        }
+
         public GameObject()
         {
             GameObjectManager.getInstance().addGameObject(this);

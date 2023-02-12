@@ -65,6 +65,17 @@ namespace Shard
             }
         }
 
+        public void drawUpdate()
+        {
+            GameObject gob;
+            for (int i = 0; i < myObjects.Count; i++)
+            {
+                gob = myObjects[i];
+
+                gob.drawUpdate();
+            }
+        }
+
         public void update()
         {
             List<int> toDestroy = new List<int>();
