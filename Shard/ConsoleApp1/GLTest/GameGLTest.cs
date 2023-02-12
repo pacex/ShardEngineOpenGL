@@ -34,13 +34,19 @@ namespace Shard
 
             go1 = new VisualGameObject(new Mesh());
             go2 = new VisualGameObject(new Mesh());
-            //go2.Transform.Z = -5;
+            go2.Transform.Translation.Z = 0.5f;
+            go1.Transform.Translation.Z = -0.5f;
+
+            go2.Transform.Rotate(Quaternion.FromEulerAngles(0.0f, 0.0f, 1.0f));
 
         }
 
         public override void update()
         {
+            float rot = 0.8f * (float)Bootstrap.getDeltaTime();
 
+            go1.Transform.Rotate(Quaternion.FromAxisAngle(Vector3.UnitZ, rot));
+            go2.Transform.Rotate(Quaternion.FromAxisAngle(Vector3.UnitZ, -rot));
         }
 
         public override void draw()
