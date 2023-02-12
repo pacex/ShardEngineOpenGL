@@ -15,7 +15,8 @@ namespace Shard
 {
     class GameObject
     {
-        private Transform3D transform;
+        private Transform3D transformOld;
+        private Transform3DNew transform;
         private bool transient;
         private bool toBeDestroyed;
         private bool visible;
@@ -70,14 +71,19 @@ namespace Shard
             return true;
         }
 
-        internal Transform3D Transform
+        internal Transform3D TransformOld
+        {
+            get => transformOld;
+        }
+
+        internal Transform3DNew Transform
         {
             get => transform;
         }
 
         internal Transform Transform2D
         {
-            get => (Transform)transform;
+            get => (Transform)transformOld;
         }
 
 
@@ -111,7 +117,8 @@ namespace Shard
         {
             GameObjectManager.getInstance().addGameObject(this);
 
-            transform = new Transform3D(this);
+            transformOld = new Transform3D(this);
+            transform = new Transform3DNew();
             visible = false;
 
             ToBeDestroyed = false;
@@ -129,13 +136,14 @@ namespace Shard
                 return;
             }
 
-            if (Transform.X > 0 && Transform.X < Bootstrap.getDisplay().getWidth())
+            /*
+            if (TransformOld.X > 0 && TransformOld.X < Bootstrap.getDisplay().getWidth())
             {
-                if (Transform.Y > 0 && Transform.Y < Bootstrap.getDisplay().getHeight())
+                if (TransformOld.Y > 0 && TransformOld.Y < Bootstrap.getDisplay().getHeight())
                 {
                     return;
                 }
-            }
+            }*/
 
 
             ToBeDestroyed = true;
@@ -147,7 +155,7 @@ namespace Shard
             PhysicsManager.getInstance().removePhysicsObject(myBody);
 
             myBody = null;
-            transform = null;
+            transformOld = null;
         }
 
 

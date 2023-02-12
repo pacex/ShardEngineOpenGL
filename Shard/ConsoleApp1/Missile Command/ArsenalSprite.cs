@@ -9,9 +9,9 @@ namespace MissileCommand
         {
 
 
-            this.Transform.X = 200.0f;
-            this.Transform.Y = 100.0f;
-            this.Transform.SpritePath = Bootstrap.getAssetManager().getAssetPath("missile.png");
+            this.TransformOld.X = 200.0f;
+            this.TransformOld.Y = 100.0f;
+            this.TransformOld.SpritePath = Bootstrap.getAssetManager().getAssetPath("missile.png");
 
         }
 

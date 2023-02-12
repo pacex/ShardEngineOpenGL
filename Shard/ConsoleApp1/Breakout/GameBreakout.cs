@@ -44,8 +44,8 @@ namespace Shard
                     }
 
                     Brick br = new Brick();
-                    br.Transform.X = 100 + (i * 65);
-                    br.Transform.Y = 100 + (j * 33);
+                    br.TransformOld.X = 100 + (i * 65);
+                    br.TransformOld.Y = 100 + (j * 33);
                     br.Health = 1 + rand.Next(3);
                     myBricks.Add(br);
                 }
@@ -61,8 +61,8 @@ namespace Shard
             Paddle p = new Paddle();
 
             Ball b = new Ball();
-            b.Transform.X = 50;
-            b.Transform.Y = 50;
+            b.TransformOld.X = 50;
+            b.TransformOld.Y = 50;
             b.Dir = new Vector2(1, 1);
             b.LastDir = new Vector2(1, 1);
 

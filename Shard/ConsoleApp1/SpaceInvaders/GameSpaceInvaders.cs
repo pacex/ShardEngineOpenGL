@@ -82,11 +82,11 @@ namespace Shard
 
                         if (ymod != 0)
                         {
-                            myInvaders[i, j].Transform.translate(0, ymod);
+                            myInvaders[i, j].TransformOld.translate(0, ymod);
                         }
                         else
                         {
-                            myInvaders[i, j].Transform.translate(xdir, 0);
+                            myInvaders[i, j].TransformOld.translate(xdir, 0);
                         }
 
                         livingInvaders.Add(myInvaders[i, j]);
@@ -121,8 +121,8 @@ namespace Shard
                 for (int i = 0; i < columns; i++)
                 {
                     Invader invader = new Invader();
-                    invader.Transform.X = 100 + (i * 50);
-                    invader.Transform.Y = 100 + (ymod * 50);
+                    invader.TransformOld.X = 100 + (i * 50);
+                    invader.TransformOld.Y = 100 + (ymod * 50);
 
                     myInvaders[j, i] = invader;
 
@@ -144,10 +144,10 @@ namespace Shard
 
                 Bunker b = new Bunker();
 
-                b.Transform.X = 200 + (i * 180);
-                b.Transform.Y = 600;
+                b.TransformOld.X = 200 + (i * 180);
+                b.TransformOld.Y = 600;
 
-                Debug.Log("Setting up bunker " + i + "at " + b.Transform.X + ", " + b.Transform.Y);
+                Debug.Log("Setting up bunker " + i + "at " + b.TransformOld.X + ", " + b.TransformOld.Y);
 
                 b.setupBunker();
 

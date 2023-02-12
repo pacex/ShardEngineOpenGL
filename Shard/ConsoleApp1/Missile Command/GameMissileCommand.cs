@@ -79,7 +79,7 @@ namespace Shard
                     imod = 200;
                 }
 
-                c.Transform.translate(100 + imod + (i * 140), 750);
+                c.TransformOld.translate(100 + imod + (i * 140), 750);
 
             }
 
@@ -88,7 +88,7 @@ namespace Shard
             for (int i = 0; i < 3; i++)
             {
                 Arsenal a = new Arsenal();
-                a.Transform.translate(25 + (i * 550), 700);
+                a.TransformOld.translate(25 + (i * 550), 700);
                 a.resetMissiles();
 
                 myArsenals.Add(a);
@@ -126,15 +126,15 @@ namespace Shard
             // generate an incoming missile
 
             m = new Missile();
-            m.Transform.translate(rand.Next(0, Bootstrap.getDisplay().getWidth()), 0);
+            m.TransformOld.translate(rand.Next(0, Bootstrap.getDisplay().getWidth()), 0);
 
-            m.Originx = (float)m.Transform.X;
-            m.Originy = (float)m.Transform.Y;
+            m.Originx = (float)m.TransformOld.X;
+            m.Originy = (float)m.TransformOld.Y;
 
             target = theCities[rand.Next(0, theCities.Count)];
 
-            m.Targetx = (float)target.Transform.Centre.X;
-            m.Targety = (float)target.Transform.Centre.Y;
+            m.Targetx = (float)target.TransformOld.Centre.X;
+            m.Targety = (float)target.TransformOld.Centre.Y;
 
             // Some of our missiles will split before they explode.
             if (rand.Next(0, 100) < 10)
@@ -195,13 +195,13 @@ namespace Shard
 
                 a.fireMissile();
 
-                m.Originx = (float)a.Transform.Centre.X;
-                m.Originy = (float)a.Transform.Centre.Y;
+                m.Originx = (float)a.TransformOld.Centre.X;
+                m.Originy = (float)a.TransformOld.Centre.Y;
 
-                m.Transform.translate(m.Originx, m.Originy);
+                m.TransformOld.translate(m.Originx, m.Originy);
 
-                m.Transform.X = m.Originx;
-                m.Transform.Y = m.Originy;
+                m.TransformOld.X = m.Originx;
+                m.TransformOld.Y = m.Originy;
 
                 m.Targetx = inp.X;
                 m.Targety = inp.Y;

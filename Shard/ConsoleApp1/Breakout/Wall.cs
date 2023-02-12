@@ -44,7 +44,7 @@ namespace GameBreakout
 
         public override string ToString()
         {
-            return "Wall: [" + Transform.X + ", " + Transform.Y + "]";
+            return "Wall: [" + TransformOld.X + ", " + TransformOld.Y + "]";
         }
 
 

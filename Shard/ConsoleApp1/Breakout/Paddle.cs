@@ -13,11 +13,11 @@ namespace GameBreakout
         public override void initialize()
         {
 
-            this.Transform.X = 500.0f;
-            this.Transform.Y = 800.0f;
-            this.Transform.SpritePath = Bootstrap.getAssetManager().getAssetPath("test.png");
-            this.Transform.Scaley = 0.5f;
-            this.Transform.Scalex = 1.5f;
+            this.TransformOld.X = 500.0f;
+            this.TransformOld.Y = 800.0f;
+            this.TransformOld.SpritePath = Bootstrap.getAssetManager().getAssetPath("test.png");
+            this.TransformOld.Scaley = 0.5f;
+            this.TransformOld.Scalex = 1.5f;
 
 
             Bootstrap.getInput().addListener(this);
@@ -87,27 +87,27 @@ namespace GameBreakout
 
             if (left)
             {
-                MyBody.addForce(this.Transform.Forward, -1 * 2000f);
+                MyBody.addForce(this.TransformOld.Forward, -1 * 2000f);
             }
 
 
             if (right)
             {
-                MyBody.addForce(this.Transform.Forward, 2000f);
+                MyBody.addForce(this.TransformOld.Forward, 2000f);
             }
 
 
-            if (this.Transform.X < 0)
+            if (this.TransformOld.X < 0)
             {
-                this.Transform.translate(-1 * Transform.X, 0);
+                this.TransformOld.translate(-1 * TransformOld.X, 0);
             }
 
 
-            boundsx = wid - (this.Transform.X + this.Transform.Wid);
+            boundsx = wid - (this.TransformOld.X + this.TransformOld.Wid);
 
             if (boundsx < 0)
             {
-                this.Transform.translate(boundsx, 0);
+                this.TransformOld.translate(boundsx, 0);
             }
 
 
@@ -132,7 +132,7 @@ namespace GameBreakout
 
         public override string ToString()
         {
-            return "Paddle: [" + Transform.X + ", " + Transform.Y + ", " + Transform.Wid + ", " + Transform.Ht + "]";
+            return "Paddle: [" + TransformOld.X + ", " + TransformOld.Y + ", " + TransformOld.Wid + ", " + TransformOld.Ht + "]";
         }
 
     }

@@ -9,7 +9,7 @@ namespace SpaceInvaders
         {
 
 
-            this.Transform.SpritePath = Bootstrap.getAssetManager().getAssetPath("bunkerBit.png");
+            this.TransformOld.SpritePath = Bootstrap.getAssetManager().getAssetPath("bunkerBit.png");
 
             setPhysicsEnabled();
             MyBody.addRectCollider();

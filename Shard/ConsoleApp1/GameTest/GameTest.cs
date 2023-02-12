@@ -38,9 +38,9 @@ namespace Shard
 
 
             background = new GameObject();
-            background.Transform.SpritePath = getAssetManager().getAssetPath ("background2.jpg");
-            background.Transform.X = 0;
-            background.Transform.Y = 0;
+            background.TransformOld.SpritePath = getAssetManager().getAssetPath ("background2.jpg");
+            background.TransformOld.X = 0;
+            background.TransformOld.Y = 0;
 
 
         }
@@ -65,8 +65,8 @@ namespace Shard
             if (eventType == "MouseDown" && inp.Button == 1)
             {
                 Asteroid asteroid = new Asteroid();
-                asteroid.Transform.X = inp.X;
-                asteroid.Transform.Y = inp.Y;
+                asteroid.TransformOld.X = inp.X;
+                asteroid.TransformOld.Y = inp.Y;
                 asteroids.Add (asteroid);
             }
 

@@ -40,7 +40,7 @@ namespace MissileCommand
 
             //            MyBody.Kinematic = true;
 
-            c = MyBody.addCircleCollider((int)Transform.X, (int)Transform.Y, 2);
+            c = MyBody.addCircleCollider((int)TransformOld.X, (int)TransformOld.Y, 2);
 
             MyBody.PassThrough = true;
         }
@@ -52,8 +52,8 @@ namespace MissileCommand
 
 
             exp = new Explosion();
-            exp.Transform.X = Transform.X;
-            exp.Transform.Y = Transform.Y;
+            exp.TransformOld.X = TransformOld.X;
+            exp.TransformOld.Y = TransformOld.Y;
             exp.TargetTag = TargetTag;
 
             ToBeDestroyed = true;
@@ -69,8 +69,8 @@ namespace MissileCommand
 
             Color col = Color.FromArgb(rand.Next(0, 256), rand.Next(0, 256), rand.Next(0, 256));
 
-            xDist = (float)(Targetx - Transform.X);
-            yDist = (float)(Targety - Transform.Y);
+            xDist = (float)(Targetx - TransformOld.X);
+            yDist = (float)(Targety - TransformOld.Y);
 
             v = new(xDist, yDist);
             v = Vector2.Normalize (v);
@@ -78,14 +78,14 @@ namespace MissileCommand
             v.X = (float)(v.X * Bootstrap.getDeltaTime() * Speed);
             v.Y = (float)(v.Y * Bootstrap.getDeltaTime() * Speed);
 
-            Transform.translate(v);
+            TransformOld.translate(v);
 
             xDist = Math.Abs(xDist);
             yDist = Math.Abs(yDist);
 
             // Since we're not building a collider around a sprite or forces, we have to do this manually.
-            c.X = (float)Transform.Centre.X;
-            c.Y = (float)Transform.Centre.Y;
+            c.X = (float)TransformOld.Centre.X;
+            c.Y = (float)TransformOld.Centre.Y;
             c.Rad = 2;
             //            c.recalculate();
 
@@ -112,13 +112,13 @@ namespace MissileCommand
                     for (int i = 0; i < numWarheads; i++)
                     {
                         Missile m = new Missile();
-                        m.Originx = (float)this.Transform.X;
-                        m.Originy = (float)this.Transform.Y;
+                        m.Originx = (float)this.TransformOld.X;
+                        m.Originy = (float)this.TransformOld.Y;
 
-                        m.Transform.translate(m.Originx, m.Originy);
+                        m.TransformOld.translate(m.Originx, m.Originy);
 
-                        m.Targetx = remainingCities[i].Transform.Centre.X;
-                        m.Targety = remainingCities[i].Transform.Centre.Y;
+                        m.Targetx = remainingCities[i].TransformOld.Centre.X;
+                        m.Targety = remainingCities[i].TransformOld.Centre.Y;
 
                         m.addTag("EnemyMissile");
 
@@ -141,8 +141,8 @@ namespace MissileCommand
             }
 
 
-            Bootstrap.getDisplay().drawLine((int)Originx, (int)Originy, (int)Transform.X, (int)Transform.Y, myColor);
-            Bootstrap.getDisplay().drawCircle((int)Transform.X, (int)Transform.Y, 2, col);
+            Bootstrap.getDisplay().drawLine((int)Originx, (int)Originy, (int)TransformOld.X, (int)TransformOld.Y, myColor);
+            Bootstrap.getDisplay().drawCircle((int)TransformOld.X, (int)TransformOld.Y, 2, col);
 
             mirvCount += Bootstrap.getDeltaTime();
         }
@@ -163,7 +163,7 @@ namespace MissileCommand
 
         public override string ToString()
         {
-            return "Missile: [" + Transform.X + ", " + Transform.Y + ", " + c.Rad + "]";
+            return "Missile: [" + TransformOld.X + ", " + TransformOld.Y + ", " + c.Rad + "]";
         }
 
 

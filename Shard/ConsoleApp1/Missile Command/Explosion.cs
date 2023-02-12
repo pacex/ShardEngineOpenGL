@@ -47,8 +47,8 @@ namespace MissileCommand
 
             currentRadius += (float)(radDir * Bootstrap.getDeltaTime() * explosionSpeed);
 
-            c.X = (float)Transform.Centre.X;
-            c.Y = (float)Transform.Centre.Y;
+            c.X = (float)TransformOld.Centre.X;
+            c.Y = (float)TransformOld.Centre.Y;
             c.Rad = currentRadius;
             c.recalculate();
 
@@ -59,7 +59,7 @@ namespace MissileCommand
             }
 
 
-            Bootstrap.getDisplay().drawFilledCircle((int)Transform.X, (int)Transform.Y, (int)currentRadius, col);
+            Bootstrap.getDisplay().drawFilledCircle((int)TransformOld.X, (int)TransformOld.Y, (int)currentRadius, col);
 
         }
 

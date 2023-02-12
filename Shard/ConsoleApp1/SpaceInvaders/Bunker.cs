@@ -31,8 +31,8 @@ namespace SpaceInvaders
 
                     BunkerBit myBit = new BunkerBit();
 
-                    myBit.Transform.X = this.Transform.X + (j * 16);
-                    myBit.Transform.Y = this.Transform.Y + (i * 16);
+                    myBit.TransformOld.X = this.TransformOld.X + (j * 16);
+                    myBit.TransformOld.Y = this.TransformOld.Y + (i * 16);
                 }
 
             }

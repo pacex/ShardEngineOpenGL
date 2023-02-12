@@ -14,7 +14,7 @@ namespace GameBreakout
         {
 
 
-            this.Transform.SpritePath = Bootstrap.getAssetManager().getAssetPath("ball.png");
+            this.TransformOld.SpritePath = Bootstrap.getAssetManager().getAssetPath("ball.png");
             setPhysicsEnabled();
 
 
@@ -27,11 +27,11 @@ namespace GameBreakout
             MyBody.StopOnCollision = false;
             MyBody.ReflectOnCollision = true;
 
-            Transform.Scalex = 2;
-            Transform.Scaley = 2;
+            TransformOld.Scalex = 2;
+            TransformOld.Scaley = 2;
 
 
-            Transform.rotate(90);
+            TransformOld.rotate(90);
 
 
         }
@@ -54,7 +54,7 @@ namespace GameBreakout
                         if (other.Parent.checkTag("Paddle"))
                         {
 //                            Debug.Log ("Hit the Paddle");
-                            Dir = new Vector2(Transform.Centre.X - other.Trans.Centre.X, LastDir.Y * -1);
+                            Dir = new Vector2(TransformOld.Centre.X - other.Trans.Centre.X, LastDir.Y * -1);
                         }
 
                         if (other.Parent.checkTag("Brick"))
@@ -99,37 +99,37 @@ namespace GameBreakout
         {
 
 
-            if (Transform.Centre.Y - Transform.Ht <= 0)
+            if (TransformOld.Centre.Y - TransformOld.Ht <= 0)
             {
                 changeDir(0, 1);
-                Transform.translate(0, -1 * Transform.Centre.Y);
+                TransformOld.translate(0, -1 * TransformOld.Centre.Y);
 
                 Debug.Log("Top wall");
             }
 
-            if (Transform.Centre.Y + Transform.Ht >= Bootstrap.getDisplay().getHeight())
+            if (TransformOld.Centre.Y + TransformOld.Ht >= Bootstrap.getDisplay().getHeight())
             {
                 changeDir(0, -1);
-                Transform.translate(0, Transform.Centre.Y - Bootstrap.getDisplay().getHeight());
+                TransformOld.translate(0, TransformOld.Centre.Y - Bootstrap.getDisplay().getHeight());
 
                 Debug.Log("Bottom wall");
 
             }
 
 
-            if (Transform.Centre.X - Transform.Wid <= 0)
+            if (TransformOld.Centre.X - TransformOld.Wid <= 0)
             {
                 changeDir(1, 0);
-                Transform.translate(-1 * Transform.Centre.X, 0);
+                TransformOld.translate(-1 * TransformOld.Centre.X, 0);
 
                 Debug.Log("Left wall");
 
             }
 
-            if (Transform.Centre.X + Transform.Wid >= Bootstrap.getDisplay().getWidth())
+            if (TransformOld.Centre.X + TransformOld.Wid >= Bootstrap.getDisplay().getWidth())
             {
                 changeDir(-1, 0);
-                Transform.translate(Transform.Centre.X - Bootstrap.getDisplay().getWidth(), 0);
+                TransformOld.translate(TransformOld.Centre.X - Bootstrap.getDisplay().getWidth(), 0);
 
                 Debug.Log("Right wall");
 
@@ -174,7 +174,7 @@ namespace GameBreakout
 
         public override string ToString()
         {
-            return "Ball: [" + Transform.X + ", " + Transform.Y + ", Dir: " + Dir + ", LastDir: " + LastDir + ", " + Transform.Lx + ", " + Transform.Ly + "]";
+            return "Ball: [" + TransformOld.X + ", " + TransformOld.Y + ", Dir: " + Dir + ", LastDir: " + LastDir + ", " + TransformOld.Lx + ", " + TransformOld.Ly + "]";
         }
 
 

@@ -22,7 +22,7 @@ namespace GameTest
 
         public override void initialize()
         {
-            this.Transform.SpritePath = Bootstrap.getAssetManager().getAssetPath("asteroid.png");
+            this.TransformOld.SpritePath = Bootstrap.getAssetManager().getAssetPath("asteroid.png");
 
             setPhysicsEnabled();
 
@@ -36,7 +36,7 @@ namespace GameTest
             //            MyBody.Kinematic = true;
 
 
-            MyBody.addForce(this.Transform.Right, 20.5f);
+            MyBody.addForce(this.TransformOld.Right, 20.5f);
             //            MyBody.addCircleCollider(32, 32, 30);
             MyBody.addRectCollider();
             Bootstrap.getInput().addListener(this);
@@ -90,7 +90,7 @@ namespace GameTest
 
         public override string ToString()
         {
-            return "Asteroid: [" + Transform.X + ", " + Transform.Y + ", " + Transform.Wid + ", " + Transform.Ht + "]";
+            return "Asteroid: [" + TransformOld.X + ", " + TransformOld.Y + ", " + TransformOld.Wid + ", " + TransformOld.Ht + "]";
         }
     }
 }

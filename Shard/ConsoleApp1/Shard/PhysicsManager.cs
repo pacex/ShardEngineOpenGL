@@ -486,7 +486,7 @@ namespace Shard
 
                         if (ob.B.Kinematic == false)
                         {
-                            ob.B.Parent.Transform.translate(-1 * (impulse.X * massProp), -1 * (impulse.Y * massProp));
+                            ob.B.Parent.TransformOld.translate(-1 * (impulse.X * massProp), -1 * (impulse.Y * massProp));
                         }
 
 
@@ -505,7 +505,7 @@ namespace Shard
                         if (ob.A.Kinematic == false)
                         {
 
-                            ob.A.Parent.Transform.translate((impulse.X * massProp), (impulse.Y * massProp));
+                            ob.A.Parent.TransformOld.translate((impulse.X * massProp), (impulse.Y * massProp));
                         }
 
 

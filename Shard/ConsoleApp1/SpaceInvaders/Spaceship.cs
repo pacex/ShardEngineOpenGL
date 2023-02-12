@@ -13,9 +13,9 @@ namespace SpaceInvaders
         public override void initialize()
         {
 
-            this.Transform.X = 100.0f;
-            this.Transform.Y = 800.0f;
-            this.Transform.SpritePath = Bootstrap.getAssetManager().getAssetPath("player.png");
+            this.TransformOld.X = 100.0f;
+            this.TransformOld.Y = 800.0f;
+            this.TransformOld.SpritePath = Bootstrap.getAssetManager().getAssetPath("player.png");
 
 
             fireDelay = 2;
@@ -41,7 +41,7 @@ namespace SpaceInvaders
 
             Bullet b = new Bullet();
 
-            b.setupBullet(this.Transform.Centre.X, this.Transform.Centre.Y);
+            b.setupBullet(this.TransformOld.Centre.X, this.TransformOld.Centre.Y);
             b.Dir = -1;
             b.DestroyTag = "Invader";
 
@@ -107,12 +107,12 @@ namespace SpaceInvaders
 
             if (left)
             {
-                this.Transform.translate(-1 * amount, 0);
+                this.TransformOld.translate(-1 * amount, 0);
             }
 
             if (right)
             {
-                this.Transform.translate(1 * amount, 0);
+                this.TransformOld.translate(1 * amount, 0);
             }
 
             Bootstrap.getDisplay().addToDraw(this);
@@ -136,7 +136,7 @@ namespace SpaceInvaders
 
         public override string ToString()
         {
-            return "Spaceship: [" + Transform.X + ", " + Transform.Y + ", " + Transform.Wid + ", " + Transform.Ht + "]";
+            return "Spaceship: [" + TransformOld.X + ", " + TransformOld.Y + ", " + TransformOld.Wid + ", " + TransformOld.Ht + "]";
         }
 
     }

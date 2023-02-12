@@ -12,7 +12,7 @@ namespace ManicMiner
             setPhysicsEnabled();
             
             addTag ("Collectible");
-            MyBody.addRectCollider((int)Transform.X, (int)Transform.Y, 10, 10);
+            MyBody.addRectCollider((int)TransformOld.X, (int)TransformOld.Y, 10, 10);
             MyBody.PassThrough = true;
 
         }
@@ -24,17 +24,17 @@ namespace ManicMiner
             Color col = Color.FromArgb(r.Next(0, 256), r.Next(0, 256), 0);
 
             Bootstrap.getDisplay().drawLine(
-                         (int)Transform.X,
-                         (int)Transform.Y,
-                         (int)Transform.X + 10,
-                         (int)Transform.Y + 10,
+                         (int)TransformOld.X,
+                         (int)TransformOld.Y,
+                         (int)TransformOld.X + 10,
+                         (int)TransformOld.Y + 10,
                          col);
 
             Bootstrap.getDisplay().drawLine(
-                (int)Transform.X + 10,
-                (int)Transform.Y,
-                (int)Transform.X,
-                (int)Transform.Y + 10,
+                (int)TransformOld.X + 10,
+                (int)TransformOld.Y,
+                (int)TransformOld.X,
+                (int)TransformOld.Y + 10,
                 col);
 
 
@@ -59,7 +59,7 @@ namespace ManicMiner
 
         public override string ToString()
         {
-            return "Collectible: [" + Transform.X + ", " + Transform.Y + "]";
+            return "Collectible: [" + TransformOld.X + ", " + TransformOld.Y + "]";
         }
 
 

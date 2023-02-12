@@ -14,10 +14,10 @@ namespace SpaceInvaders
 
         public void setupBullet(float x, float y)
         {
-            this.Transform.X = x;
-            this.Transform.Y = y;
-            this.Transform.Wid = 1;
-            this.Transform.Ht = 20;
+            this.TransformOld.X = x;
+            this.TransformOld.Y = y;
+            this.TransformOld.Wid = 1;
+            this.TransformOld.Ht = 20;
 
 
             setPhysicsEnabled();
@@ -41,13 +41,13 @@ namespace SpaceInvaders
             Random r = new Random();
             Color col = Color.FromArgb(r.Next(0, 256), r.Next(0, 256), 0);
 
-            this.Transform.translate(0, dir * 400 * Bootstrap.getDeltaTime());
+            this.TransformOld.translate(0, dir * 400 * Bootstrap.getDeltaTime());
 
             Bootstrap.getDisplay().drawLine(
-                (int)Transform.X,
-                (int)Transform.Y,
-                (int)Transform.X,
-                (int)Transform.Y + 20,
+                (int)TransformOld.X,
+                (int)TransformOld.Y,
+                (int)TransformOld.X,
+                (int)TransformOld.Y + 20,
                 col);
 
 
@@ -84,7 +84,7 @@ namespace SpaceInvaders
 
         public override string ToString()
         {
-            return "Bullet: " + Transform.X + ", " + Transform.X;
+            return "Bullet: " + TransformOld.X + ", " + TransformOld.X;
         }
     }
 }

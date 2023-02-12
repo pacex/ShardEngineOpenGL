@@ -27,9 +27,9 @@ namespace SpaceInvaders
 
             spriteToUse = 0;
 
-            this.Transform.X = 200.0f;
-            this.Transform.Y = 100.0f;
-            this.Transform.SpritePath = sprites[0];
+            this.TransformOld.X = 200.0f;
+            this.TransformOld.Y = 100.0f;
+            this.TransformOld.SpritePath = sprites[0];
 
             setPhysicsEnabled();
             MyBody.addRectCollider();
@@ -52,7 +52,7 @@ namespace SpaceInvaders
                 spriteToUse = 0;
             }
 
-            this.Transform.SpritePath = Bootstrap.getAssetManager().getAssetPath(sprites[spriteToUse]);
+            this.TransformOld.SpritePath = Bootstrap.getAssetManager().getAssetPath(sprites[spriteToUse]);
 
         }
 
@@ -86,14 +86,14 @@ namespace SpaceInvaders
 
         public override string ToString()
         {
-            return "Asteroid: [" + Transform.X + ", " + Transform.Y + ", " + Transform.Wid + ", " + Transform.Ht + "]";
+            return "Asteroid: [" + TransformOld.X + ", " + TransformOld.Y + ", " + TransformOld.Wid + ", " + TransformOld.Ht + "]";
         }
 
         public void fire()
         {
             Bullet b = new Bullet();
 
-            b.setupBullet(this.Transform.Centre.X, this.Transform.Centre.Y);
+            b.setupBullet(this.TransformOld.Centre.X, this.TransformOld.Centre.Y);
             b.Dir = 1;
             b.DestroyTag = "Player";
         }

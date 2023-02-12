@@ -36,7 +36,7 @@ namespace GameBreakout
         public override void update()
         {
 
-            this.Transform.SpritePath = Bootstrap.getAssetManager().getAssetPath("brick" + Health + ".png");
+            this.TransformOld.SpritePath = Bootstrap.getAssetManager().getAssetPath("brick" + Health + ".png");
 
             Bootstrap.getDisplay().addToDraw(this);
         }
@@ -62,7 +62,7 @@ namespace GameBreakout
 
         public override string ToString()
         {
-            return "Brick: [" + Transform.X + ", " + Transform.Y + ", " + Transform.Wid + ", " + Transform.Ht + "]";
+            return "Brick: [" + TransformOld.X + ", " + TransformOld.Y + ", " + TransformOld.Wid + ", " + TransformOld.Ht + "]";
         }
 
     }

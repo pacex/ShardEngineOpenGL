@@ -135,7 +135,7 @@ namespace Shard
             collisionCandidates = new List<Collider>();
 
             Parent = p;
-            Trans = p.Transform;
+            Trans = p.TransformOld;
             colh = (CollisionHandler)p;
 
             AngularDrag = 0.01f;
@@ -328,7 +328,7 @@ namespace Shard
 
         public ColliderRect addRectCollider()
         {
-            ColliderRect cr = new ColliderRect((CollisionHandler)parent, parent.Transform);
+            ColliderRect cr = new ColliderRect((CollisionHandler)parent, parent.TransformOld);
 
             addCollider(cr);
 
@@ -337,7 +337,7 @@ namespace Shard
 
         public ColliderCircle addCircleCollider()
         {
-            ColliderCircle cr = new ColliderCircle((CollisionHandler)parent, parent.Transform);
+            ColliderCircle cr = new ColliderCircle((CollisionHandler)parent, parent.TransformOld);
 
             addCollider(cr);
 
@@ -346,7 +346,7 @@ namespace Shard
 
         public ColliderCircle addCircleCollider(int x, int y, int rad)
         {
-            ColliderCircle cr = new ColliderCircle((CollisionHandler)parent, parent.Transform, x, y, rad);
+            ColliderCircle cr = new ColliderCircle((CollisionHandler)parent, parent.TransformOld, x, y, rad);
 
             addCollider(cr);
 
@@ -356,7 +356,7 @@ namespace Shard
 
         public ColliderRect addRectCollider(int x, int y, int wid, int ht)
         {
-            ColliderRect cr = new ColliderRect((CollisionHandler)parent, parent.Transform, x, y, wid, ht);
+            ColliderRect cr = new ColliderRect((CollisionHandler)parent, parent.TransformOld, x, y, wid, ht);
 
             addCollider(cr);
 

@@ -95,16 +95,16 @@ namespace Shard
 
 
             Collectible c = new Collectible();
-            c.Transform.translate(100, 780);
+            c.TransformOld.translate(100, 780);
             collect.Add(c);
 
 
             c = new Collectible();
-            c.Transform.translate (840, 560);
+            c.TransformOld.translate (840, 560);
             collect.Add (c);
 
             c = new Collectible();
-            c.Transform.translate(840, 60);
+            c.TransformOld.translate(840, 60);
             collect.Add(c);
 
         }

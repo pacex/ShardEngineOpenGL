@@ -26,8 +26,8 @@ namespace MissileCommand
 
 
                 ArsenalSprite ar = new ArsenalSprite();
-                ar.Transform.X = this.Transform.X + xmod;
-                ar.Transform.Y = this.Transform.Y + ymod;
+                ar.TransformOld.X = this.TransformOld.X + xmod;
+                ar.TransformOld.Y = this.TransformOld.Y + ymod;
 
                 if (i > 0 && i % 5 == 0)
                 {
@@ -62,8 +62,8 @@ namespace MissileCommand
 
 
             numMissiles = 10;
-            Transform.Wid = 64;
-            Transform.Ht = 32;
+            TransformOld.Wid = 64;
+            TransformOld.Ht = 32;
 
 
         }

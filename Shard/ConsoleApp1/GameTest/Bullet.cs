@@ -10,10 +10,10 @@ namespace GameTest
 
         public void setupBullet(Spaceship or, float x, float y)
         {
-            this.Transform.X = x;
-            this.Transform.Y = y;
-            this.Transform.Wid = 10;
-            this.Transform.Ht = 10;
+            this.TransformOld.X = x;
+            this.TransformOld.Y = y;
+            this.TransformOld.Wid = 10;
+            this.TransformOld.Ht = 10;
 
             this.origin = or;
 
@@ -40,7 +40,7 @@ namespace GameTest
 
         public override void physicsUpdate()
         {
-            MyBody.addForce(this.Transform.Forward, 100.0f);
+            MyBody.addForce(this.TransformOld.Forward, 100.0f);
         }
 
         public override void update()
@@ -50,17 +50,17 @@ namespace GameTest
 
 
             Bootstrap.getDisplay().drawLine(
-                (int)Transform.X,
-                (int)Transform.Y,
-                (int)Transform.X + 10,
-                (int)Transform.Y + 10,
+                (int)TransformOld.X,
+                (int)TransformOld.Y,
+                (int)TransformOld.X + 10,
+                (int)TransformOld.Y + 10,
                 col);
 
             Bootstrap.getDisplay().drawLine(
-                (int)Transform.X + 10,
-                (int)Transform.Y,
-                (int)Transform.X,
-                (int)Transform.Y + 10,
+                (int)TransformOld.X + 10,
+                (int)TransformOld.Y,
+                (int)TransformOld.X,
+                (int)TransformOld.Y + 10,
                 col);
 
 
@@ -85,7 +85,7 @@ namespace GameTest
 
         public override string ToString()
         {
-            return "Bullet: " + Transform.X + ", " + Transform.X;
+            return "Bullet: " + TransformOld.X + ", " + TransformOld.X;
         }
     }
 }

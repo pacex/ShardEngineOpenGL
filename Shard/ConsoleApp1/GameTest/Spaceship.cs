@@ -12,9 +12,9 @@ namespace GameTest
         public override void initialize()
         {
 
-            this.Transform.X = 500.0f;
-            this.Transform.Y = 500.0f;
-            this.Transform.SpritePath = Bootstrap.getAssetManager().getAssetPath("spaceship.png");
+            this.TransformOld.X = 500.0f;
+            this.TransformOld.Y = 500.0f;
+            this.TransformOld.SpritePath = Bootstrap.getAssetManager().getAssetPath("spaceship.png");
 
 
             Bootstrap.getInput().addListener(this);
@@ -51,9 +51,9 @@ namespace GameTest
         {
             Bullet b = new Bullet();
 
-            b.setupBullet(this, this.Transform.Centre.X, this.Transform.Centre.Y);
+            b.setupBullet(this, this.TransformOld.Centre.X, this.TransformOld.Centre.Y);
 
-            b.Transform.rotate(this.Transform.Rotz);
+            b.TransformOld.rotate(this.TransformOld.Rotz);
 
             Bootstrap.getSound().playSound ("fire.wav");
         }
@@ -138,13 +138,13 @@ namespace GameTest
             if (up)
             {
 
-                MyBody.addForce(this.Transform.Forward, 0.5f);
+                MyBody.addForce(this.TransformOld.Forward, 0.5f);
 
             }
 
             if (down)
             {
-                MyBody.addForce(this.Transform.Forward, -0.2f);
+                MyBody.addForce(this.TransformOld.Forward, -0.2f);
             }
 
 
@@ -176,7 +176,7 @@ namespace GameTest
 
         public override string ToString()
         {
-            return "Spaceship: [" + Transform.X + ", " + Transform.Y + ", " + Transform.Wid + ", " + Transform.Ht + "]";
+            return "Spaceship: [" + TransformOld.X + ", " + TransformOld.Y + ", " + TransformOld.Wid + ", " + TransformOld.Ht + "]";
         }
 
     }

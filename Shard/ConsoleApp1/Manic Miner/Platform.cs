@@ -25,7 +25,7 @@ namespace ManicMiner
             MyBody.Kinematic = true;
             
 
-            this.Transform.SpritePath = Bootstrap.getAssetManager().getAssetPath("platform.png");
+            this.TransformOld.SpritePath = Bootstrap.getAssetManager().getAssetPath("platform.png");
 
 
 
@@ -45,7 +45,7 @@ namespace ManicMiner
 
             MoveSpeed = speed;
 
-            Transform.translate (x, y);
+            TransformOld.translate (x, y);
         }
 
         public void onCollisionEnter(PhysicsBody x)
@@ -65,13 +65,13 @@ namespace ManicMiner
 
             if (moveDirY != 0)
             {
-                Transform.translate(0, moveSpeed * moveDirY * Bootstrap.getDeltaTime());
+                TransformOld.translate(0, moveSpeed * moveDirY * Bootstrap.getDeltaTime());
 
-                if (Transform.Y > maxY) {
+                if (TransformOld.Y > maxY) {
                     MoveDirY = -1;
                 }
             
-                if (Transform.Y < minY) {
+                if (TransformOld.Y < minY) {
                     MoveDirY = 1;
 
                 }
@@ -80,14 +80,14 @@ namespace ManicMiner
 
             if (moveDirX != 0)
             {
-                Transform.translate(moveSpeed * moveDirX * Bootstrap.getDeltaTime(), 0);
+                TransformOld.translate(moveSpeed * moveDirX * Bootstrap.getDeltaTime(), 0);
 
-                if (Transform.X > maxX)
+                if (TransformOld.X > maxX)
                 {
                     MoveDirX = -1;
                 }
 
-                if (Transform.X < minX)
+                if (TransformOld.X < minX)
                 {
                     MoveDirX = 1;
 

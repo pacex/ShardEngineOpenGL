@@ -27,7 +27,7 @@ namespace ManicMiner
             Bootstrap.getInput().addListener(this);
 
 
-            Transform.translate (0, 800);
+            TransformOld.translate (0, 800);
             MyBody.StopOnCollision = false;
             MyBody.Kinematic = false;
 
@@ -87,13 +87,13 @@ namespace ManicMiner
 
             if (left)
             {
-                this.Transform.translate(-1 * speed * Bootstrap.getDeltaTime(), 0);
+                this.TransformOld.translate(-1 * speed * Bootstrap.getDeltaTime(), 0);
                 spriteTimer += Bootstrap.getDeltaTime();
             }
 
             if (right)
             {
-                this.Transform.translate(1 * speed * Bootstrap.getDeltaTime(), 0);
+                this.TransformOld.translate(1 * speed * Bootstrap.getDeltaTime(), 0);
                 spriteTimer += Bootstrap.getDeltaTime();
             }
 
@@ -101,7 +101,7 @@ namespace ManicMiner
                 fall = false;
                 fallCounter = 0;
                 if (jumpCount < 0.3f) {
-                    this.Transform.translate(0, -1 * jumpSpeed * Bootstrap.getDeltaTime());
+                    this.TransformOld.translate(0, -1 * jumpSpeed * Bootstrap.getDeltaTime());
                     jumpCount += Bootstrap.getDeltaTime();
                 }
                 else {
@@ -135,16 +135,16 @@ namespace ManicMiner
             }
 
             if (fall) {
-                Transform.translate(0, jumpSpeed * Bootstrap.getDeltaTime());
+                TransformOld.translate(0, jumpSpeed * Bootstrap.getDeltaTime());
                 fallCounter += Bootstrap.getDeltaTime();
 
-                if (Transform.Y > 900) {
+                if (TransformOld.Y > 900) {
                     ToBeDestroyed = true;
                 }
 
             }
 
-            this.Transform.SpritePath = Bootstrap.getAssetManager().getAssetPath(spriteName + spriteCounter + ".png");
+            this.TransformOld.SpritePath = Bootstrap.getAssetManager().getAssetPath(spriteName + spriteCounter + ".png");
 
 
             Bootstrap.getDisplay().addToDraw(this);
@@ -155,14 +155,14 @@ namespace ManicMiner
             float[] minAndMaxX = x.getMinAndMax(true);
             float[] minAndMaxY = x.getMinAndMax(false);
 
-            if (Transform.X + Transform.Wid >= minAndMaxX[0] && Transform.X <= minAndMaxX[1]) {
+            if (TransformOld.X + TransformOld.Wid >= minAndMaxX[0] && TransformOld.X <= minAndMaxX[1]) {
                 // We're in the centre, so it's fine.
 
-                if (Transform.Y + Transform.Ht <= minAndMaxY[0]) {
+                if (TransformOld.Y + TransformOld.Ht <= minAndMaxY[0]) {
                     return true;
                 }
 
-                if (Transform.Y >= minAndMaxY[1])
+                if (TransformOld.Y >= minAndMaxY[1])
                 {
                     jumpUp = false;
                     return false;

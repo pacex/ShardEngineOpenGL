@@ -7,7 +7,7 @@ namespace MissileCommand
 
         public override void initialize()
         {
-            this.Transform.SpritePath = Bootstrap.getAssetManager().getAssetPath("city.png");
+            this.TransformOld.SpritePath = Bootstrap.getAssetManager().getAssetPath("city.png");
 
             setPhysicsEnabled();
 
@@ -42,7 +42,7 @@ namespace MissileCommand
 
         public override string ToString()
         {
-            return "City: [" + Transform.X + ", " + Transform.Y + "]";
+            return "City: [" + TransformOld.X + ", " + TransformOld.Y + "]";
         }
 
 
