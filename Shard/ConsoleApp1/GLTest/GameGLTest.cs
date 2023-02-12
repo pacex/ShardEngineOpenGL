@@ -11,13 +11,8 @@ namespace Shard
     class GameGLTest : Game, InputListener
     {
 
-        private float[] vertices;
-        private uint[] indices;
-        private Mesh mesh;
-
-        private float rot;
-
-        Matrix4 mat;
+        private VisualGameObject go1;
+        private VisualGameObject go2;
 
 
         public void handleInput(InputEvent inp, string eventType)
@@ -27,20 +22,6 @@ namespace Shard
 
         public override void initialize()
         {
-            vertices = new float[] {
-                0.5f,  0.5f, 0.0f,  // top right
-                0.5f, -0.5f, 0.0f,  // bottom right
-                -0.5f, -0.5f, 0.0f,  // bottom left
-                -0.5f,  0.5f, 0.0f   // top left
-            };
-
-            indices = new uint[] {
-                0, 1, 3,   // first triangle
-                1, 2, 3    // second triangle
-            };
-
-
-            mesh = new Mesh();
 
             Vector2i windowSize = Bootstrap.GetDisplayOpenGL().Window.Size;
 
@@ -51,20 +32,20 @@ namespace Shard
             //Bootstrap.GetDisplayOpenGL().View = Matrix4.Identity;
             Bootstrap.GetDisplayOpenGL().Model = Matrix4.Identity;
 
+            go1 = new VisualGameObject(new Mesh());
+            go2 = new VisualGameObject(new Mesh());
+            go2.Transform.Z = -5;
+
         }
 
         public override void update()
         {
-            rot += 0.01f;
-            mat = Transform3D.buildTransformMatrix(Vector3.Zero, new Vector3(0.0f, 0.0f, rot), Vector3.One);
+
         }
 
         public override void draw()
         {
-            Bootstrap.GetDisplayOpenGL().Model = mat;
 
-            Shader.SetDefaultShader();
-            mesh.Draw();
         }
     }
 }

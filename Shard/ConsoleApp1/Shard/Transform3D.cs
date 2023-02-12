@@ -38,6 +38,10 @@ namespace Shard
 
         public Transform3D(GameObject o) : base(o)
         {
+            scalez = 1.0;
+            z = 0.0;
+            rotx = 0.0;
+            roty = 0.0;
         }
 
         public double Z
@@ -68,7 +72,9 @@ namespace Shard
 
             Matrix4.CreateTranslation((float)X, (float)Y, (float)Z, out t);
 
-            return t * (rz * ry * rx) * s;
+            Matrix4 ret = t * (rz * ry * rx) * s;
+
+            return ret;
         }
     }
 }

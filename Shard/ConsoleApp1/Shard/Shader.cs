@@ -22,15 +22,20 @@ namespace Shard
             return defaultShader;
         }
 
-        public static void SetDefaultShader()
+        public static void ApplyDefaultShader()
         {
-            DisplayOpenGL display = (DisplayOpenGL)Bootstrap.getDisplay();
+            DisplayOpenGL display = Bootstrap.GetDisplayOpenGL();
 
             GetDefaultShader().Use();
             GL.UniformMatrix4(GL.GetUniformLocation(defaultShader.Handle, "model"), false, ref display.Model);
             GL.UniformMatrix4(GL.GetUniformLocation(defaultShader.Handle, "view"), false, ref display.View);
             GL.UniformMatrix4(GL.GetUniformLocation(defaultShader.Handle, "proj"), false, ref display.Projection);
 
+        }
+
+        public static void Reset()
+        {
+            GL.UseProgram(0);
         }
 
 
