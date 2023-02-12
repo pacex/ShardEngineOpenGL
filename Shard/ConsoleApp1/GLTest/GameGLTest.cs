@@ -34,7 +34,7 @@ namespace Shard
 
             go1 = new VisualGameObject(new Mesh());
             go2 = new VisualGameObject(new Mesh());
-            go2.Transform.Z = -5;
+            //go2.Transform.Z = -5;
 
         }
 

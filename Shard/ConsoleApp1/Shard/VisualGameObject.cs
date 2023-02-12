@@ -20,7 +20,7 @@ namespace Shard
             if (Mesh != null)
             {
 
-                Bootstrap.GetDisplayOpenGL().Model = Transform.getMatrix();
+                //Bootstrap.GetDisplayOpenGL().Model = Transform.getMatrix();
                 Shader.ApplyDefaultShader();
                 Mesh.Draw();
                 Shader.Reset();
