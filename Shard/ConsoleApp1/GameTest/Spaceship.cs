@@ -152,7 +152,7 @@ namespace GameTest
 
         public override void update()
         {
-            Bootstrap.getDisplay().addToDraw(this);
+            //Bootstrap.getDisplay().addToDraw(this);
         }
 
         public void onCollisionEnter(PhysicsBody x)

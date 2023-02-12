@@ -88,6 +88,11 @@ namespace Shard
             return displayEngine;
         }
 
+        public static DisplayOpenGL GetDisplayOpenGL()
+        {
+            return (DisplayOpenGL)displayEngine;
+        }
+
         public static Sound getSound()
         {
             return soundEngine;
@@ -310,6 +315,12 @@ namespace Shard
                     if (physDebug) {
                         phys.drawDebugColliders();
                     }
+
+                    // Let Game draw to the screen
+                    runningGame.draw();
+
+                    // Let GameObjects draw to the screen
+                    GameObjectManager.getInstance().drawUpdate();
 
                 }
 
