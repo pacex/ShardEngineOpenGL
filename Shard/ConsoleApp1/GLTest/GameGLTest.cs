@@ -14,6 +14,8 @@ namespace Shard
         private VisualGameObject go1;
         private VisualGameObject go2;
 
+        public Texture Texture;
+
 
         public void handleInput(InputEvent inp, string eventType)
         {
@@ -22,6 +24,8 @@ namespace Shard
 
         public override void initialize()
         {
+
+            GL.ClearColor(Color4.Black);
 
             Vector2i windowSize = Bootstrap.GetDisplayOpenGL().Window.Size;
 
@@ -38,6 +42,8 @@ namespace Shard
             go1.Transform.Translation.Z = -0.5f;
 
             go2.Transform.Rotate(Quaternion.FromEulerAngles(0.0f, 0.0f, 1.0f));
+
+            Texture = new Texture("GLTest\\texture_floor1.png");
 
         }
 

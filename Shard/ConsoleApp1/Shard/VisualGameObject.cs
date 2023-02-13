@@ -20,8 +20,10 @@ namespace Shard
             if (Mesh != null)
             {
 
+                GameGLTest game = (GameGLTest)Bootstrap.getRunningGame();
+
                 Bootstrap.GetDisplayOpenGL().Model = Transform.ToMatrix();
-                Shader.ApplyDefaultShader();
+                Shader.ApplyDefaultShader(game.Texture);
                 Mesh.Draw();
                 Shader.Reset();
             }
