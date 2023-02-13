@@ -25,15 +25,15 @@ namespace Shard
         public static void ApplyDefaultShader(Texture texture)
         {
             DisplayOpenGL display = Bootstrap.GetDisplayOpenGL();
-
-            
+           
             texture.Use(TextureUnit.Texture0);
 
             GetDefaultShader().Use();
+            GetDefaultShader().SetSamplerTextureUnit("texture0", TextureUnit.Texture0);
+
             GL.UniformMatrix4(GL.GetUniformLocation(defaultShader.Handle, "model"), false, ref display.Model);
             GL.UniformMatrix4(GL.GetUniformLocation(defaultShader.Handle, "view"), false, ref display.View);
             GL.UniformMatrix4(GL.GetUniformLocation(defaultShader.Handle, "proj"), false, ref display.Projection);
-            GL.Uniform1(GL.GetUniformLocation(defaultShader.Handle, "texture0"), 0);
 
         }
 
@@ -111,7 +111,13 @@ namespace Shard
             return GL.GetAttribLocation(Handle, attribName);
         }
 
-        // Dispisal
+        public void SetSamplerTextureUnit(string samplerName, TextureUnit textureUnit)
+        {
+            int t0 = (int)TextureUnit.Texture0;
+            GL.Uniform1(GetAttribLocation(samplerName), (int)textureUnit - t0);
+        }
+
+        // Disposal
 
         private bool disposedValue = false;
 

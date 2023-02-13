@@ -28,6 +28,8 @@ namespace Shard
             GL.ClearColor(clearColor);
             GL.Enable(EnableCap.DepthTest);
             GL.DepthFunc(DepthFunction.Less);
+            GL.Enable(EnableCap.CullFace);
+            GL.CullFace(CullFaceMode.Front);
         }
 
         public void Display()
