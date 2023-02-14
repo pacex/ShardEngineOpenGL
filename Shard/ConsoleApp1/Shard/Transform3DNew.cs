@@ -34,15 +34,21 @@ namespace Shard
 
         public Matrix4 ToMatrix()
         {
-            Matrix4 m = Matrix4.Identity;
+            Matrix4 m;
 
-            float x = Rotation.X, y = Rotation.Y, z = Rotation.Z, w = Rotation.W;
+            /*
+            Quaternion q = Rotation;
+
+            float x = q.X, y = q.Y, z = q.Z, w = q.W;
             float xx = x*x, yy = y*y, zz = z*z, ww= w*w;
 
             // Rotation
             m.M11 = 1.0f - 2.0f*yy - 2.0f*zz;   m.M12 = 2.0f*x*y - 2.0f*w*z;        m.M13 = 2.0f*x*z + 2.0f*w*y;
             m.M21 = 2.0f*x*y + 2.0f*w*z;        m.M22 = 1.0f - 2.0f*xx - 2.0f*zz;   m.M23 = 2.0f*y*z - 2.0f*w*x;
             m.M31 = 2.0f*x*z - 2.0f*w*y;        m.M32 = 2.0f*x*y + 2.0f*w*z;        m.M33 = 1.0f - 2.0f*xx - 2.0f*yy;
+            */
+
+            Matrix4.CreateFromQuaternion(Rotation,out m);
 
             // Scale
             m = m * Matrix4.CreateScale(Scale);
