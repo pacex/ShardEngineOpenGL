@@ -38,14 +38,14 @@ namespace Shard
             //Bootstrap.GetDisplayOpenGL().View = Matrix4.Identity;
             Bootstrap.GetDisplayOpenGL().Model = Matrix4.Identity;
 
-            go1 = new VisualGameObject(new Mesh());
+            go1 = new VisualGameObject(ObjLoader.LoadMesh("GLTest\\level.obj"));
             go2 = new VisualGameObject(ObjLoader.LoadMesh("GLTest\\cube.obj"));
             go2.Transform.Translation = new Vector3(1.0f, 0.0f, 0.0f);
-            go1.Transform.Translation = new Vector3(-1.0f, 0.0f, -1.0f);
+            go1.Transform.Translation = new Vector3(0.0f, 0.0f, 0.0f);
 
             go2.Transform.Rotate(Quaternion.FromEulerAngles(0.0f, 0.0f, 1.0f));
 
-            Texture = new Texture("GLTest\\texture_floor1.png");
+            Texture = new Texture("GLTest\\texture_level.png");
 
             time = 0.0f;
         }
@@ -56,10 +56,22 @@ namespace Shard
 
             time += (float)Bootstrap.getDeltaTime();
 
-            go2.Transform.Translation.Z = (float)Math.Sin(time);
+            //go2.Transform.Translation.Z = (float)Math.Sin(time);
 
-            go1.Transform.Rotate(Quaternion.FromAxisAngle(Vector3.UnitZ, rot));
+            //go1.Transform.Rotate(Quaternion.FromAxisAngle(Vector3.UnitZ, rot));
             go2.Transform.Rotate(Quaternion.FromAxisAngle(Vector3.UnitZ, -rot));
+
+            /*
+            Console.WriteLine("Forward:");
+            Console.WriteLine(go2.Transform.Forward.ToString());
+
+            Console.WriteLine("Left:");
+            Console.WriteLine(go2.Transform.Left.ToString());
+
+            Console.WriteLine("Up:");
+            Console.WriteLine(go2.Transform.Up.ToString());
+            */
+
         }
 
         public override void draw()
