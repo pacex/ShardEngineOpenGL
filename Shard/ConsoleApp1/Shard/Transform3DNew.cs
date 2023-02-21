@@ -80,6 +80,11 @@ namespace Shard
             Rotation *= q;
         }
 
+        public void Translate(Vector3 t)
+        {
+            Translation += t;
+        }
+
         public Matrix4 ToMatrix()
         {
             return Matrix;

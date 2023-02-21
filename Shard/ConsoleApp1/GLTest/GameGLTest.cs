@@ -6,15 +6,12 @@ using System.Threading.Tasks;
 using OpenTK.Graphics.OpenGL;
 using OpenTK.Mathematics;
 
-namespace Shard
+namespace Shard.GLTest
 {
     class GameGLTest : Game, InputListener
     {
 
         private VisualGameObject go1;
-        private VisualGameObject go2;
-
-        public Texture Texture;
 
         private float time;
 
@@ -31,21 +28,19 @@ namespace Shard
 
             Vector2i windowSize = Bootstrap.GetDisplayOpenGL().Window.Size;
 
-            Bootstrap.GetDisplayOpenGL().Projection = Matrix4.CreatePerspectiveFieldOfView(0.4f * (float)Math.PI, (float)windowSize.X / (float)windowSize.Y, 0.1f, 256.0f);
-            Bootstrap.GetDisplayOpenGL().View = Matrix4.LookAt(new Vector3(-5,2,2), Vector3.Zero, Vector3.UnitZ);
+            //Bootstrap.GetDisplayOpenGL().Projection = Matrix4.CreatePerspectiveFieldOfView(0.4f * (float)Math.PI, (float)windowSize.X / (float)windowSize.Y, 0.1f, 256.0f);
+            //Bootstrap.GetDisplayOpenGL().View = Matrix4.LookAt(new Vector3(-5,2,2), Vector3.Zero, Vector3.UnitZ);
+
+            Camera camera = new Camera();
+            camera.Transform.Translation = new Vector3(-5,2,2);
+            camera.SetAsMain();
 
             //Bootstrap.GetDisplayOpenGL().Projection = Matrix4.Identity;
             //Bootstrap.GetDisplayOpenGL().View = Matrix4.Identity;
             Bootstrap.GetDisplayOpenGL().Model = Matrix4.Identity;
 
-            go1 = new VisualGameObject(ObjLoader.LoadMesh("GLTest\\level.obj"));
-            go2 = new VisualGameObject(ObjLoader.LoadMesh("GLTest\\cube.obj"));
-            go2.Transform.Translation = new Vector3(1.0f, 0.0f, 0.0f);
+            go1 = new VisualGameObject(ObjLoader.LoadMesh("GLTest\\level.obj"), new Texture("GLTest\\texture_level.png"));
             go1.Transform.Translation = new Vector3(0.0f, 0.0f, 0.0f);
-
-            go2.Transform.Rotate(Quaternion.FromEulerAngles(0.0f, 0.0f, 1.0f));
-
-            Texture = new Texture("GLTest\\texture_level.png");
 
             time = 0.0f;
         }
@@ -59,7 +54,6 @@ namespace Shard
             //go2.Transform.Translation.Z = (float)Math.Sin(time);
 
             //go1.Transform.Rotate(Quaternion.FromAxisAngle(Vector3.UnitZ, rot));
-            go2.Transform.Rotate(Quaternion.FromAxisAngle(Vector3.UnitZ, -rot));
 
             /*
             Console.WriteLine("Forward:");

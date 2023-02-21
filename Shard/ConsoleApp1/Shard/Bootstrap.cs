@@ -19,7 +19,7 @@ namespace Shard
 
 
         private static Game runningGame;
-        private static Display displayEngine;
+        private static DisplayOpenGL displayEngine;
         private static Sound soundEngine;
         private static InputSystem input;
         private static PhysicsManager phys;
@@ -122,6 +122,8 @@ namespace Shard
             bool bailOut = false;
 
             phys = PhysicsManager.getInstance();
+            displayEngine = DisplayOpenGL.GetInstance();
+            displayEngine.initialize();
 
             foreach (KeyValuePair<string, string> kvp in config)
             {
@@ -138,10 +140,6 @@ namespace Shard
 
                 switch (kvp.Key)
                 {
-                    case "display":
-                        displayEngine = (Display)ob;
-                        displayEngine.initialize();
-                        break;
                     case "sound":
                         soundEngine = (Sound)ob;
                         break;
@@ -315,6 +313,9 @@ namespace Shard
                     if (physDebug) {
                         phys.drawDebugColliders();
                     }
+
+                    // Execute display predraw
+                    displayEngine.preDraw();
 
                     // Let Game draw to the screen
                     runningGame.draw();

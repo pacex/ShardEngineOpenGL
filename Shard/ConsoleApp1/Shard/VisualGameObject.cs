@@ -9,9 +9,12 @@ namespace Shard
     class VisualGameObject : GameObject
     {
         public Mesh Mesh;
+        public Texture Texture;
 
-        public VisualGameObject(Mesh mesh) {
+        public VisualGameObject(Mesh mesh, Texture texture = null)
+        {
             this.Mesh = mesh;
+            this.Texture = texture;
         }
 
         public override void drawUpdate()
@@ -20,10 +23,8 @@ namespace Shard
             if (Mesh != null)
             {
 
-                GameGLTest game = (GameGLTest)Bootstrap.getRunningGame();
-
                 Bootstrap.GetDisplayOpenGL().Model = Transform.ToMatrix();
-                Shader.ApplyDefaultShader(game.Texture);
+                Shader.ApplyDefaultShader(Texture);
                 Mesh.Draw();
                 Shader.Reset();
             }
