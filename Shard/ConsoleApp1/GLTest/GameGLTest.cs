@@ -28,7 +28,7 @@ namespace Shard.GLTest
             GL.ClearColor(Color4.Black);
 
             DisplayOpenGL.GetInstance().Window.CursorState = CursorState.Grabbed;
-            DisplayOpenGL.GetInstance().Window.WindowState = WindowState.Fullscreen;
+            //DisplayOpenGL.GetInstance().Window.WindowState = WindowState.Fullscreen;
 
             player = new Player();
             player.Transform.Translation = new Vector3(-4.0f, 1.0f, 0.0f);

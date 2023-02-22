@@ -8,7 +8,7 @@ using OpenTK.Input;
 
 namespace Shard.GLTest
 {
-    class Player : GameObject
+    class Player : GameObject, CollisionHandler
     {
 
 
@@ -32,6 +32,8 @@ namespace Shard.GLTest
             sensitivity = 0.01f;
 
             camera.Transform.Translation = Transform.Translation + Vector3.UnitZ * height;
+
+            setPhysicsEnabled();
         }
 
         public override void update() 
@@ -43,15 +45,55 @@ namespace Shard.GLTest
             camera.Transform.Rotate(Quaternion.FromAxisAngle(Vector3.UnitZ, mouseDelta.X * sensitivity));
             camera.Transform.Rotate(Quaternion.FromAxisAngle(camera.Transform.Left, -mouseDelta.Y * sensitivity));
 
+            
+
         }
         public override void physicsUpdate()
         {
-            base.physicsUpdate();
+            Vector2 f = camera.Transform.Forward.Xy.Normalized();
+            Vector2 l = camera.Transform.Left.Xy.Normalized();
+
+            System.Numerics.Vector2 forward = new System.Numerics.Vector2(f.X, f.Y);
+            System.Numerics.Vector2 left = new System.Numerics.Vector2(l.X, l.Y);
+
+            float force = 0.02f;
+
+            if (DisplayOpenGL.GetInstance().Window.IsKeyDown(OpenTK.Windowing.GraphicsLibraryFramework.Keys.W))
+            {
+                MyBody.addForce(forward, force);
+            }
+            if (DisplayOpenGL.GetInstance().Window.IsKeyDown(OpenTK.Windowing.GraphicsLibraryFramework.Keys.S))
+            {
+                MyBody.addForce(-forward, force);
+            }
+            if (DisplayOpenGL.GetInstance().Window.IsKeyDown(OpenTK.Windowing.GraphicsLibraryFramework.Keys.A))
+            {
+                MyBody.addForce(left, force);
+            }
+            if (DisplayOpenGL.GetInstance().Window.IsKeyDown(OpenTK.Windowing.GraphicsLibraryFramework.Keys.D))
+            {
+                MyBody.addForce(-left, force);
+            }
         }
 
         public override void drawUpdate()
         {
             base.drawUpdate();
+        }
+
+        public void onCollisionEnter(PhysicsBody x)
+        {
+            
+        }
+
+        public void onCollisionExit(PhysicsBody x)
+        {
+            
+        }
+
+        public void onCollisionStay(PhysicsBody x)
+        {
+            
         }
     }
 }
