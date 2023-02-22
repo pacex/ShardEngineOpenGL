@@ -34,6 +34,7 @@ namespace Shard
         private static long startTime;
         private static string baseDir;
         private static Dictionary<string,string> enVars;
+        private static bool endGameFlag = false;
 
         public static bool checkEnvironmentalVariable (string id) {
             return enVars.ContainsKey (id);
@@ -236,6 +237,11 @@ namespace Shard
             return frames;
         }
 
+        public static void endGame()
+        {
+            endGameFlag = true;
+        }
+
         static void Main(string[] args)
         {
             long timeInMillisecondsStart, lastTick, timeInMillisecondsEnd;
@@ -268,7 +274,7 @@ namespace Shard
                 physDebug = true;
             }
 
-            while (true)
+            while (!endGameFlag)
             {
                 frames += 1;
 

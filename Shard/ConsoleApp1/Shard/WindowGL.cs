@@ -39,6 +39,7 @@ namespace Shard
 
         public void ProcessWindowEvents()
         {
+            base.ProcessInputEvents();
             NativeWindow.ProcessWindowEvents(base.IsEventDriven);
         }
 
