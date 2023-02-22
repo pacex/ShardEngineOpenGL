@@ -13,9 +13,9 @@ namespace Shard
     {
         public int Handle { get; private set; }
 
-        public Texture(string path) : this(path, TextureWrapMode.Repeat, TextureMinFilter.LinearMipmapLinear, TextureMagFilter.Linear) { }
+        public Texture(string path) : this(path, TextureWrapMode.Repeat, TextureMinFilter.LinearMipmapLinear, TextureMagFilter.Linear, 0, 64) { }
 
-        public Texture(string path, TextureWrapMode wrapMode, TextureMinFilter minFilter, TextureMagFilter magFilter) {
+        public Texture(string path, TextureWrapMode wrapMode, TextureMinFilter minFilter, TextureMagFilter magFilter, int texBaseLevel, int texMaxLevel) {
 
             // Load texture from file
             string assetParentDirectory = Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.Parent.Parent.FullName;
@@ -34,6 +34,8 @@ namespace Shard
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)wrapMode);
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)minFilter);
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)magFilter);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureBaseLevel, texBaseLevel);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMaxLevel, texMaxLevel);
 
             // Generate Mipmaps
             GL.GenerateMipmap(GenerateMipmapTarget.Texture2D);

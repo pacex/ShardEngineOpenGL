@@ -29,7 +29,7 @@ namespace Shard.GLTest
             camera.SetAsMain();
             height = 1.2f;
 
-            sensitivity = 0.01f;
+            sensitivity = 0.002f;
 
             camera.Transform.Translation = Transform.Translation + Vector3.UnitZ * height;
 
