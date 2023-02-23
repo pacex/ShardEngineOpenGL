@@ -17,12 +17,6 @@
 		<StartupObject>Shard.Bootstrap</StartupObject>
 	</PropertyGroup>
 
-	<ItemGroup>
-	  <Compile Remove="SpaceInvaders\**" />
-	  <EmbeddedResource Remove="SpaceInvaders\**" />
-	  <None Remove="SpaceInvaders\**" />
-	</ItemGroup>
-
   <ItemGroup>
     <COMReference Include="{215d64d2-031c-33c7-96e3-61794cd1ee61}">
       <WrapperTool>tlbimp</WrapperTool>

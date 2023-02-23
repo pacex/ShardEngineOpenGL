@@ -26,8 +26,6 @@
 *   
 */
 
-using OpenTK.Core;
-using OpenTK.Mathematics;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -42,11 +40,11 @@ namespace Shard
         List<Collider> collisionCandidates;
         GameObject parent;
         CollisionHandler colh;
-        Transform3DNew trans;
+        Transform trans;
         private float angularDrag;
         private float drag;
         private float torque;
-        private System.Numerics.Vector2 force;
+        private Vector2 force;
         private float mass;
         private double timeInterval;
         private float maxForce, maxTorque;
@@ -62,10 +60,10 @@ namespace Shard
         private float[] minAndMaxX;
         private float[] minAndMaxY;
 
-        public void applyGravity(float modifier, System.Numerics.Vector2 dir)
+        public void applyGravity(float modifier, Vector2 dir)
         {
 
-            System.Numerics.Vector2 gf = dir * modifier;
+            Vector2 gf = dir * modifier;
 
             addForce(gf);
 
@@ -74,7 +72,7 @@ namespace Shard
         public float AngularDrag { get => angularDrag; set => angularDrag = value; }
         public float Drag { get => drag; set => drag = value; }
         internal GameObject Parent { get => parent; set => parent = value; }
-        internal Transform3DNew Trans { get => trans; set => trans = value; }
+        internal Transform Trans { get => trans; set => trans = value; }
         public float Mass { get => mass; set => mass = value; }
         public float[] MinAndMaxX { get => minAndMaxX; set => minAndMaxX = value; }
         public float[] MinAndMaxY { get => minAndMaxY; set => minAndMaxY = value; }
@@ -137,7 +135,7 @@ namespace Shard
             collisionCandidates = new List<Collider>();
 
             Parent = p;
-            Trans = p.Transform;
+            Trans = p.TransformOld;
             colh = (CollisionHandler)p;
 
             AngularDrag = 0.01f;
@@ -201,12 +199,12 @@ namespace Shard
 
         public void stopForces()
         {
-            force = System.Numerics.Vector2.Zero;
+            force = Vector2.Zero;
         }
 
-        public void reflectForces(System.Numerics.Vector2 impulse)
+        public void reflectForces(Vector2 impulse)
         {
-            System.Numerics.Vector2 reflect = new System.Numerics.Vector2(0, 0);
+            Vector2 reflect = new Vector2(0, 0);
 
             Debug.Log ("Reflecting " + impulse);
 
@@ -247,11 +245,11 @@ namespace Shard
             force *= prop;
         }
 
-        public void addForce(System.Numerics.Vector2 dir, float force) {
+        public void addForce(Vector2 dir, float force) {
             addForce(dir * force);
         }
 
-        public void addForce(System.Numerics.Vector2 dir)
+        public void addForce(Vector2 dir)
         {
             if (Kinematic)
             {
@@ -271,7 +269,7 @@ namespace Shard
             // Set a higher bound.
             if (force.Length() > MaxForce)
             {
-                force = System.Numerics.Vector2.Normalize(force) * MaxForce;
+                force = Vector2.Normalize(force) * MaxForce;
             }
         }
 
@@ -288,12 +286,12 @@ namespace Shard
 
         public void physicsTick()
         {
-            List<System.Numerics.Vector2> toRemove;
+            List<Vector2> toRemove;
             float force;
             float rot = 0;
 
 
-            toRemove = new List<System.Numerics.Vector2>();
+            toRemove = new List<Vector2>();
 
             rot = torque;
 
@@ -308,11 +306,11 @@ namespace Shard
 
 
 
-            trans.Rotate(OpenTK.Mathematics.Quaternion.FromAxisAngle(OpenTK.Mathematics.Vector3.UnitZ, rot * ((float)Math.PI / 180.0f)));
+            trans.rotate(rot);
 
             force = this.force.Length();
 
-			trans.Translate(new OpenTK.Mathematics.Vector3(this.force.X, this.force.Y, 0.0f));
+			trans.translate(this.force);
 
             if (force < Drag)
             {
@@ -376,9 +374,9 @@ namespace Shard
             return myColliders;
         }
 
-        public System.Numerics.Vector2? checkCollisions(System.Numerics.Vector2 other)
+        public Vector2? checkCollisions(Vector2 other)
         {
-            System.Numerics.Vector2? d;
+            Vector2? d;
 
 
             foreach (Collider c in myColliders)
@@ -395,9 +393,9 @@ namespace Shard
         }
 
 
-        public System.Numerics.Vector2? checkCollisions(Collider other)
+        public Vector2? checkCollisions(Collider other)
         {
-            System.Numerics.Vector2? d;
+            Vector2? d;
 
 //            Debug.Log("Checking collision with " + other);
             foreach (Collider c in myColliders)

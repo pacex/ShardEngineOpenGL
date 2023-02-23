@@ -6,10 +6,6 @@ layout (location = 2) in vec2 aTexcoord;
 
 
 out vec2 vTexcoord;
-out vec4 vViewNormal;
-out vec4 vViewPos;
-out vec4 vWorldNormal;
-out vec4 vWorldPos;
 
 uniform mat4 model;
 uniform mat4 view;
@@ -19,11 +15,5 @@ void main()
 {
     vTexcoord = aTexcoord;
 
-    vWorldPos = model * vec4(aPosition, 1.0);
-    vWorldNormal = model * vec4(aNormal, 0.0);
-
-    vViewPos = view * vWorldPos;
-    vViewNormal = view * vWorldNormal;
-
-    gl_Position = proj * vViewPos;
+    gl_Position = proj * view * model * vec4(aPosition, 1.0);
 }

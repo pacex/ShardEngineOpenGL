@@ -9,93 +9,46 @@ namespace Shard
 {
     class Transform3DNew
     {
-        public Vector3 Translation
-        {
-            get { return translation; }
-            set 
-            { 
-                translation = value;
-                updateMatrix();
-            }
-        }
-        private Vector3 translation;
-        public Quaternion Rotation { 
-            get { return rotation; }
-            set
-            {
-                rotation = value;
-                updateMatrix();
-            }
-        }
-        private Quaternion rotation;
-        public Vector3 Scale
-        {
-            get { return scale; }
-            set { 
-                scale = value;
-                updateMatrix();
-            }
-        }
-        private Vector3 scale;
-
-        public Vector3 Forward
-        {
-            get
-            { return InverseMatrix.Row0.Xyz; }
-        }
-        public Vector3 Left
-        {
-            get
-            { return InverseMatrix.Row1.Xyz; }
-        }
-        public Vector3 Up
-        {
-            get
-            { return InverseMatrix.Row2.Xyz; }
-        }
-
-
-        public Matrix4 Matrix { get; private set; }
-        public Matrix4 InverseMatrix { get; private set; }
+        public Vector3 Translation;
+        public Quaternion Rotation;
+        public Vector3 Scale;
 
         public Transform3DNew()
         {
-            translation = Vector3.Zero;
-            rotation = Quaternion.Identity;
-            scale = Vector3.One;
-            updateMatrix();
+            Translation = Vector3.Zero;
+            Rotation = Quaternion.Identity;
+            Scale = Vector3.One;
         }
 
         public Transform3DNew(Vector3 t, Quaternion r, Vector3 s)
         {
-            translation = t;
-            rotation = r;
-            scale = s;
-            updateMatrix();
+            Translation = t;
+            Rotation = r;
+            Scale = s;
         }
-
 
         public void Rotate(Quaternion q)
         {
             Rotation *= q;
         }
 
-        public void Translate(Vector3 t)
-        {
-            Translation += t;
-        }
-
         public Matrix4 ToMatrix()
-        {
-            return Matrix;
-        }
-
-        private void updateMatrix()
         {
             Matrix4 m;
 
+            /*
+            Quaternion q = Rotation;
+
+            float x = q.X, y = q.Y, z = q.Z, w = q.W;
+            float xx = x*x, yy = y*y, zz = z*z, ww= w*w;
+
             // Rotation
-            Matrix4.CreateFromQuaternion(Rotation, out m);
+            m.M11 = 1.0f - 2.0f*yy - 2.0f*zz;   m.M12 = 2.0f*x*y - 2.0f*w*z;        m.M13 = 2.0f*x*z + 2.0f*w*y;
+            m.M21 = 2.0f*x*y + 2.0f*w*z;        m.M22 = 1.0f - 2.0f*xx - 2.0f*zz;   m.M23 = 2.0f*y*z - 2.0f*w*x;
+            m.M31 = 2.0f*x*z - 2.0f*w*y;        m.M32 = 2.0f*x*y + 2.0f*w*z;        m.M33 = 1.0f - 2.0f*xx - 2.0f*yy;
+            */
+
+            Matrix4.CreateFromQuaternion(Rotation,out m);
 
             // Scale
             m = m * Matrix4.CreateScale(Scale);
@@ -103,8 +56,7 @@ namespace Shard
             // Translation
             m.M41 = Translation.X; m.M42 = Translation.Y; m.M43 = Translation.Z;
 
-            Matrix = m;
-            InverseMatrix = m.Inverted();
+            return m;
         }
     }
 }
