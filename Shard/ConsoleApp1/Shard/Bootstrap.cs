@@ -19,7 +19,7 @@ namespace Shard
 
 
         private static Game runningGame;
-        private static Display displayEngine;
+        private static DisplayOpenGL displayEngine;
         private static Sound soundEngine;
         private static InputSystem input;
         private static PhysicsManager phys;
@@ -34,6 +34,7 @@ namespace Shard
         private static long startTime;
         private static string baseDir;
         private static Dictionary<string,string> enVars;
+        private static bool endGameFlag = false;
 
         public static bool checkEnvironmentalVariable (string id) {
             return enVars.ContainsKey (id);
@@ -122,6 +123,8 @@ namespace Shard
             bool bailOut = false;
 
             phys = PhysicsManager.getInstance();
+            displayEngine = DisplayOpenGL.GetInstance();
+            displayEngine.initialize();
 
             foreach (KeyValuePair<string, string> kvp in config)
             {
@@ -138,10 +141,6 @@ namespace Shard
 
                 switch (kvp.Key)
                 {
-                    case "display":
-                        displayEngine = (Display)ob;
-                        displayEngine.initialize();
-                        break;
                     case "sound":
                         soundEngine = (Sound)ob;
                         break;
@@ -238,6 +237,11 @@ namespace Shard
             return frames;
         }
 
+        public static void endGame()
+        {
+            endGameFlag = true;
+        }
+
         static void Main(string[] args)
         {
             long timeInMillisecondsStart, lastTick, timeInMillisecondsEnd;
@@ -270,7 +274,7 @@ namespace Shard
                 physDebug = true;
             }
 
-            while (true)
+            while (!endGameFlag)
             {
                 frames += 1;
 
@@ -315,6 +319,9 @@ namespace Shard
                     if (physDebug) {
                         phys.drawDebugColliders();
                     }
+
+                    // Execute display predraw
+                    displayEngine.preDraw();
 
                     // Let Game draw to the screen
                     runningGame.draw();
