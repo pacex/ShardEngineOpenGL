@@ -23,6 +23,8 @@ namespace Shard
         private PhysicsBody myBody;
         private List<string> tags;
 
+        protected Game runningGame { get; private set; }
+
         public void addTag(string str)
         {
             if (tags.Contains(str))
@@ -124,6 +126,8 @@ namespace Shard
             transformOld = new Transform3D(this);
             transform = new Transform3DNew();
             visible = false;
+
+            runningGame = Bootstrap.getRunningGame();
 
             ToBeDestroyed = false;
             tags = new List<string>();

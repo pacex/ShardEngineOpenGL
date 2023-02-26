@@ -47,12 +47,13 @@ namespace Shard
 
         }
 
-        public static void ApplyWireframeShader()
+        public static void ApplyWireframeShader(Color4 color)
         {
             DisplayOpenGL display = Bootstrap.GetDisplayOpenGL();
 
             GetWireframeShader().Use();
 
+            GL.Uniform4(GL.GetUniformLocation(GetWireframeShader().Handle, "color"), color);
             GL.UniformMatrix4(GL.GetUniformLocation(GetWireframeShader().Handle, "model"), false, ref display.Model);
             GL.UniformMatrix4(GL.GetUniformLocation(GetWireframeShader().Handle, "view"), false, ref display.View);
             GL.UniformMatrix4(GL.GetUniformLocation(GetWireframeShader().Handle, "proj"), false, ref display.Projection);

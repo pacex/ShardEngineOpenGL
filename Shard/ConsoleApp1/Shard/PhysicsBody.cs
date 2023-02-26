@@ -168,20 +168,6 @@ namespace Shard
             PhysicsManager.getInstance().addToKinematic(this);
         }
 
-        public void debugDraw()
-        {
-            DisplayOpenGL.GetInstance().Model = Matrix4.Identity;
-
-            foreach (Collider col in myColliders)
-            {
-                if (col is ColliderRect)
-                {
-                    ColliderRect cr = (ColliderRect)col;
-                    cr.debugDraw();
-                }
-            }
-        }
-
         public void addTorque(float dir)
         {
             if (Kinematic)
@@ -309,7 +295,7 @@ namespace Shard
             MinAndMaxY = getMinAndMax(false);
         }
 
-        public void physicsTick()
+        public void physicsTick(float physDeltaTime)
         {
             List<System.Numerics.Vector2> toRemove;
 
@@ -329,17 +315,16 @@ namespace Shard
                 torque -= Math.Sign(torque) * AngularDrag;
             }
 
-
-
             trans.Rotate(OpenTK.Mathematics.Quaternion.FromAxisAngle(OpenTK.Mathematics.Vector3.UnitZ, rot * ((float)Math.PI / 180.0f)));
 
 
+            // TODO: scale application of force by physDeltaTime
             if (!kinematic && force.Length() > 0.0f)
             {
                 // X direction
                 if (PhysicsManager.getInstance().queryKinematic(this, new OpenTK.Mathematics.Vector2(force.X, 0.0f)))
                 {
-                    force.X = Math.Sign(force.X) * 0.02f;
+                    force.X = Math.Sign(force.X) * 0.03f;
                 }
                 else
                 {
@@ -349,7 +334,7 @@ namespace Shard
                 // Y direction
                 if (PhysicsManager.getInstance().queryKinematic(this, new OpenTK.Mathematics.Vector2(0.0f, force.Y)))
                 {
-                    force.Y = Math.Sign(force.Y) * 0.02f;
+                    force.Y = Math.Sign(force.Y) * 0.03f;
 
                 }
                 else

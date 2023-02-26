@@ -6,6 +6,11 @@ using System.Threading.Tasks;
 
 namespace Shard
 {
+    /*
+     * A GameObject with a mesh and a texture that draws itself automatically.
+     * 
+     */
+
     class VisualGameObject : GameObject
     {
         public Mesh Mesh;

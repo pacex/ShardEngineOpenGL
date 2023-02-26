@@ -130,14 +130,53 @@ namespace Shard
 
         public override void drawMe(Color col)
         {
-            Display d = Bootstrap.getDisplay();
+            /*
+             * LEGACY
+             * 
+             * Display d = Bootstrap.getDisplay();
 
-            d.drawLine((int)MinAndMaxX[0], (int)MinAndMaxY[0], (int)MinAndMaxX[1], (int)MinAndMaxY[0], col);
-            d.drawLine((int)MinAndMaxX[0], (int)MinAndMaxY[0], (int)MinAndMaxX[0], (int)MinAndMaxY[1], col);
-            d.drawLine((int)MinAndMaxX[1], (int)MinAndMaxY[0], (int)MinAndMaxX[1], (int)MinAndMaxY[1], col);
-            d.drawLine((int)MinAndMaxX[0], (int)MinAndMaxY[1], (int)MinAndMaxX[1], (int)MinAndMaxY[1], col);
+                d.drawLine((int)MinAndMaxX[0], (int)MinAndMaxY[0], (int)MinAndMaxX[1], (int)MinAndMaxY[0], col);
+                d.drawLine((int)MinAndMaxX[0], (int)MinAndMaxY[0], (int)MinAndMaxX[0], (int)MinAndMaxY[1], col);
+                d.drawLine((int)MinAndMaxX[1], (int)MinAndMaxY[0], (int)MinAndMaxX[1], (int)MinAndMaxY[1], col);
+                d.drawLine((int)MinAndMaxX[0], (int)MinAndMaxY[1], (int)MinAndMaxX[1], (int)MinAndMaxY[1], col);
 
-            d.drawCircle((int)Transform.Translation.X, (int)Transform.Translation.Y, 2, col);
+                d.drawCircle((int)Transform.Translation.X, (int)Transform.Translation.Y, 2, col);
+             * 
+             */
+            float[] vertices = new float[] {    MinAndMaxX[0], MinAndMaxY[0], 0.0f,     MinAndMaxX[0], MinAndMaxY[0], 2.0f,
+                                                MinAndMaxX[0], MinAndMaxY[1], 0.0f,     MinAndMaxX[0], MinAndMaxY[1], 2.0f,
+                                                MinAndMaxX[1], MinAndMaxY[0], 0.0f,     MinAndMaxX[1], MinAndMaxY[0], 2.0f,
+                                                MinAndMaxX[1], MinAndMaxY[1], 0.0f,     MinAndMaxX[1], MinAndMaxY[1], 2.0f };
+
+            uint[] indices = new uint[] { 0, 1, 0, 2, 0, 4,
+                                          1, 3, 1, 5,
+                                          2, 3, 2, 6,
+                                          3, 7,
+                                          4, 5, 4, 6,
+                                          5, 7,
+                                          6, 7};
+
+            int vertexBufferObject, vertexArrayObject;
+
+            vertexArrayObject = GL.GenVertexArray();
+            GL.BindVertexArray(vertexArrayObject);
+
+            vertexBufferObject = GL.GenBuffer();
+
+            GL.BindBuffer(BufferTarget.ArrayBuffer, vertexBufferObject);
+            GL.BufferData(BufferTarget.ArrayBuffer, vertices.Length * sizeof(float), vertices, BufferUsageHint.StaticDraw);
+            GL.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, 0, 0);
+            GL.EnableVertexAttribArray(0);
+
+            GL.BindVertexArray(0);
+            GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
+
+            Shader.ApplyWireframeShader(new OpenTK.Mathematics.Color4(col.R, col.G, col.B, col.A));
+            GL.BindVertexArray(vertexArrayObject);
+            GL.DrawElements(PrimitiveType.Lines, indices.Length, DrawElementsType.UnsignedInt, indices);
+            GL.BindVertexArray(0);
+            Shader.Reset();
+
         }
 
         public override Vector2? checkCollision(ColliderCircle c)
@@ -178,43 +217,6 @@ namespace Shard
             }
 
             return null;
-        }
-
-        public void debugDraw()
-        {
-            float[] vertices = new float[] {    MinAndMaxX[0], MinAndMaxY[0], 0.0f,     MinAndMaxX[0], MinAndMaxY[0], 2.0f,
-                                                MinAndMaxX[0], MinAndMaxY[1], 0.0f,     MinAndMaxX[0], MinAndMaxY[1], 2.0f,
-                                                MinAndMaxX[1], MinAndMaxY[0], 0.0f,     MinAndMaxX[1], MinAndMaxY[0], 2.0f,
-                                                MinAndMaxX[1], MinAndMaxY[1], 0.0f,     MinAndMaxX[1], MinAndMaxY[1], 2.0f };
-
-            uint[] indices = new uint[] { 0, 1, 0, 2, 0, 4,
-                                          1, 3, 1, 5,
-                                          2, 3, 2, 6,
-                                          3, 7,
-                                          4, 5, 4, 6,
-                                          5, 7,
-                                          6, 7};
-
-            int vertexBufferObject, vertexArrayObject;
-
-            vertexArrayObject = GL.GenVertexArray();
-            GL.BindVertexArray(vertexArrayObject);
-
-            vertexBufferObject = GL.GenBuffer();
-
-            GL.BindBuffer(BufferTarget.ArrayBuffer, vertexBufferObject);
-            GL.BufferData(BufferTarget.ArrayBuffer, vertices.Length * sizeof(float), vertices, BufferUsageHint.StaticDraw);
-            GL.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, 0, 0);
-            GL.EnableVertexAttribArray(0);
-
-            GL.BindVertexArray(0);
-            GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
-
-            Shader.ApplyWireframeShader();
-            GL.BindVertexArray(vertexArrayObject);
-            GL.DrawElements(PrimitiveType.Lines, indices.Length, DrawElementsType.UnsignedInt, indices);
-            GL.BindVertexArray(0);
-            Shader.Reset();
         }
 
     }

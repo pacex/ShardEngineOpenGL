@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using OpenTK.Mathematics;
 using OpenTK.Input;
+using OpenTK.Windowing.GraphicsLibraryFramework;
 
 namespace Shard.GLTest
 {
@@ -25,6 +26,7 @@ namespace Shard.GLTest
         {
             base.initialize();
 
+            // Camera Setup
             camera = new Camera();
             camera.SetAsMain();
             height = 1.2f;
@@ -33,27 +35,29 @@ namespace Shard.GLTest
 
             camera.Transform.Translation = Transform.Translation + Vector3.UnitZ * height;
 
+            // Player physics
             setPhysicsEnabled();
-
             MyBody.addRectCollider(0.6f, 0.6f);
-            MyBody.ReflectOnCollision = false;
-            MyBody.StopOnCollision = true;
         }
 
         public override void update() 
         {
-            camera.Transform.Translation = Transform.Translation + Vector3.UnitZ * height;
+            // Interpolate camera position
+            Vector3 goal = Transform.Translation + Vector3.UnitZ * height;
+            Vector3 current = camera.Transform.Translation;
 
+            camera.Transform.Translation = current + (goal - current) * 0.5f;
+
+            // Update Camera rotation
             Vector2 mouseDelta = DisplayOpenGL.GetInstance().Window.MouseState.Delta;
-
             camera.Transform.Rotate(Quaternion.FromAxisAngle(Vector3.UnitZ, mouseDelta.X * sensitivity));
             camera.Transform.Rotate(Quaternion.FromAxisAngle(camera.Transform.Left, -mouseDelta.Y * sensitivity));
 
             
-
         }
         public override void physicsUpdate()
         {
+            // Player Movement
             Vector2 f = camera.Transform.Forward.Xy.Normalized();
             Vector2 l = camera.Transform.Left.Xy.Normalized();
 
@@ -62,19 +66,19 @@ namespace Shard.GLTest
 
             float force = 0.02f;
 
-            if (DisplayOpenGL.GetInstance().Window.IsKeyDown(OpenTK.Windowing.GraphicsLibraryFramework.Keys.W))
+            if (DisplayOpenGL.GetInstance().Window.IsKeyDown(Keys.W))
             {
                 MyBody.addForce(forward, force);
             }
-            if (DisplayOpenGL.GetInstance().Window.IsKeyDown(OpenTK.Windowing.GraphicsLibraryFramework.Keys.S))
+            if (DisplayOpenGL.GetInstance().Window.IsKeyDown(Keys.S))
             {
                 MyBody.addForce(-forward, force);
             }
-            if (DisplayOpenGL.GetInstance().Window.IsKeyDown(OpenTK.Windowing.GraphicsLibraryFramework.Keys.A))
+            if (DisplayOpenGL.GetInstance().Window.IsKeyDown(Keys.A))
             {
                 MyBody.addForce(left, force);
             }
-            if (DisplayOpenGL.GetInstance().Window.IsKeyDown(OpenTK.Windowing.GraphicsLibraryFramework.Keys.D))
+            if (DisplayOpenGL.GetInstance().Window.IsKeyDown(Keys.D))
             {
                 MyBody.addForce(-left, force);
             }
@@ -82,15 +86,7 @@ namespace Shard.GLTest
 
         public override void drawUpdate()
         {
-            
-
             base.drawUpdate();
-
-            GameGLTest game = (GameGLTest)Bootstrap.getRunningGame();
-            if (game.DrawDebug)
-            {
-                MyBody.debugDraw();
-            }
             
         }
     }

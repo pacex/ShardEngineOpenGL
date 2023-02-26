@@ -101,6 +101,7 @@ namespace Shard
         private long lastUpdate;
         private long lastDebugDraw;
 
+        // A 2D-Grid of static bodys (i.e. PhysicsBodys with kinematic set to true)
         private List<PhysicsBody>[,] kinematicObjects;
         private Box2 extents;
         private Vector2i cellCount;
@@ -120,6 +121,7 @@ namespace Shard
             gravityDir = new System.Numerics.Vector2(0, 1);
             // 50 FPS            
 
+            // TODO: Make TimeInterval adjustable
             TimeInterval = 20;
             
             if (Bootstrap.checkEnvironmentalVariable("gravity_modifier"))
@@ -172,6 +174,8 @@ namespace Shard
             allPhysicsObjects.Add(body);       
         }
 
+
+        #region Kinematic
         public void initKinematic(Box2 extents, float cellSize)
         {
             if (kinematicObjects != null)
@@ -281,6 +285,8 @@ namespace Shard
                 addKinBody(body, collider);
             }
         }
+        #endregion
+
 
         public void removePhysicsObject(PhysicsBody body)
         {
@@ -401,7 +407,11 @@ namespace Shard
 
             //            Debug.Log("Tick: " + Bootstrap.TimeElapsed);
 
-            lastUpdate = Bootstrap.getCurrentMillis();
+            long currentMillis = Bootstrap.getCurrentMillis(); 
+            long physDeltaTime = currentMillis - lastUpdate;
+            lastUpdate = currentMillis;
+
+            Console.WriteLine((float)physDeltaTime * 0.001f);
 
 
             toRemove = new List<CollidingObject>();
@@ -413,7 +423,7 @@ namespace Shard
                     body.applyGravity(gravityModifier, gravityDir);
                 }
 
-                body.physicsTick();
+                body.physicsTick((float)physDeltaTime * 0.001f);
                 body.recalculateColliders();
 
 

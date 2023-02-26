@@ -16,9 +16,6 @@ namespace Shard.GLTest
         private VisualGameObject level;
         private Player player;
 
-        public bool DrawDebug = false;
-
-
         public void handleInput(InputEvent inp, string eventType)
         {
             
@@ -41,7 +38,6 @@ namespace Shard.GLTest
 
             level = new VisualGameObject(ObjLoader.LoadMesh("GLTest\\level.obj"), 
                 new Texture("GLTest\\texture_level.png", TextureWrapMode.MirroredRepeat, TextureMinFilter.NearestMipmapLinear, TextureMagFilter.Nearest, 0, 32));
-
             level.Transform.Translation = new Vector3(0.0f, 0.0f, 0.0f);
 
             Wall go;
@@ -62,16 +58,11 @@ namespace Shard.GLTest
 
         public override void update()
         {
+            // End game
             if (DisplayOpenGL.GetInstance().Window.IsKeyPressed(Keys.Escape))
             {
                 Bootstrap.endGame();
-            }
-
-            if (DisplayOpenGL.GetInstance().Window.IsKeyDown(Keys.F3))
-            {
-                DrawDebug = !DrawDebug;
-            }
-            
+            }        
         }
 
         public override void draw()
