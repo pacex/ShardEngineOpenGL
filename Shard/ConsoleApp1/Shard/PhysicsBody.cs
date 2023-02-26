@@ -28,6 +28,7 @@
 
 using OpenTK.Core;
 using OpenTK.Mathematics;
+using Shard.GLTest;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -150,6 +151,8 @@ namespace Shard
             stopOnCollision = true;
             reflectOnCollision = false;
 
+            Kinematic = false;
+
             MinAndMaxX = new float[2];
             MinAndMaxY = new float[2];
 
@@ -157,6 +160,12 @@ namespace Shard
             //            Debug.getInstance().log ("Setting physics enabled");
 
             PhysicsManager.getInstance().addPhysicsObject(this);
+        }
+
+        public void setKinematic()
+        {
+            Kinematic = true;
+            PhysicsManager.getInstance().addToKinematic(this);
         }
 
         public void debugDraw()
@@ -303,7 +312,7 @@ namespace Shard
         public void physicsTick()
         {
             List<System.Numerics.Vector2> toRemove;
-            float force;
+
             float rot = 0;
 
 
@@ -324,17 +333,42 @@ namespace Shard
 
             trans.Rotate(OpenTK.Mathematics.Quaternion.FromAxisAngle(OpenTK.Mathematics.Vector3.UnitZ, rot * ((float)Math.PI / 180.0f)));
 
-            force = this.force.Length();
 
-			trans.Translate(new OpenTK.Mathematics.Vector3(this.force.X, this.force.Y, 0.0f));
+            if (!kinematic && force.Length() > 0.0f)
+            {
+                // X direction
+                if (PhysicsManager.getInstance().queryKinematic(this, new OpenTK.Mathematics.Vector2(force.X, 0.0f)))
+                {
+                    force.X = Math.Sign(force.X) * 0.02f;
+                }
+                else
+                {
+                    trans.Translate(new OpenTK.Mathematics.Vector3(force.X, 0.0f, 0.0f));
+                }
 
-            if (force < Drag)
+                // Y direction
+                if (PhysicsManager.getInstance().queryKinematic(this, new OpenTK.Mathematics.Vector2(0.0f, force.Y)))
+                {
+                    force.Y = Math.Sign(force.Y) * 0.02f;
+
+                }
+                else
+                {
+                    trans.Translate(new OpenTK.Mathematics.Vector3(0.0f, force.Y, 0.0f));
+                }
+            }
+
+			
+
+
+            float mag = force.Length();
+            if (mag < Drag)
             {
                 stopForces();
             }
-            else if (force > 0)
+            else if (mag > 0)
             {
-                this.force = (this.force / force) * (force - Drag);
+                this.force = (this.force / mag) * (mag - Drag);
             }
 
 

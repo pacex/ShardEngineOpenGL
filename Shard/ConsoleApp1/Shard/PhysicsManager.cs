@@ -101,7 +101,7 @@ namespace Shard
         private long lastUpdate;
         private long lastDebugDraw;
 
-        private List<PhysicsBody>[,] nonKinematicObjects;
+        private List<PhysicsBody>[,] kinematicObjects;
         private Box2 extents;
         private Vector2i cellCount;
 
@@ -169,45 +169,65 @@ namespace Shard
                 return;
             }
 
-            allPhysicsObjects.Add(body);
-            addToNonKinematic(body);
-
+            allPhysicsObjects.Add(body);       
         }
 
-        public void initNonKinematic(Box2 extents, float cellSize)
+        public void initKinematic(Box2 extents, float cellSize)
         {
-            if (nonKinematicObjects != null)
+            if (kinematicObjects != null)
             {
                 return;
             }
 
             this.extents = extents;
             cellCount = new Vector2i((int)(extents.Size.X / cellSize), (int)(extents.Size.Y / cellSize));
-            nonKinematicObjects = new List<PhysicsBody>[cellCount.X, cellCount.Y];
+            kinematicObjects = new List<PhysicsBody>[cellCount.X, cellCount.Y];
 
+        }
+
+        /*
+         * Returns true if at least one of body's colliders intersects a kinematic PhysicsBody
+         */
+        public bool queryKinematic(PhysicsBody body, OpenTK.Mathematics.Vector2 offset)
+        {
+            if (kinematicObjects == null) { return false; }
+
+            foreach (Collider collider in body.getColliders())
+            {
+                if (collider is ColliderRect)
+                {
+                    ColliderRect cr = (ColliderRect)collider;
+                    if (queryKinBody(cr, offset))
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
         }
 
         private Vector2i getCell(OpenTK.Mathematics.Vector2 pos)
         {
-            if (nonKinematicObjects == null) { throw new NotImplementedException(); }
+            if (kinematicObjects == null) { throw new NotImplementedException(); }
 
             Vector2i cell = new Vector2i((int)(cellCount.X * (pos.X - extents.Min.X) / extents.Size.X),
                 (int)(cellCount.Y * (pos.Y - extents.Min.Y) / extents.Size.Y));
 
-            return new Vector2i(Math.Clamp(cell.X, 0, cellCount.X), Math.Clamp(cell.Y, 0, cellCount.Y));
+            return new Vector2i(Math.Clamp(cell.X, 0, cellCount.X - 1), Math.Clamp(cell.Y, 0, cellCount.Y - 1));
         }
 
         private void addToCell(Vector2i cellIndex, PhysicsBody body)
         {
-            if (nonKinematicObjects[cellIndex.X, cellIndex.Y] == null)
+            if (kinematicObjects[cellIndex.X, cellIndex.Y] == null)
             {
-                nonKinematicObjects[cellIndex.X, cellIndex.Y] = new List<PhysicsBody>();
+                kinematicObjects[cellIndex.X, cellIndex.Y] = new List<PhysicsBody>();
             }
 
-            nonKinematicObjects[cellIndex.X, cellIndex.Y].Add(body);
+            kinematicObjects[cellIndex.X, cellIndex.Y].Add(body);
         }
 
-        private void addNKBody(PhysicsBody body, Collider collider)
+        private void addKinBody(PhysicsBody body, Collider collider)
         {
             Vector2i min = getCell(new OpenTK.Mathematics.Vector2(collider.getMinAndMaxX()[0], collider.getMinAndMaxY()[0]));
             Vector2i max = getCell(new OpenTK.Mathematics.Vector2(collider.getMinAndMaxX()[1], collider.getMinAndMaxY()[1]));
@@ -221,13 +241,44 @@ namespace Shard
             }
         }
 
-        private void addToNonKinematic(PhysicsBody body)
+        private bool queryKinBody(ColliderRect collider, OpenTK.Mathematics.Vector2 offset)
         {
-            if (nonKinematicObjects == null) { return; }
+            Box2 own = new Box2(collider.getMinAndMaxX()[0] + offset.X, collider.getMinAndMaxY()[0] + offset.Y,
+                                                collider.getMinAndMaxX()[1] + offset.X, collider.getMinAndMaxY()[1] + offset.Y);
+
+            Vector2i min = getCell(own.Min);
+            Vector2i max = getCell(own.Max);
+
+            for (int i = min.X; i <= max.X; i++)
+            {
+                for (int j = min.Y; j <= max.Y; j++)
+                {
+                    if (kinematicObjects[i,j] == null) { continue; }
+
+                    foreach(PhysicsBody body in kinematicObjects[i, j])
+                    {
+                        foreach(Collider c in body.getColliders())
+                        {                           
+                            Box2 other = new Box2(c.getMinAndMaxX()[0], c.getMinAndMaxY()[0],
+                                                c.getMinAndMaxX()[1], c.getMinAndMaxY()[1]);
+                            if (own.Contains(other))
+                            {
+                                return true;
+                            }
+                        }
+                    }
+                }
+            }
+            return false;
+        }
+
+        public void addToKinematic(PhysicsBody body)
+        {
+            if (kinematicObjects == null) { throw new NotImplementedException(); }
 
             foreach (Collider collider in body.getColliders())
             {
-                addNKBody(body, collider);
+                addKinBody(body, collider);
             }
         }
 

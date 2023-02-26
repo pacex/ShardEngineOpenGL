@@ -82,8 +82,16 @@ namespace Shard.GLTest
 
         public override void drawUpdate()
         {
+            
+
             base.drawUpdate();
-            MyBody.debugDraw();
+
+            GameGLTest game = (GameGLTest)Bootstrap.getRunningGame();
+            if (game.DrawDebug)
+            {
+                MyBody.debugDraw();
+            }
+            
         }
     }
 }

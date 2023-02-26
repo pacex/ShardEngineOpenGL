@@ -156,11 +156,13 @@ namespace Shard
 
         public override float[] getMinAndMaxX()
         {
+            calculateBoundingBox();
             return MinAndMaxX;
         }
 
         public override float[] getMinAndMaxY()
         {
+            calculateBoundingBox();
             return MinAndMaxY;
         }
 

@@ -16,6 +16,8 @@ namespace Shard.GLTest
         private VisualGameObject level;
         private Player player;
 
+        public bool DrawDebug = false;
+
 
         public void handleInput(InputEvent inp, string eventType)
         {
@@ -31,7 +33,7 @@ namespace Shard.GLTest
             DisplayOpenGL.GetInstance().Window.WindowState = WindowState.Maximized;
 
             // Physics settings
-            PhysicsManager.getInstance().initNonKinematic(new Box2(-8.0f, -8.0f, 8.0f, 8.0f), 1.0f);
+            PhysicsManager.getInstance().initKinematic(new Box2(-8.0f, -8.0f, 8.0f, 8.0f), 1.0f);
 
             // GameObjects
             player = new Player();
@@ -42,15 +44,19 @@ namespace Shard.GLTest
 
             level.Transform.Translation = new Vector3(0.0f, 0.0f, 0.0f);
 
-            GameObject go;
-            go = new Wall(new Vector2(2.0f));
+            Wall go;
+            go = new Wall(new Vector2(2.0f, 2.0f));
             go.Transform.Translation = new Vector3(-4.0f, -4.0f, 0.0f);
+            go.initPhys();
             go = new Wall(new Vector2(2.0f));
             go.Transform.Translation = new Vector3(4.0f, -4.0f, 0.0f);
+            go.initPhys();
             go = new Wall(new Vector2(2.0f));
             go.Transform.Translation = new Vector3(-4.0f, 4.0f, 0.0f);
+            go.initPhys();
             go = new Wall(new Vector2(2.0f));
             go.Transform.Translation = new Vector3(4.0f, 4.0f, 0.0f);
+            go.initPhys();
 
         }
 
@@ -60,6 +66,12 @@ namespace Shard.GLTest
             {
                 Bootstrap.endGame();
             }
+
+            if (DisplayOpenGL.GetInstance().Window.IsKeyDown(Keys.F3))
+            {
+                DrawDebug = !DrawDebug;
+            }
+            
         }
 
         public override void draw()

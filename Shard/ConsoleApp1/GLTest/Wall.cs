@@ -9,18 +9,33 @@ namespace Shard.GLTest
 {
     class Wall : GameObject
     {
-        private Vector2 size = Vector2.One;
+        private Vector2 dim;
 
         public Wall(Vector2 size) : base() {
-            this.size = size;
+            dim = size;   
+        }
+
+        public void initPhys()
+        {
+            setPhysicsEnabled();
+            MyBody.addRectCollider(dim.X, dim.Y);
+            MyBody.setKinematic();
         }
 
         public override void initialize()
         {
             base.initialize();
-            setPhysicsEnabled();
-            MyBody.addRectCollider(size.X, size.Y);
-            MyBody.Kinematic = false;
+        }
+
+        public override void drawUpdate()
+        {
+            base.drawUpdate();
+
+            GameGLTest game = (GameGLTest)Bootstrap.getRunningGame();
+            if (game.DrawDebug)
+            {
+                MyBody.debugDraw();
+            }
         }
     }
 }
