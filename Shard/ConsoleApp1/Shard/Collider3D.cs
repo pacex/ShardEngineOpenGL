@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Shard.Shard
+namespace Shard
 {
     class Collider3D
     {

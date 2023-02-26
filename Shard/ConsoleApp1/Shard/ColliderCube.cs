@@ -8,6 +8,8 @@ using System.Threading.Tasks;
 
 namespace Shard
 {
+
+    /*
     class ColliderCube : Collider3D
     {
         Vector3 centre;
@@ -149,5 +151,5 @@ namespace Shard
         {
             throw new NotImplementedException();
         }
-    }
+    }*/
 }

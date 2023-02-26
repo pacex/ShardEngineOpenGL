@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace Shard
 {
+    /*
     class ColliderSphere : Collider3D
     {
         float radius;
@@ -99,5 +100,5 @@ namespace Shard
         {
             throw new NotImplementedException();
         }
-    }
+    }*/
 }
