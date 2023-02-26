@@ -13,7 +13,7 @@ using System.Collections.Generic;
 
 namespace Shard
 {
-    class GameObject
+    class GameObject : CollisionHandler
     {
         private Transform3D transformOld;
         private Transform3DNew transform;
@@ -162,6 +162,19 @@ namespace Shard
             transformOld = null;
         }
 
+        public virtual void onCollisionEnter(PhysicsBody x)
+        {
+            
+        }
 
+        public virtual void onCollisionExit(PhysicsBody x)
+        {
+            
+        }
+
+        public virtual void onCollisionStay(PhysicsBody x)
+        {
+            
+        }
     }
 }

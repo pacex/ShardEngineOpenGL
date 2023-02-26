@@ -24,12 +24,16 @@ namespace Shard.GLTest
 
         public override void initialize()
         {
-
+            // Display settings
             GL.ClearColor(Color4.Black);
 
             DisplayOpenGL.GetInstance().Window.CursorState = CursorState.Grabbed;
             DisplayOpenGL.GetInstance().Window.WindowState = WindowState.Maximized;
 
+            // Physics settings
+            PhysicsManager.getInstance().initNonKinematic(new Box2(-8.0f, -8.0f, 8.0f, 8.0f), 1.0f);
+
+            // GameObjects
             player = new Player();
             player.Transform.Translation = new Vector3(-4.0f, 1.0f, 0.0f);
 
@@ -37,6 +41,16 @@ namespace Shard.GLTest
                 new Texture("GLTest\\texture_level.png", TextureWrapMode.MirroredRepeat, TextureMinFilter.NearestMipmapLinear, TextureMagFilter.Nearest, 0, 32));
 
             level.Transform.Translation = new Vector3(0.0f, 0.0f, 0.0f);
+
+            GameObject go;
+            go = new Wall(new Vector2(2.0f));
+            go.Transform.Translation = new Vector3(-4.0f, -4.0f, 0.0f);
+            go = new Wall(new Vector2(2.0f));
+            go.Transform.Translation = new Vector3(4.0f, -4.0f, 0.0f);
+            go = new Wall(new Vector2(2.0f));
+            go.Transform.Translation = new Vector3(-4.0f, 4.0f, 0.0f);
+            go = new Wall(new Vector2(2.0f));
+            go.Transform.Translation = new Vector3(4.0f, 4.0f, 0.0f);
 
         }
 

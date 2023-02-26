@@ -22,6 +22,7 @@
 *   
 */
 
+using OpenTK.Mathematics;
 using System;
 using System.Collections.Generic;
 using System.Numerics;
@@ -94,11 +95,16 @@ namespace Shard
         private long timeInterval;
         SAPEntry sapX, sapY;
         float gravityModifier;
-        Vector2 gravityDir;
+        System.Numerics.Vector2 gravityDir;
 
         List<PhysicsBody> allPhysicsObjects;
         private long lastUpdate;
         private long lastDebugDraw;
+
+        private List<PhysicsBody>[,] nonKinematicObjects;
+        private Box2 extents;
+        private Vector2i cellCount;
+
         private PhysicsManager()
         {
             string tmp = "";
@@ -111,7 +117,7 @@ namespace Shard
 
             collisionsToCheck = new List<CollidingObject>();
 
-            gravityDir = new Vector2(0, 1);
+            gravityDir = new System.Numerics.Vector2(0, 1);
             // 50 FPS            
 
             TimeInterval = 20;
@@ -131,10 +137,10 @@ namespace Shard
 
                 tmpbits = tmp.Split(",");
 
-                gravityDir = new Vector2(int.Parse(tmpbits[0]), int.Parse(tmpbits[1]));
+                gravityDir = new System.Numerics.Vector2(int.Parse(tmpbits[0]), int.Parse(tmpbits[1]));
             }
             else {
-                gravityDir = new Vector2 (0, 1);
+                gravityDir = new System.Numerics.Vector2 (0, 1);
             }
 
             
@@ -164,7 +170,65 @@ namespace Shard
             }
 
             allPhysicsObjects.Add(body);
+            addToNonKinematic(body);
 
+        }
+
+        public void initNonKinematic(Box2 extents, float cellSize)
+        {
+            if (nonKinematicObjects != null)
+            {
+                return;
+            }
+
+            this.extents = extents;
+            cellCount = new Vector2i((int)(extents.Size.X / cellSize), (int)(extents.Size.Y / cellSize));
+            nonKinematicObjects = new List<PhysicsBody>[cellCount.X, cellCount.Y];
+
+        }
+
+        private Vector2i getCell(OpenTK.Mathematics.Vector2 pos)
+        {
+            if (nonKinematicObjects == null) { throw new NotImplementedException(); }
+
+            Vector2i cell = new Vector2i((int)(cellCount.X * (pos.X - extents.Min.X) / extents.Size.X),
+                (int)(cellCount.Y * (pos.Y - extents.Min.Y) / extents.Size.Y));
+
+            return new Vector2i(Math.Clamp(cell.X, 0, cellCount.X), Math.Clamp(cell.Y, 0, cellCount.Y));
+        }
+
+        private void addToCell(Vector2i cellIndex, PhysicsBody body)
+        {
+            if (nonKinematicObjects[cellIndex.X, cellIndex.Y] == null)
+            {
+                nonKinematicObjects[cellIndex.X, cellIndex.Y] = new List<PhysicsBody>();
+            }
+
+            nonKinematicObjects[cellIndex.X, cellIndex.Y].Add(body);
+        }
+
+        private void addNKBody(PhysicsBody body, Collider collider)
+        {
+            Vector2i min = getCell(new OpenTK.Mathematics.Vector2(collider.getMinAndMaxX()[0], collider.getMinAndMaxY()[0]));
+            Vector2i max = getCell(new OpenTK.Mathematics.Vector2(collider.getMinAndMaxX()[1], collider.getMinAndMaxY()[1]));
+
+            for(int i = min.X; i <= max.X; i++)
+            {
+                for(int j = min.Y; j <= max.Y; j++)
+                {
+                    addToCell(new Vector2i(i, j), body);
+                }
+            }
+        }
+
+        private void addToNonKinematic(PhysicsBody body)
+        {
+            if (nonKinematicObjects == null) { return; }
+
+            foreach (Collider collider in body.getColliders())
+            {
+                addNKBody(body, collider);
+            }
         }
 
         public void removePhysicsObject(PhysicsBody body)
@@ -310,7 +374,7 @@ namespace Shard
             {
                 ch = (CollisionHandler)col.A.Parent;
                 ch2 = (CollisionHandler)col.B.Parent;
-                Vector2? impulse;
+                System.Numerics.Vector2? impulse;
 
                 // If the object has been destroyed in the interim, it should still 
                 // trigger a collision exit.
@@ -367,9 +431,9 @@ namespace Shard
             }
         }
 
-        private Vector2? checkCollisionBetweenObjects(PhysicsBody a, PhysicsBody b)
+        private System.Numerics.Vector2? checkCollisionBetweenObjects(PhysicsBody a, PhysicsBody b)
         {
-            Vector2? impulse;
+            System.Numerics.Vector2? impulse;
 
             foreach (Collider col in a.getColliders())
             {
@@ -442,8 +506,8 @@ namespace Shard
 
         private void narrowPass()
         {
-            Vector2 impulse;
-            Vector2? possibleImpulse;
+            System.Numerics.Vector2 impulse;
+            System.Numerics.Vector2? possibleImpulse;
             float massTotal, massa, massb;
             float massProp = 0.0f;
 

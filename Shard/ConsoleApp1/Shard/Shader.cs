@@ -13,6 +13,7 @@ namespace Shard
     class Shader : IDisposable
     {
         private static Shader defaultShader = null;
+        private static Shader wireframeShader = null;
 
         public static Shader GetDefaultShader()
         {
@@ -20,6 +21,15 @@ namespace Shard
                 defaultShader = new Shader("Shaders/default.vert", "Shaders/default.frag");
 
             return defaultShader;
+        }
+
+        public static Shader GetWireframeShader()
+        {
+            if (wireframeShader == null)
+            {
+                wireframeShader = new Shader("Shaders/wireframe.vert", "Shaders/wireframe.frag");
+            }
+            return wireframeShader;
         }
 
         public static void ApplyDefaultShader(Texture texture)
@@ -31,10 +41,21 @@ namespace Shard
             GetDefaultShader().Use();
             GetDefaultShader().SetSamplerTextureUnit("texture0", TextureUnit.Texture0);
 
-            GL.UniformMatrix4(GL.GetUniformLocation(defaultShader.Handle, "model"), false, ref display.Model);
-            GL.UniformMatrix4(GL.GetUniformLocation(defaultShader.Handle, "view"), false, ref display.View);
-            GL.UniformMatrix4(GL.GetUniformLocation(defaultShader.Handle, "proj"), false, ref display.Projection);
+            GL.UniformMatrix4(GL.GetUniformLocation(GetDefaultShader().Handle, "model"), false, ref display.Model);
+            GL.UniformMatrix4(GL.GetUniformLocation(GetDefaultShader().Handle, "view"), false, ref display.View);
+            GL.UniformMatrix4(GL.GetUniformLocation(GetDefaultShader().Handle, "proj"), false, ref display.Projection);
 
+        }
+
+        public static void ApplyWireframeShader()
+        {
+            DisplayOpenGL display = Bootstrap.GetDisplayOpenGL();
+
+            GetWireframeShader().Use();
+
+            GL.UniformMatrix4(GL.GetUniformLocation(GetWireframeShader().Handle, "model"), false, ref display.Model);
+            GL.UniformMatrix4(GL.GetUniformLocation(GetWireframeShader().Handle, "view"), false, ref display.View);
+            GL.UniformMatrix4(GL.GetUniformLocation(GetWireframeShader().Handle, "proj"), false, ref display.Projection);
         }
 
         public static void Reset()

@@ -9,109 +9,43 @@
 using System;
 using System.Drawing;
 using System.Numerics;
+using OpenTK.Graphics.OpenGL;
 
 namespace Shard
 {
     class ColliderRect : Collider
     {
-        private Transform myRect;
-        private float baseWid, baseHt;
-        private float x, y, wid, ht;
-        private bool fromTrans;
+        private Transform3DNew transform;
+        private float width, height;
 
-
-
-        public ColliderRect(CollisionHandler gob, Transform t) : base(gob)
+        public ColliderRect(CollisionHandler gob, Transform3DNew t, float wid, float ht) : base(gob)
         {
 
-            this.MyRect = t;
-            fromTrans = true;
-            RotateAtOffset = false;
-            calculateBoundingBox();
-        }
-
-        public ColliderRect(CollisionHandler gob, Transform t, float x, float y, float wid, float ht) : base(gob)
-        {
-            X = x;
-            Y = y;
-            BaseWid = wid;
-            BaseHt = ht;
+            width = wid;
+            height = ht;
             RotateAtOffset = true;
 
-            this.MyRect = t;
+            this.Transform = t;
 
-            fromTrans = false;
 
         }
 
         public void calculateBoundingBox()
         {
-            float nwid, nht, angle, x1, x2, y1, y2;
-            double cos, sin;
-            if (myRect == null)
-            {
-                return;
-            }
-
-            if (fromTrans)
-            {
-                Wid = (float)(MyRect.Wid * MyRect.Scalex);
-                Ht = (float)(MyRect.Ht * MyRect.Scaley);
-            }
-            else
-            {
-                Wid = (float)(BaseWid * MyRect.Scalex);
-                Ht = (float)(BaseHt * MyRect.Scaley);
-            }
-
-            angle = (float)(Math.PI * MyRect.Rotz / 180.0f);
-
-
-            cos = Math.Cos(angle);
-            sin = Math.Sin(angle);
-
-            // Bit of trig here to calculate the new height and width
-            nwid = (float)(Math.Abs(Wid * cos) + Math.Abs(Ht * sin));
-            nht = (float)(Math.Abs(Wid * sin) + Math.Abs(Ht * cos));
-
-            X = (float)MyRect.X + (Wid / 2);
-            Y = (float)MyRect.Y + (Ht / 2);
-
-            Wid = nwid;
-            Ht = nht;
-
-            if (RotateAtOffset) {
-                // Now we work out the X and Y based on the rotation of the body to 
-                // which this belongs,.
-                x1 = X - MyRect.Centre.X;
-                y1 = Y - MyRect.Centre.Y;
-
-                x2 = (float)(x1 * Math.Cos(angle) - y1 * Math.Sin(angle));
-                y2 = (float)(x1 * Math.Sin(angle) + y1 * Math.Cos(angle));
-
-                X = x2 + (float)MyRect.Centre.X;
-                Y = y2 + (float)MyRect.Centre.Y;
-            }
-
-            MinAndMaxX[0] = X - Wid / 2;
-            MinAndMaxX[1] = X + Wid / 2;
-            MinAndMaxY[0] = Y - Ht / 2;
-            MinAndMaxY[1] = Y + Ht / 2;
-
-
+            MinAndMaxX[0] = Transform.Translation.X - Width / 2;
+            MinAndMaxX[1] = Transform.Translation.X + Width / 2;
+            MinAndMaxY[0] = Transform.Translation.Y - Height / 2;
+            MinAndMaxY[1] = Transform.Translation.Y + Height / 2;
         }
 
-        internal Transform MyRect { get => myRect; set => myRect = value; }
-        public float X { get => x; set => x = value; }
-        public float Y { get => y; set => y = value; }
-        public float Wid { get => wid; set => wid = value; }
-        public float Ht { get => ht; set => ht = value; }
+        internal Transform3DNew Transform { get => transform; set => transform = value; }
         public float Left { get => MinAndMaxX[0]; set => MinAndMaxX[0] = value; }
         public float Right { get => MinAndMaxX[1]; set => MinAndMaxX[1] = value; }
         public float Top { get => MinAndMaxY[0]; set => MinAndMaxY[0] = value; }
         public float Bottom { get => MinAndMaxY[1]; set => MinAndMaxY[1] = value; }
-        public float BaseWid { get => baseWid; set => baseWid = value; }
-        public float BaseHt { get => baseHt; set => baseHt = value; }
+        public float Width { get => width; set => width = value; }
+        public float Height { get=> height; set => height = value; }
+
 
         public override void recalculate()
         {
@@ -121,19 +55,19 @@ namespace Shard
         public ColliderRect calculateMinkowskiDifference(ColliderRect other)
         {
             float left, right, top, bottom, width, height;
-            ColliderRect mink = new ColliderRect(null, null);
+            ColliderRect mink = new ColliderRect(null, null, 0.0f, 0.0f);
 
             // A set of calculations that gives us the Minkowski difference
             // for this intersection.
             left = Left - other.Right;
             top = other.Top - Bottom;
-            width = Wid + other.Wid;
-            height = Ht + other.Ht;
+            width = Width + other.Width;
+            height = Height + other.Height;
             right = Right - other.Left;
             bottom = other.Bottom - Top;
 
-            mink.Wid = width;
-            mink.Ht = height;
+            mink.Width = width;
+            mink.Height = height;
 
             mink.MinAndMaxX = new float[2] { left, right };
             mink.MinAndMaxY = new float[2] { top, bottom };
@@ -203,7 +137,7 @@ namespace Shard
             d.drawLine((int)MinAndMaxX[1], (int)MinAndMaxY[0], (int)MinAndMaxX[1], (int)MinAndMaxY[1], col);
             d.drawLine((int)MinAndMaxX[0], (int)MinAndMaxY[1], (int)MinAndMaxX[1], (int)MinAndMaxY[1], col);
 
-            d.drawCircle((int)X, (int)Y, 2, col);
+            d.drawCircle((int)Transform.Translation.X, (int)Transform.Translation.Y, 2, col);
         }
 
         public override Vector2? checkCollision(ColliderCircle c)
@@ -242,6 +176,43 @@ namespace Shard
             }
 
             return null;
+        }
+
+        public void debugDraw()
+        {
+            float[] vertices = new float[] {    MinAndMaxX[0], MinAndMaxY[0], 0.0f,     MinAndMaxX[0], MinAndMaxY[0], 2.0f,
+                                                MinAndMaxX[0], MinAndMaxY[1], 0.0f,     MinAndMaxX[0], MinAndMaxY[1], 2.0f,
+                                                MinAndMaxX[1], MinAndMaxY[0], 0.0f,     MinAndMaxX[1], MinAndMaxY[0], 2.0f,
+                                                MinAndMaxX[1], MinAndMaxY[1], 0.0f,     MinAndMaxX[1], MinAndMaxY[1], 2.0f };
+
+            uint[] indices = new uint[] { 0, 1, 0, 2, 0, 4,
+                                          1, 3, 1, 5,
+                                          2, 3, 2, 6,
+                                          3, 7,
+                                          4, 5, 4, 6,
+                                          5, 7,
+                                          6, 7};
+
+            int vertexBufferObject, vertexArrayObject;
+
+            vertexArrayObject = GL.GenVertexArray();
+            GL.BindVertexArray(vertexArrayObject);
+
+            vertexBufferObject = GL.GenBuffer();
+
+            GL.BindBuffer(BufferTarget.ArrayBuffer, vertexBufferObject);
+            GL.BufferData(BufferTarget.ArrayBuffer, vertices.Length * sizeof(float), vertices, BufferUsageHint.StaticDraw);
+            GL.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, 0, 0);
+            GL.EnableVertexAttribArray(0);
+
+            GL.BindVertexArray(0);
+            GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
+
+            Shader.ApplyWireframeShader();
+            GL.BindVertexArray(vertexArrayObject);
+            GL.DrawElements(PrimitiveType.Lines, indices.Length, DrawElementsType.UnsignedInt, indices);
+            GL.BindVertexArray(0);
+            Shader.Reset();
         }
 
     }

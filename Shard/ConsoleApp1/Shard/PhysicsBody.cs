@@ -159,6 +159,20 @@ namespace Shard
             PhysicsManager.getInstance().addPhysicsObject(this);
         }
 
+        public void debugDraw()
+        {
+            DisplayOpenGL.GetInstance().Model = Matrix4.Identity;
+
+            foreach (Collider col in myColliders)
+            {
+                if (col is ColliderRect)
+                {
+                    ColliderRect cr = (ColliderRect)col;
+                    cr.debugDraw();
+                }
+            }
+        }
+
         public void addTorque(float dir)
         {
             if (Kinematic)
@@ -328,9 +342,9 @@ namespace Shard
         }
 
 
-        public ColliderRect addRectCollider()
+        public ColliderRect addRectCollider(float width, float height)
         {
-            ColliderRect cr = new ColliderRect((CollisionHandler)parent, parent.TransformOld);
+            ColliderRect cr = new ColliderRect((CollisionHandler)parent, parent.Transform, width, height);
 
             addCollider(cr);
 
@@ -349,16 +363,6 @@ namespace Shard
         public ColliderCircle addCircleCollider(int x, int y, int rad)
         {
             ColliderCircle cr = new ColliderCircle((CollisionHandler)parent, parent.TransformOld, x, y, rad);
-
-            addCollider(cr);
-
-            return cr;
-        }
-
-
-        public ColliderRect addRectCollider(int x, int y, int wid, int ht)
-        {
-            ColliderRect cr = new ColliderRect((CollisionHandler)parent, parent.TransformOld, x, y, wid, ht);
 
             addCollider(cr);
 

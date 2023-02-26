@@ -8,7 +8,7 @@ using OpenTK.Input;
 
 namespace Shard.GLTest
 {
-    class Player : GameObject, CollisionHandler
+    class Player : GameObject
     {
 
 
@@ -34,6 +34,10 @@ namespace Shard.GLTest
             camera.Transform.Translation = Transform.Translation + Vector3.UnitZ * height;
 
             setPhysicsEnabled();
+
+            MyBody.addRectCollider(0.6f, 0.6f);
+            MyBody.ReflectOnCollision = false;
+            MyBody.StopOnCollision = true;
         }
 
         public override void update() 
@@ -79,21 +83,7 @@ namespace Shard.GLTest
         public override void drawUpdate()
         {
             base.drawUpdate();
-        }
-
-        public void onCollisionEnter(PhysicsBody x)
-        {
-            
-        }
-
-        public void onCollisionExit(PhysicsBody x)
-        {
-            
-        }
-
-        public void onCollisionStay(PhysicsBody x)
-        {
-            
+            MyBody.debugDraw();
         }
     }
 }
