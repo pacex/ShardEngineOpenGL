@@ -5,6 +5,7 @@ using System.Linq;
 using OpenTK.Mathematics;
 using System.Text;
 using System.Threading.Tasks;
+using Shard.Shard;
 
 namespace Shard
 {
@@ -82,7 +83,7 @@ namespace Shard
             return (cornerDistance_sq < (c.getRadius() * c.getRadius()));
         }
 
-        public override void drawMe(Color col)
+        public override void DrawMe(Color col)
         {
             throw new NotImplementedException();
         }
