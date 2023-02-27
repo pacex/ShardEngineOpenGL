@@ -27,7 +27,7 @@ namespace Shard.GLTest
             GL.ClearColor(Color4.Black);
 
             DisplayOpenGL.GetInstance().Window.CursorState = CursorState.Grabbed;
-            DisplayOpenGL.GetInstance().Window.WindowState = WindowState.Maximized;
+            //DisplayOpenGL.GetInstance().Window.WindowState = WindowState.Maximized;
 
             // Physics settings
             PhysicsManager.getInstance().initKinematic(new Box2(-8.0f, -8.0f, 8.0f, 8.0f), 1.0f);

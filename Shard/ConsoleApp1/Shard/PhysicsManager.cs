@@ -411,8 +411,6 @@ namespace Shard
             long physDeltaTime = currentMillis - lastUpdate;
             lastUpdate = currentMillis;
 
-            Console.WriteLine((float)physDeltaTime * 0.001f);
-
 
             toRemove = new List<CollidingObject>();
 

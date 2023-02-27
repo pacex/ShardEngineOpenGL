@@ -177,6 +177,9 @@ namespace Shard
             GL.BindVertexArray(0);
             Shader.Reset();
 
+            GL.DeleteBuffer(vertexBufferObject);
+            GL.DeleteVertexArray(vertexArrayObject);
+
         }
 
         public override Vector2? checkCollision(ColliderCircle c)
