@@ -68,8 +68,8 @@ namespace Shard.Shard
 
         public abstract void DrawMe(Color col);
         public abstract void calculateBoundingBox();
-        public abstract float[] getMinAndMaxX();
-        public abstract float[] getMinAndMaxY();
+        //public abstract float[] getMinAndMaxX();
+        //public abstract float[] getMinAndMaxY();
 
         public abstract Vector3 getCentre();
       
@@ -83,4 +83,4 @@ namespace Shard.Shard
 
     }
 }
-}
+

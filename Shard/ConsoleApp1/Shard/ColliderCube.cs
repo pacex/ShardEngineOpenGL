@@ -90,7 +90,7 @@ namespace Shard
 
         public override Vector3 getCentre()
         {
-            throw new NotImplementedException();
+            return centre;
         }
 
         public override float getCentreX()
@@ -148,7 +148,7 @@ namespace Shard
 
         public override void recalculate()
         {
-            throw new NotImplementedException();
+            calculateBoundingBox();
         }
     }
 }

@@ -74,71 +74,58 @@ namespace Shard
         {
             throw new NotImplementedException();
         }
-
-        public override float getMinX()
-        {
-            throw new NotImplementedException();
-        }
-
-        public override float getMaxX()
-        {
-            throw new NotImplementedException();
-        }
-
-        public override float getMinY()
-        {
-            throw new NotImplementedException();
-        }
-
-        public override float getMaxY()
-        {
-            throw new NotImplementedException();
-        }
-
-        public override float getMinZ()
-        {
-            throw new NotImplementedException();
-        }
-
-        public override float getMaxZ()
-        {
-            throw new NotImplementedException();
-        }
-
         public override void DrawMe(Color col)
         {
             throw new NotImplementedException();
         }
 
-        public override float[] getMinAndMaxX()
+        public override Vector3 getCentre()
         {
-            throw new NotImplementedException();
-        }
-
-        public override float[] getMinAndMaxY()
-        {
-            throw new NotImplementedException();
-        }
-
-        public override OpenTK.Mathematics.Vector3 getCentre()
-        {
-            throw new NotImplementedException();
+            return centre;
         }
 
         public override float getCentreX()
         {
-            throw new NotImplementedException();
+            return centre.X;
         }
 
         public override float getCentreY()
         {
-            throw new NotImplementedException();
+            return centre.Y;
         }
 
         public override float getCentreZ()
         {
-            throw new NotImplementedException();
+            return centre.Z;
         }
+
+
+        public override float getMinX()
+        {
+            return boundingBoxMin.X;
+        }
+        public override float getMaxX()
+        {
+            return boundingBoxMax.X;
+        }
+        public override float getMinY()
+        {
+            return boundingBoxMin.Y;
+        }
+        public override float getMaxY()
+        {
+            return boundingBoxMax.Y;
+        }
+
+        public override float getMinZ()
+        {
+            return boundingBoxMin.Z;
+        }
+        public override float getMaxZ()
+        {
+            return boundingBoxMax.Z;
+        }
+
         public float getRadius()
         {
             return radius;
