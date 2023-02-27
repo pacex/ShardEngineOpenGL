@@ -324,7 +324,7 @@ namespace Shard
                 // X direction
                 if (PhysicsManager.getInstance().queryKinematic(this, new OpenTK.Mathematics.Vector2(force.X, 0.0f)))
                 {
-                    force.X = Math.Sign(force.X) * 0.03f;
+                    force.X = 0.0f;
                 }
                 else
                 {
@@ -334,7 +334,7 @@ namespace Shard
                 // Y direction
                 if (PhysicsManager.getInstance().queryKinematic(this, new OpenTK.Mathematics.Vector2(0.0f, force.Y)))
                 {
-                    force.Y = Math.Sign(force.Y) * 0.03f;
+                    force.Y = 0.0f;
 
                 }
                 else

@@ -51,8 +51,13 @@ namespace Shard.GLTest
             // Update Camera rotation
             Vector2 mouseDelta = DisplayOpenGL.GetInstance().Window.MouseState.Delta;
             camera.Transform.Rotate(Quaternion.FromAxisAngle(Vector3.UnitZ, mouseDelta.X * sensitivity));
-            camera.Transform.Rotate(Quaternion.FromAxisAngle(camera.Transform.Left, -mouseDelta.Y * sensitivity));
 
+            Vector3 euler = camera.Transform.Rotation.ToEulerAngles();
+            float vrot = -mouseDelta.Y * sensitivity;
+            if (Math.Abs(euler.Y + vrot) < Math.PI / 2.0f)
+            {
+                camera.Transform.Rotate(Quaternion.FromAxisAngle(camera.Transform.Left, -mouseDelta.Y * sensitivity));
+            }
             
         }
         public override void physicsUpdate()
