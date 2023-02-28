@@ -362,7 +362,7 @@ namespace Shard
 
                 lastTick = timeInMillisecondsStart;
 
-                //Console.WriteLine(getSecondFPS());
+                Console.WriteLine(getSecondFPS());
 
             } 
 
