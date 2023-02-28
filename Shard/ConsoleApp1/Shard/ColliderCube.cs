@@ -5,6 +5,7 @@ using System.Linq;
 using OpenTK.Mathematics;
 using System.Text;
 using System.Threading.Tasks;
+using Shard.Shard;
 
 namespace Shard
 {
@@ -84,14 +85,14 @@ namespace Shard
             return (cornerDistance_sq < (c.getRadius() * c.getRadius()));
         }
 
-        public override void drawMe(Color col)
+        public override void DrawMe(Color col)
         {
             throw new NotImplementedException();
         }
 
         public override Vector3 getCentre()
         {
-            throw new NotImplementedException();
+            return centre;
         }
 
         public override float getCentreX()
@@ -149,7 +150,7 @@ namespace Shard
 
         public override void recalculate()
         {
-            throw new NotImplementedException();
+            calculateBoundingBox();
         }
     }*/
 }
