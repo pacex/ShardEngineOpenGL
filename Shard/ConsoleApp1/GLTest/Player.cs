@@ -17,6 +17,8 @@ namespace Shard.GLTest
         private Camera camera;
         private float sensitivity;
 
+        private float acc;
+
         public Player() : base()
         {
             
@@ -38,6 +40,9 @@ namespace Shard.GLTest
             // Player physics
             setPhysicsEnabled();
             MyBody.addRectCollider(0.6f, 0.6f);
+            MyBody.Drag = 0.03f;
+            MyBody.MaxForce = 0.22f;
+            acc = 0.04f;
         }
 
         public override void update() 
@@ -69,7 +74,7 @@ namespace Shard.GLTest
             System.Numerics.Vector2 forward = new System.Numerics.Vector2(f.X, f.Y);
             System.Numerics.Vector2 left = new System.Numerics.Vector2(l.X, l.Y);
 
-            float force = 0.02f;
+            float force = acc;
 
             if (DisplayOpenGL.GetInstance().Window.IsKeyDown(Keys.W))
             {
