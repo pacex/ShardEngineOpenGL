@@ -1,4 +1,4 @@
-﻿using Shard.Shard;
+﻿
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -17,8 +17,9 @@ namespace Shard
         Vector3 boundingBoxMin;
         Vector3 boundingBoxMax;
         Transform3DNew mySphere;
-        public ColliderSphere(CollisionHandler gob, Transform3DNew t) : base(gob)
+        public ColliderSphere(CollisionHandler gob, Transform3DNew t, float radius) : base(gob)
         {
+            this.radius = radius;
             mySphere = t;
             centre = t.Translation;
             calculateBoundingBox();

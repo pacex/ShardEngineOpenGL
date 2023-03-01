@@ -5,12 +5,12 @@ using System.Linq;
 using OpenTK.Mathematics;
 using System.Text;
 using System.Threading.Tasks;
-using Shard.Shard;
+
 
 namespace Shard
 {
 
-    /*
+    
     class ColliderCube : Collider3D
     {
         Vector3 centre;
@@ -20,10 +20,12 @@ namespace Shard
         private float height;
         private float depth;
         private Transform3DNew myCube;
-        public ColliderCube(CollisionHandler gob, Transform3DNew t) : base(gob)
+        public ColliderCube(CollisionHandler gob, Transform3DNew t,float hgt, float wdt, float dpt) : base(gob)
         {
             
-
+            this.widht = wdt;
+            this.height = hgt;
+            this.depth = dpt;
             myCube = t;
             centre = t.Translation;
 
@@ -122,6 +124,14 @@ namespace Shard
             return depth;
         }
 
+        public Vector3 getBoundingBoxMin()
+        {
+            return boundingBoxMin;
+        }
+        public Vector3 getBoundingBoxMax()
+        {
+            return boundingBoxMax;
+        }
         public override float getMinX()
         {
             return boundingBoxMin.X;

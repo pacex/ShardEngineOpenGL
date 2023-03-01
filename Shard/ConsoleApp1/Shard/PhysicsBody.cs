@@ -41,6 +41,8 @@ namespace Shard
     {
         List<Collider> myColliders;
         List<Collider> collisionCandidates;
+        List<Collider3D> my3DColliders;
+        List<Collider3D> collision3Dcandidates;
         GameObject parent;
         CollisionHandler colh;
         Transform3DNew trans;
@@ -359,8 +361,20 @@ namespace Shard
 
 
         }
+        public ColliderSphere addSphereCollider(float radius)
+        {
+            ColliderSphere cr = new ColliderSphere((CollisionHandler)parent, parent.Transform,radius);
+            add3DCollider(cr);
+            return cr;
 
+        }
+        public ColliderCube addCubeCollider(float width, float height, float depth)
+        {
+            ColliderCube cr = new ColliderCube((CollisionHandler)parent, parent.Transform, width, height,depth);
+            add3DCollider(cr);
+            return cr;
 
+        }
         public ColliderRect addRectCollider(float width, float height)
         {
             ColliderRect cr = new ColliderRect((CollisionHandler)parent, parent.Transform, width, height);
@@ -393,12 +407,20 @@ namespace Shard
         {
             myColliders.Add(col);
         }
+        public void add3DCollider(Collider3D col)
+        {
+            my3DColliders.Add(col);
+        }
 
         public List<Collider> getColliders()
         {
             return myColliders;
         }
-
+        public List<Collider3D> get3DColliders()
+        {
+            return my3DColliders;
+        }
+         
         public System.Numerics.Vector2? checkCollisions(System.Numerics.Vector2 other)
         {
             System.Numerics.Vector2? d;

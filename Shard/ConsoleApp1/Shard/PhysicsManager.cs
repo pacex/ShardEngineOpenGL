@@ -104,8 +104,12 @@ namespace Shard
         // A 2D-Grid of static bodys (i.e. PhysicsBodys with kinematic set to true)
         private List<PhysicsBody>[,] kinematicObjects;
         private Box2 extents;
+        
         private Vector2i cellCount;
-
+        
+        private Box3 extents3D;
+        private Vector3i cellCount3D;
+        private List<PhysicsBody>[] kinematicObjects3D;
         private PhysicsManager()
         {
             string tmp = "";
@@ -220,6 +224,15 @@ namespace Shard
 
             return new Vector2i(Math.Clamp(cell.X, 0, cellCount.X - 1), Math.Clamp(cell.Y, 0, cellCount.Y - 1));
         }
+        private Vector3i getCell(OpenTK.Mathematics.Vector3 pos)
+        {
+            if (kinematicObjects == null) { throw new NotImplementedException(); }
+
+            Vector3i cell = new Vector3i((int)(cellCount3D.X * (pos.X - extents3D.Min.X) / extents3D.Size.X),
+                (int)(cellCount3D.Y * (pos.Y - extents3D.Min.Y) / extents3D.Size.Y),(int)(cellCount3D.Z * (pos.Z - extents3D.Min.Z) / extents3D.Size.Z));
+
+            return new Vector3i(Math.Clamp(cell.X, 0, cellCount3D.X - 1), Math.Clamp(cell.Y, 0, cellCount3D.Y - 1),Math.Clamp(cell.Z,0,cellCount3D.Z - 1));
+        }
 
         private void addToCell(Vector2i cellIndex, PhysicsBody body)
         {
@@ -263,6 +276,36 @@ namespace Shard
                     {
                         foreach(Collider c in body.getColliders())
                         {                           
+                            Box2 other = new Box2(c.getMinAndMaxX()[0], c.getMinAndMaxY()[0],
+                                                c.getMinAndMaxX()[1], c.getMinAndMaxY()[1]);
+                            if (own.Contains(other))
+                            {
+                                return true;
+                            }
+                        }
+                    }
+                }
+            }
+            return false;
+        }
+        private bool queryKinBody3D(ColliderCube collider, OpenTK.Mathematics.Vector3 offset)
+        {
+            Box3 own = new Box3(collider.getBoundingBoxMin(), collider.getBoundingBoxMax());
+
+            Vector3i min = getCell(own.Min);
+            Vector3i max = getCell(own.Max);
+
+            for (int i = min.X; i <= max.X; i++)
+            {
+                for (int j = min.Y; j <= max.Y; j++)
+                {
+                    for(int k = min.Z; k<= max.Z; k++)
+                        if (kinematicObjects3D[i, j, k] == null) { continue; }
+
+                    foreach (PhysicsBody body in kinematicObjects[i, j])
+                    {
+                        foreach (Collider c in body.getColliders())
+                        {
                             Box2 other = new Box2(c.getMinAndMaxX()[0], c.getMinAndMaxY()[0],
                                                 c.getMinAndMaxX()[1], c.getMinAndMaxY()[1]);
                             if (own.Contains(other))
