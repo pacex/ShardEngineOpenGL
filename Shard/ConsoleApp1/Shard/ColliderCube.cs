@@ -5,12 +5,12 @@ using System.Linq;
 using OpenTK.Mathematics;
 using System.Text;
 using System.Threading.Tasks;
-using Shard.Shard;
+using Shard;
 
 namespace Shard
 {
 
-    /*
+    
     class ColliderCube : Collider3D
     {
         Vector3 centre;
@@ -152,5 +152,5 @@ namespace Shard
         {
             calculateBoundingBox();
         }
-    }*/
+    }
 }

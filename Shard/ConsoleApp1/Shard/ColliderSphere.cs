@@ -1,4 +1,4 @@
-﻿using Shard.Shard;
+﻿using Shard;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
