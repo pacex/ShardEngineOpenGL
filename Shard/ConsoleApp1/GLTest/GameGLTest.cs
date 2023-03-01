@@ -40,6 +40,11 @@ namespace Shard.GLTest
                 new Texture("GLTest\\texture_level2.png", TextureWrapMode.MirroredRepeat, TextureMinFilter.NearestMipmapLinear, TextureMagFilter.Nearest, 0, 3));
             level.Transform.Translation = new Vector3(0.0f, 0.0f, 0.0f);
 
+            Monster m = new Monster();
+            m.Transform.Translation = new Vector3(18.0f, 18.0f, 0.0f);
+            m = new Monster();
+            m.Transform.Translation = new Vector3(22.0f, 18.0f, 0.0f);
+
             #region Wall objects
 
             // Walls
