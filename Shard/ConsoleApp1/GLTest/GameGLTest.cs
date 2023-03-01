@@ -41,7 +41,9 @@ namespace Shard.GLTest
             level.Transform.Translation = new Vector3(0.0f, 0.0f, 0.0f);
 
             Monster m = new Monster();
-            m.Transform.Translation = new Vector3(0.0f, 0.0f, 0.0f);
+            m.Transform.Translation = new Vector3(18.0f, 18.0f, 0.0f);
+            m = new Monster();
+            m.Transform.Translation = new Vector3(22.0f, 18.0f, 0.0f);
 
             #region Wall objects
 
