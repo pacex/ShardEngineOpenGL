@@ -13,6 +13,7 @@ namespace Shard
     {
 
         private int vertexArrayObject;
+        private int vertexBufferObject;
 
         private float[] vertices;
         private uint[] indices;
@@ -38,7 +39,6 @@ namespace Shard
             vertexArrayObject = GL.GenVertexArray();
             GL.BindVertexArray(vertexArrayObject);
 
-            int vertexBufferObject;
             vertexBufferObject = GL.GenBuffer();
 
             // Vertex Attributes: (0) vec3 pos, (1) vec3 normal, (2) vec4 color, (3) vec2 uv
@@ -58,11 +58,15 @@ namespace Shard
             GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
         }
 
-        public void Draw()
+        public virtual void Draw()
         {
             GL.BindVertexArray(vertexArrayObject);
             GL.DrawElements(PrimitiveType.Triangles, indices.Length, DrawElementsType.UnsignedInt, indices);
             GL.BindVertexArray(0);
+        }
+
+        public AnimatedMesh ToAnimatedMesh(Texture texture, int frameCount, float animationSpeed) {
+            return new AnimatedMesh(vertices, indices, texture, frameCount, animationSpeed);
         }
     }
 }
