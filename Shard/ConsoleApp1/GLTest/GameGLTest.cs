@@ -34,7 +34,7 @@ namespace Shard.GLTest
 
             // GameObjects
             player = new Player();
-            player.Transform.Translation = new Vector3(-4.0f, 1.0f, 0.0f);
+            player.Transform.Translation = new Vector3(-4.0f, 1.0f, 0.7f);
 
             level = new VisualGameObject(ObjLoader.LoadMesh("GLTest\\level2.obj"), 
                 new Texture("GLTest\\texture_level2.png", TextureWrapMode.MirroredRepeat, TextureMinFilter.NearestMipmapLinear, TextureMagFilter.Nearest, 0, 3));
@@ -45,76 +45,76 @@ namespace Shard.GLTest
             // Walls
             Wall go;
             go = new Wall(new Vector2(2.0f, 2.0f));
-            go.Transform.Translation = new Vector3(-6.0f, -6.0f, 0.0f);
+            go.Transform.Translation = new Vector3(-6.0f, -6.0f, 1.0f);
             go.initPhys();
             go = new Wall(new Vector2(2.0f));
-            go.Transform.Translation = new Vector3(6.0f, -6.0f, 0.0f);
+            go.Transform.Translation = new Vector3(6.0f, -6.0f, 1.0f);
             go.initPhys();
             go = new Wall(new Vector2(2.0f));
-            go.Transform.Translation = new Vector3(-6.0f, 6.0f, 0.0f);
+            go.Transform.Translation = new Vector3(-6.0f, 6.0f, 1.0f);
             go.initPhys();
             go = new Wall(new Vector2(2.0f));
-            go.Transform.Translation = new Vector3(6.0f, 6.0f, 0.0f);
+            go.Transform.Translation = new Vector3(6.0f, 6.0f, 1.0f);
             go.initPhys();
             go = new Wall(new Vector2(6.0f));
-            go.Transform.Translation = new Vector3(10.0f, 4.0f, 0.0f);
+            go.Transform.Translation = new Vector3(10.0f, 4.0f, 1.0f);
             go.initPhys();
             go = new Wall(new Vector2(6.0f));
-            go.Transform.Translation = new Vector3(10.0f, -4.0f, 0.0f);
+            go.Transform.Translation = new Vector3(10.0f, -4.0f, 1.0f);
             go.initPhys();
             go = new Wall(new Vector2(34.0f, 2.0f));
-            go.Transform.Translation = new Vector3(10.0f, -8.0f, 0.0f);
+            go.Transform.Translation = new Vector3(10.0f, -8.0f, 1.0f);
             go.initPhys();
             go = new Wall(new Vector2(24.0f, 2.0f));
-            go.Transform.Translation = new Vector3(5.0f, 8.0f, 0.0f);
+            go.Transform.Translation = new Vector3(5.0f, 8.0f, 1.0f);
             go.initPhys();
 
             go = new Wall(new Vector2(2.0f, 2.0f));
-            go.Transform.Translation = new Vector3(14.0f, -6.0f, 0.0f);
+            go.Transform.Translation = new Vector3(14.0f, -6.0f, 1.0f);
             go.initPhys();
             go = new Wall(new Vector2(2.0f));
-            go.Transform.Translation = new Vector3(26.0f, -6.0f, 0.0f);
+            go.Transform.Translation = new Vector3(26.0f, -6.0f, 1.0f);
             go.initPhys();
             go = new Wall(new Vector2(2.0f));
-            go.Transform.Translation = new Vector3(14.0f, 6.0f, 0.0f);
+            go.Transform.Translation = new Vector3(14.0f, 6.0f, 1.0f);
             go.initPhys();
             go = new Wall(new Vector2(2.0f));
-            go.Transform.Translation = new Vector3(26.0f, 6.0f, 0.0f);
+            go.Transform.Translation = new Vector3(26.0f, 6.0f, 1.0f);
             go.initPhys();
 
             go = new Wall(new Vector2(2.0f, 12.0f));
-            go.Transform.Translation = new Vector3(28.0f, 0.0f, 0.0f);
+            go.Transform.Translation = new Vector3(28.0f, 0.0f, 1.0f);
             go.initPhys();
             go = new Wall(new Vector2(2.0f, 12.0f));
-            go.Transform.Translation = new Vector3(-8.0f, 0.0f, 0.0f);
+            go.Transform.Translation = new Vector3(-8.0f, 0.0f, 1.0f);
             go.initPhys();
 
             go = new Wall(new Vector2(2.0f, 16.0f));
-            go.Transform.Translation = new Vector3(26.0f, 15.0f, 0.0f);
+            go.Transform.Translation = new Vector3(26.0f, 15.0f, 1.0f);
             go.initPhys();
             go = new Wall(new Vector2(2.0f, 16.0f));
-            go.Transform.Translation = new Vector3(14.0f, 15.0f, 0.0f);
+            go.Transform.Translation = new Vector3(14.0f, 15.0f, 1.0f);
             go.initPhys();
 
             go = new Wall(new Vector2(2.0f));
-            go.Transform.Translation = new Vector3(24.0f, 8.0f, 0.0f);
+            go.Transform.Translation = new Vector3(24.0f, 8.0f, 1.0f);
             go.initPhys();
 
             go = new Wall(new Vector2(2.0f));
-            go.Transform.Translation = new Vector3(24.0f, 22.0f, 0.0f);
+            go.Transform.Translation = new Vector3(24.0f, 22.0f, 1.0f);
             go.initPhys();
 
             go = new Wall(new Vector2(2.0f));
-            go.Transform.Translation = new Vector3(16.0f, 22.0f, 0.0f);
+            go.Transform.Translation = new Vector3(16.0f, 22.0f, 1.0f);
             go.initPhys();
 
             go = new Wall(new Vector2(10.0f, 2.0f));
-            go.Transform.Translation = new Vector3(20.0f, 24.0f, 0.0f);
+            go.Transform.Translation = new Vector3(20.0f, 24.0f, 1.0f);
             go.initPhys();
 
             // Crates
             go = new Wall(new Vector2(4.1f, 1.1f));
-            go.Transform.Translation = new Vector3(20.0f, 4.0f, 0.0f);
+            go.Transform.Translation = new Vector3(20.0f, 4.0f, 1.0f);
             go.initPhys();
 
             #endregion

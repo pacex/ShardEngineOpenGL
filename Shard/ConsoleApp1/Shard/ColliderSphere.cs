@@ -30,34 +30,20 @@ namespace Shard
             boundingBoxMin = new Vector3(radius - centre.X, radius - centre.Y, radius - centre.Z);
         }
 
-        public double distanceBetween(ColliderSphere a, ColliderSphere b) {
-            return Math.Sqrt(Math.Pow(a.centre.X - b.centre.X, 2) + Math.Pow(a.centre.Y - b.centre.Y, 2) + Math.Pow(a.centre.Z - b.centre.Z, 2));
-        }
+      
        
-        public override void recalculate()
+       public override void recalculate()
         {
-            throw new NotImplementedException();
+             calculateBoundingBox();
         }
         public override bool areColliding(ColliderCube c)
         {
-            float xDistance = Math.Abs(centre.X - c.getCentreX());
-            float yDistance = Math.Abs(centre.Y - c.getCentreX());
-            float zDistance = Math.Abs(centre.Z - c.getCentreX());
-
-            if (xDistance <= (c.getWidth() / 2 + getRadius()) && yDistance <= (c.getHeight() / 2 + getRadius()) && zDistance <= (c.getDepth() / 2 + getRadius()))
-            {
-                return true;
-            }
-            float cornerDistance_sq = ((xDistance - c.getWidth()) * (xDistance - c.getWidth())) +
-                                  ((yDistance - c.getHeight()) * (yDistance - c.getHeight()) +
-                                  ((yDistance - c.getDepth()) * (yDistance - c.getDepth())));
-
-            return (cornerDistance_sq < (getRadius() * getRadius()));
+            return areColliding(c, Vector2.Zero);
         }
 
         public override bool areColliding(ColliderSphere c)
         {
-            return distanceBetween(this, c) <= (radius + c.getRadius());
+            return areColliding(c, Vector2.Zero);
         }
 
         public override bool areColliding(OpenTK.Mathematics.Vector3 c)
@@ -119,6 +105,34 @@ namespace Shard
         public float getRadius()
         {
             return radius;
+        }
+
+        public override bool areColliding(ColliderCube c, Vector2 offset)
+        {
+            float xDistance = Math.Abs(centre.X + offset.X - c.getCentreX());
+            float yDistance = Math.Abs(centre.Y + offset.Y - c.getCentreX());
+            float zDistance = Math.Abs(centre.Z - c.getCentreX());
+
+            if (xDistance <= (c.getWidth() / 2 + getRadius()) && yDistance <= (c.getHeight() / 2 + getRadius()) && zDistance <= (c.getDepth() / 2 + getRadius()))
+            {
+                return true;
+            }
+            float cornerDistance_sq = ((xDistance - c.getWidth()) * (xDistance - c.getWidth())) +
+                                  ((yDistance - c.getHeight()) * (yDistance - c.getHeight()) +
+                                  ((yDistance - c.getDepth()) * (yDistance - c.getDepth())));
+
+            return (cornerDistance_sq < (getRadius() * getRadius()));
+    }
+
+        public override bool areColliding(ColliderSphere c, Vector2 offset)
+        {
+            double dis = Math.Sqrt(Math.Pow(centre.X + offset.X - c.centre.X, 2) + Math.Pow(centre.Y + offset.Y - c.centre.Y, 2) + Math.Pow(centre.Z - c.centre.Z, 2));
+            return dis <= (radius + c.getRadius());
+        }
+
+        public override bool areColliding(Vector3 c, Vector2 offset)
+        {
+            throw new NotImplementedException();
         }
     }
 }

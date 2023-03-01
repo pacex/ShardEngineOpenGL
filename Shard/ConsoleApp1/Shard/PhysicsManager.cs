@@ -107,9 +107,6 @@ namespace Shard
         
         private Vector2i cellCount;
         
-        private Box3 extents3D;
-        private Vector3i cellCount3D;
-        private List<PhysicsBody>[] kinematicObjects3D;
         private PhysicsManager()
         {
             string tmp = "";
@@ -200,15 +197,11 @@ namespace Shard
         {
             if (kinematicObjects == null) { return false; }
 
-            foreach (Collider collider in body.getColliders())
+            foreach (Collider3D collider in body.get3DColliders())
             {
-                if (collider is ColliderRect)
+                if (queryKinBody(collider, offset))
                 {
-                    ColliderRect cr = (ColliderRect)collider;
-                    if (queryKinBody(cr, offset))
-                    {
-                        return true;
-                    }
+                    return true;
                 }
             }
 
@@ -224,15 +217,6 @@ namespace Shard
 
             return new Vector2i(Math.Clamp(cell.X, 0, cellCount.X - 1), Math.Clamp(cell.Y, 0, cellCount.Y - 1));
         }
-        private Vector3i getCell(OpenTK.Mathematics.Vector3 pos)
-        {
-            if (kinematicObjects == null) { throw new NotImplementedException(); }
-
-            Vector3i cell = new Vector3i((int)(cellCount3D.X * (pos.X - extents3D.Min.X) / extents3D.Size.X),
-                (int)(cellCount3D.Y * (pos.Y - extents3D.Min.Y) / extents3D.Size.Y),(int)(cellCount3D.Z * (pos.Z - extents3D.Min.Z) / extents3D.Size.Z));
-
-            return new Vector3i(Math.Clamp(cell.X, 0, cellCount3D.X - 1), Math.Clamp(cell.Y, 0, cellCount3D.Y - 1),Math.Clamp(cell.Z,0,cellCount3D.Z - 1));
-        }
 
         private void addToCell(Vector2i cellIndex, PhysicsBody body)
         {
@@ -244,10 +228,10 @@ namespace Shard
             kinematicObjects[cellIndex.X, cellIndex.Y].Add(body);
         }
 
-        private void addKinBody(PhysicsBody body, Collider collider)
+        private void addKinBody(PhysicsBody body, Collider3D collider)
         {
-            Vector2i min = getCell(new OpenTK.Mathematics.Vector2(collider.getMinAndMaxX()[0], collider.getMinAndMaxY()[0]));
-            Vector2i max = getCell(new OpenTK.Mathematics.Vector2(collider.getMinAndMaxX()[1], collider.getMinAndMaxY()[1]));
+            Vector2i min = getCell(new OpenTK.Mathematics.Vector2(collider.getMinX(), collider.getMinY()));
+            Vector2i max = getCell(new OpenTK.Mathematics.Vector2(collider.getMaxX(), collider.getMaxY()));
 
             for(int i = min.X; i <= max.X; i++)
             {
@@ -258,10 +242,10 @@ namespace Shard
             }
         }
 
-        private bool queryKinBody(ColliderRect collider, OpenTK.Mathematics.Vector2 offset)
+        private bool queryKinBody(Collider3D collider, OpenTK.Mathematics.Vector2 offset)
         {
-            Box2 own = new Box2(collider.getMinAndMaxX()[0] + offset.X, collider.getMinAndMaxY()[0] + offset.Y,
-                                                collider.getMinAndMaxX()[1] + offset.X, collider.getMinAndMaxY()[1] + offset.Y);
+            Box2 own = new Box2(collider.getMinX() + offset.X, collider.getMinY() + offset.Y,collider.getMaxX() + offset.X,collider.getMaxY() + offset.Y);
+
 
             Vector2i min = getCell(own.Min);
             Vector2i max = getCell(own.Max);
@@ -274,11 +258,10 @@ namespace Shard
 
                     foreach(PhysicsBody body in kinematicObjects[i, j])
                     {
-                        foreach(Collider c in body.getColliders())
+                        foreach(Collider3D c in body.get3DColliders())
                         {                           
-                            Box2 other = new Box2(c.getMinAndMaxX()[0], c.getMinAndMaxY()[0],
-                                                c.getMinAndMaxX()[1], c.getMinAndMaxY()[1]);
-                            if (own.Contains(other))
+                        
+                            if (collider.areColliding(c,offset))
                             {
                                 return true;
                             }
@@ -288,42 +271,13 @@ namespace Shard
             }
             return false;
         }
-        private bool queryKinBody3D(ColliderCube collider, OpenTK.Mathematics.Vector3 offset)
-        {
-            Box3 own = new Box3(collider.getBoundingBoxMin(), collider.getBoundingBoxMax());
-
-            Vector3i min = getCell(own.Min);
-            Vector3i max = getCell(own.Max);
-
-            for (int i = min.X; i <= max.X; i++)
-            {
-                for (int j = min.Y; j <= max.Y; j++)
-                {
-                    for(int k = min.Z; k<= max.Z; k++)
-                        if (kinematicObjects3D[i, j, k] == null) { continue; }
-
-                    foreach (PhysicsBody body in kinematicObjects[i, j])
-                    {
-                        foreach (Collider c in body.getColliders())
-                        {
-                            Box2 other = new Box2(c.getMinAndMaxX()[0], c.getMinAndMaxY()[0],
-                                                c.getMinAndMaxX()[1], c.getMinAndMaxY()[1]);
-                            if (own.Contains(other))
-                            {
-                                return true;
-                            }
-                        }
-                    }
-                }
-            }
-            return false;
-        }
+        
 
         public void addToKinematic(PhysicsBody body)
         {
             if (kinematicObjects == null) { throw new NotImplementedException(); }
 
-            foreach (Collider collider in body.getColliders())
+            foreach (Collider3D collider in body.get3DColliders())
             {
                 addKinBody(body, collider);
             }

@@ -18,7 +18,7 @@ namespace Shard.GLTest
         public void initPhys()
         {
             setPhysicsEnabled();
-            MyBody.addRectCollider(dim.X, dim.Y);
+            MyBody.addCubeCollider(dim.X, dim.Y, 2.0f);
             MyBody.setKinematic();
         }
 

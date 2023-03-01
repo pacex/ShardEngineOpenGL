@@ -96,6 +96,11 @@ namespace Shard
             {
                 col.drawMe(DebugColor);
             }
+
+            foreach (Collider3D col in my3DColliders)
+            {
+                col.DrawMe(DebugColor);
+            }
         }
 
         public float[] getMinAndMax(bool x)
@@ -137,6 +142,7 @@ namespace Shard
             DebugColor = Color.Green;
 
             myColliders = new List<Collider>();
+            my3DColliders = new List<Collider3D>();
             collisionCandidates = new List<Collider>();
 
             Parent = p;
@@ -289,6 +295,11 @@ namespace Shard
         public void recalculateColliders()
         {
             foreach (Collider col in getColliders())
+            {
+                col.recalculate();
+            }
+
+            foreach (Collider3D col in get3DColliders())
             {
                 col.recalculate();
             }

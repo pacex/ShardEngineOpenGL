@@ -31,7 +31,7 @@ namespace Shard.GLTest
             // Camera Setup
             camera = new Camera();
             camera.SetAsMain();
-            height = 1.2f;
+            height = 0.6f;
 
             sensitivity = 0.002f;
 
@@ -39,7 +39,7 @@ namespace Shard.GLTest
 
             // Player physics
             setPhysicsEnabled();
-            MyBody.addRectCollider(0.6f, 0.6f);
+            MyBody.addCubeCollider(0.6f, 0.6f,1.2f);
             MyBody.Drag = 0.03f;
             MyBody.MaxForce = 0.22f;
             acc = 0.04f;

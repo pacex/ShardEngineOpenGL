@@ -26,9 +26,31 @@ namespace Shard
 
         internal CollisionHandler GameObject { get => gameObject; set => gameObject = value; }
         //public bool RotateAtOffset { get => rotateAtOffset; set => rotateAtOffset = value; }
+
+        public bool areColliding(Collider3D c)
+        {
+            return areColliding(c, Vector2.Zero);
+        }
+
+        public bool areColliding(Collider3D c, Vector2 offset)
+        {
+            if (c is ColliderCube)
+            {
+                return areColliding((ColliderCube)c, offset);
+            }
+            if (c is ColliderSphere)
+            {
+                return areColliding((ColliderSphere)c, offset);
+            }
+
+            return false;
+        }
         public abstract bool areColliding(ColliderCube c);
         public abstract bool areColliding(ColliderSphere c);
         public abstract bool areColliding(Vector3 c);
+        public abstract bool areColliding(ColliderCube c, Vector2 offset);
+        public abstract bool areColliding(ColliderSphere c, Vector2 offset);
+        public abstract bool areColliding(Vector3 c, Vector2 offset);
         public abstract float getMinX();
 
         public abstract float getMaxX();
