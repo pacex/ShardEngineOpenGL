@@ -50,6 +50,7 @@ namespace Shard
         private float drag;
         private float torque;
         private System.Numerics.Vector2 force;
+        //private System.Numerics.Vector3 force3D;
         private float mass;
         private double timeInterval;
         private float maxForce, maxTorque;
@@ -267,6 +268,9 @@ namespace Shard
         public void addForce(System.Numerics.Vector2 dir, float force) {
             addForce(dir * force);
         }
+        //public void addForce(System.Numerics.Vector3 dir, float force){
+        //    addForce(dir * force);
+        //}
 
         public void addForce(System.Numerics.Vector2 dir)
         {
@@ -291,6 +295,29 @@ namespace Shard
                 force = System.Numerics.Vector2.Normalize(force) * MaxForce;
             }
         }
+        //public void addForce(System.Numerics.Vector3 dir)
+        //{
+        //    if (Kinematic)
+        //    {
+        //        return;
+        //    }
+
+        //    dir /= Mass;
+
+        //    // Set a lower bound.
+        //    if (dir.LengthSquared() < 0.0001)
+        //    {
+        //        return;
+        //    }
+
+        //    force3D += dir;
+
+        //    // Set a higher bound.
+        //    if (force3D.Length() > MaxForce)
+        //    {
+        //        force3D = System.Numerics.Vector3.Normalize(force3D) * MaxForce;
+        //    }
+        //}
 
         public void recalculateColliders()
         {

@@ -12,7 +12,7 @@ namespace Shard.GLTest
     class Player : GameObject
     {
 
-
+        private Rifle rifle;
         private float height;
         private Camera camera;
         private float sensitivity;
@@ -27,7 +27,7 @@ namespace Shard.GLTest
         public override void initialize()
         {
             base.initialize();
-
+            rifle = new Rifle();
             // Camera Setup
             camera = new Camera();
             camera.SetAsMain();
@@ -91,6 +91,10 @@ namespace Shard.GLTest
             if (DisplayOpenGL.GetInstance().Window.IsKeyDown(Keys.D))
             {
                 MyBody.addForce(-left, force);
+            }
+            if (DisplayOpenGL.GetInstance().Window.IsMouseButtonPressed(MouseButton.Left))
+            {
+                rifle.FireRifle(forward);
             }
         }
 
