@@ -18,8 +18,10 @@ namespace Shard.GLTest
         public override void initialize()
         {
             base.initialize();
+            setPhysicsEnabled();
             if (texture == null) { texture = new Texture("GLTest\\monster_idle.png", TextureWrapMode.MirroredRepeat, TextureMinFilter.Nearest, TextureMagFilter.Nearest, 0, 2); }
             if (mesh == null) { mesh = ObjLoader.LoadMesh("GLTest\\billboard.obj").ToAnimatedMesh(texture, 6, 8.0f); }
+            MyBody.addCubeCollider(1.0f, 1.0f, 2.0f);
         }
 
         public override void update()
@@ -48,6 +50,15 @@ namespace Shard.GLTest
             DisplayOpenGL.GetInstance().Model = m;
             mesh.Draw();
 
+        }
+        public override void onCollisionEnter(PhysicsBody x)
+        {
+            base.onCollisionEnter(x);
+            if (x.Parent is Bullet)
+            {
+                x.Parent.killMe();
+                killMe();
+            }
         }
     }
 }

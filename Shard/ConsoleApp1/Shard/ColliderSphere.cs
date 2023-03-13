@@ -28,8 +28,8 @@ namespace Shard
         }
         public override void calculateBoundingBox()
         {
-            boundingBoxMax = new Vector3(radius + centre.X, radius + centre.Y, radius + centre.Z);
-            boundingBoxMin = new Vector3(radius - centre.X, radius - centre.Y, radius - centre.Z);
+            boundingBoxMax = new Vector3(radius + getCentreX(), radius + getCentreY(), radius + getCentreZ());
+            boundingBoxMin = new Vector3(radius - getCentreX(), radius - getCentreY(), radius - getCentreZ()); ;
         }
 
 
@@ -99,17 +99,17 @@ namespace Shard
 
         public override float getCentreX()
         {
-            return centre.X;
+            return mySphere.Translation.X;
         }
 
         public override float getCentreY()
         {
-            return centre.Y;
+            return mySphere.Translation.Y;
         }
 
         public override float getCentreZ()
         {
-            return centre.Z;
+            return mySphere.Translation.Z;
         }
 
 
@@ -146,9 +146,9 @@ namespace Shard
 
         public override bool areColliding(ColliderCube c, Vector2 offset)
         {
-            float xDistance = Math.Abs(centre.X + offset.X - c.getCentreX());
-            float yDistance = Math.Abs(centre.Y + offset.Y - c.getCentreX());
-            float zDistance = Math.Abs(centre.Z - c.getCentreX());
+            float xDistance = Math.Abs(getCentreX() + offset.X - c.getCentreX());
+            float yDistance = Math.Abs(getCentreY()+ offset.Y - c.getCentreX());
+            float zDistance = Math.Abs(getCentreZ() - c.getCentreX());
 
             if (xDistance <= (c.getWidth() / 2 + getRadius()) && yDistance <= (c.getHeight() / 2 + getRadius()) && zDistance <= (c.getDepth() / 2 + getRadius()))
             {
@@ -163,7 +163,7 @@ namespace Shard
 
         public override bool areColliding(ColliderSphere c, Vector2 offset)
         {
-            double dis = Math.Sqrt(Math.Pow(centre.X + offset.X - c.centre.X, 2) + Math.Pow(centre.Y + offset.Y - c.centre.Y, 2) + Math.Pow(centre.Z - c.centre.Z, 2));
+            double dis = Math.Sqrt(Math.Pow(getCentreX() + offset.X - c.getCentreX(), 2) + Math.Pow(getCentreY() + offset.Y - c.getCentreY(), 2) + Math.Pow(getCentreZ() - c.getCentreZ(), 2));
             return dis <= (radius + c.getRadius());
         }
 
@@ -182,6 +182,6 @@ namespace Shard
             throw new NotImplementedException();
         }
 
-        public new bool CheckOffset { get => checkOffset; set => checkOffset = value; }
+       
     }
 }

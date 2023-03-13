@@ -25,9 +25,9 @@ namespace Shard.GLTest
             base.initialize();
             setPhysicsEnabled();
            
-            acc = 5.0f;
-            //visualBullet = new VisualGameObject(ObjLoader.LoadMesh("GLTest\\bullet.glb"), new Texture("GLTest\\texture_level2.png", TextureWrapMode.MirroredRepeat, TextureMinFilter.NearestMipmapLinear, TextureMagFilter.Nearest, 0, 3));
-            MyBody.addCubeCollider(0.3f,0.3f,0.3f,false);
+            acc = 0.3f;
+           // visualBullet = new VisualGameObject(ObjLoader.LoadMesh("GLTest\\bullet.obj"), new Texture("GLTest\\texture_level2.png", TextureWrapMode.MirroredRepeat, TextureMinFilter.NearestMipmapLinear, TextureMagFilter.Nearest, 0, 3));
+            MyBody.addCubeCollider(1.0f,1.0f,1.0f);
             
             
             addTag("Bullet");
@@ -53,15 +53,9 @@ namespace Shard.GLTest
             base.onCollisionEnter(x);
            
             
-            if(x.Parent is Enemy)
-            {
-                
-                
-            }
-            else
-            {
-                Console.WriteLine("Hey I hit something that wasnt an enemy");
-            }
+           
+            
+          
             killMe();
         }
         
