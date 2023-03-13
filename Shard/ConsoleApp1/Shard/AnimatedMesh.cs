@@ -63,5 +63,14 @@ namespace Shard
         {
             startTime = Bootstrap.getCurrentMillis();
         }
+
+        public void ChangeAnimation(Texture texture, int frameCount, float animationSpeed, AnimationMode mode)
+        {
+            this.texture = texture;
+            this.frameCount = frameCount;
+            this.animationSpeed = animationSpeed;
+            this.Mode = mode;
+            StartAnimation();
+        }
     }
 }

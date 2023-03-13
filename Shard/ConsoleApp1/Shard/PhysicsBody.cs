@@ -110,16 +110,16 @@ namespace Shard
             float max = -1 * min;
             float[] tmp;
 
-            foreach (Collider col in myColliders)
+            foreach (Collider3D col in my3DColliders)
             {
 
                 if (x)
                 {
-                    tmp = col.MinAndMaxX;
+                    tmp = new float[] { col.getMinX(), col.getMaxX()};
                 }
                 else
                 {
-                    tmp = col.MinAndMaxY;
+                    tmp = new float[] { col.getMinY(), col.getMaxY() };
                 }
 
 

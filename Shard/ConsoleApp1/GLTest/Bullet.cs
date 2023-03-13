@@ -38,10 +38,11 @@ namespace Shard.GLTest
         }
         public override void update()
         {
+            /*
             if (MyBody.getForce().Equals(0f))
             {
                 killMe();
-            }
+            }*/
         }
         public void FireMe(System.Numerics.Vector2 direction)
         {
@@ -51,12 +52,6 @@ namespace Shard.GLTest
         public override void onCollisionEnter(PhysicsBody x)
         {
             base.onCollisionEnter(x);
-           
-            
-           
-            
-          
-            killMe();
         }
         
         public override void drawUpdate()

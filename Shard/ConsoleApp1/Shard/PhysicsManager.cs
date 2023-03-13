@@ -445,6 +445,7 @@ namespace Shard
                     toRemove.Add(col);
                 }
 
+                /*
                 impulse = checkCollisionBetweenObjects(col.A, col.B);
 
                 if (impulse != null)
@@ -458,6 +459,20 @@ namespace Shard
                     ch2.onCollisionExit(col.A);
                     toRemove.Add(col);
                 }
+                */
+
+                if (checkCollisionBetweenObjects(col.A, col.B))
+                {
+                    ch.onCollisionStay(col.B);
+                    ch2.onCollisionStay(col.A);
+                }
+                else
+                {
+                    ch.onCollisionExit(col.B);
+                    ch2.onCollisionExit(col.A);
+                    toRemove.Add(col);
+                }
+
 
             }
 
@@ -487,7 +502,7 @@ namespace Shard
             }
         }
 
-        private System.Numerics.Vector2? checkCollisionBetweenObjects(PhysicsBody a, PhysicsBody b)
+        /*private System.Numerics.Vector2? checkCollisionBetweenObjects(PhysicsBody a, PhysicsBody b)
         {
             System.Numerics.Vector2? impulse;
 
@@ -506,6 +521,28 @@ namespace Shard
             }
 
             return null;
+
+        }*/
+
+        private bool checkCollisionBetweenObjects(PhysicsBody a, PhysicsBody b)
+        {
+            bool collide;
+
+            foreach (Collider3D col in a.get3DColliders())
+            {
+                foreach (Collider3D col2 in b.get3DColliders())
+                {
+                    collide = col.areColliding(col2);
+
+
+                    if (collide)
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
 
         }
 
@@ -572,7 +609,16 @@ namespace Shard
             foreach (CollidingObject ob in collisionsToCheck)
             {
 
-                possibleImpulse = checkCollisionBetweenObjects(ob.A, ob.B);
+                if (checkCollisionBetweenObjects(ob.A, ob.B))
+                {
+                    ((CollisionHandler)ob.A.Parent).onCollisionEnter(ob.B);
+                    ((CollisionHandler)ob.B.Parent).onCollisionEnter(ob.A);
+                    colliding.Add(ob);
+                }
+
+                /*
+                 * Collision response stuff we ignore for now
+                 * 
 
                 if (possibleImpulse.HasValue)
                 {
@@ -659,7 +705,7 @@ namespace Shard
                     }
 
 
-                }
+                }*/
 
 
             }
