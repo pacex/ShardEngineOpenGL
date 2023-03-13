@@ -14,7 +14,6 @@ namespace Shard
     class ColliderSphere : Collider3D
     {
         private float radius;
-        Vector3 centre;
         Vector3 boundingBoxMin;
         Vector3 boundingBoxMax;
         Transform3DNew mySphere;
@@ -23,13 +22,12 @@ namespace Shard
         {
             this.radius = radius;
             mySphere = t;
-            centre = t.Translation;
             calculateBoundingBox();
         }
         public override void calculateBoundingBox()
         {
-            boundingBoxMax = new Vector3(radius + getCentreX(), radius + getCentreY(), radius + getCentreZ());
-            boundingBoxMin = new Vector3(radius - getCentreX(), radius - getCentreY(), radius - getCentreZ()); ;
+            boundingBoxMax = new Vector3(radius + mySphere.Translation.X, radius + mySphere.Translation.Y, radius + mySphere.Translation.Z);
+            boundingBoxMin = new Vector3(mySphere.Translation.X - radius, mySphere.Translation.Y - radius, mySphere.Translation.Z - radius); ;
         }
 
 
@@ -94,7 +92,7 @@ namespace Shard
 
         public override Vector3 getCentre()
         {
-            return centre;
+            return mySphere.Translation;
         }
 
         public override float getCentreX()
