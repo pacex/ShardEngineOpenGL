@@ -12,16 +12,19 @@ namespace Shard.GLTest
     class Monster : GameObject
     {
         private static AnimatedMesh mesh;
-        private static Texture texture;
+        private static Texture textureIdle;
+        private static Texture textureDie;
 
 
         public override void initialize()
         {
             base.initialize();
             setPhysicsEnabled();
-            if (texture == null) { texture = new Texture("GLTest\\monster_idle.png", TextureWrapMode.MirroredRepeat, TextureMinFilter.Nearest, TextureMagFilter.Nearest, 0, 2); }
-            if (mesh == null) { mesh = ObjLoader.LoadMesh("GLTest\\billboard.obj").ToAnimatedMesh(texture, 6, 8.0f); }
+            if (textureIdle == null) { textureIdle = new Texture("GLTest\\monster_idle.png", TextureWrapMode.MirroredRepeat, TextureMinFilter.Nearest, TextureMagFilter.Nearest, 0, 2); }
+            if (textureDie == null) { textureDie= new Texture("GLTest\\monster_die.png", TextureWrapMode.MirroredRepeat, TextureMinFilter.Nearest, TextureMagFilter.Nearest, 0, 2); }
+            if (mesh == null) { mesh = ObjLoader.LoadMesh("GLTest\\billboard.obj").ToAnimatedMesh(textureIdle, 6, 8.0f); }
             MyBody.addCubeCollider(1.0f, 1.0f, 2.0f);
+            
         }
 
         public override void update()
@@ -57,8 +60,15 @@ namespace Shard.GLTest
             if (x.Parent is Bullet)
             {
                 x.Parent.killMe();
-                killMe();
+
+                triggerDeath();
+                
             }
+        }
+
+        private void triggerDeath()
+        {
+            
         }
     }
 }
