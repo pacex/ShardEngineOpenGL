@@ -164,6 +164,7 @@ namespace Shard
 
             myBody = null;
             transformOld = null;
+
         }
 
         public virtual void onCollisionEnter(PhysicsBody x)
@@ -179,6 +180,11 @@ namespace Shard
         public virtual void onCollisionStay(PhysicsBody x)
         {
             
+        }
+
+        public virtual void onKinematicCollision()
+        {
+
         }
     }
 }

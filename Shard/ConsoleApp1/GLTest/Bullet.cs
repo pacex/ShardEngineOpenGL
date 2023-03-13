@@ -14,6 +14,7 @@ namespace Shard.GLTest
     class Bullet: GameObject
     {
         private float acc;
+        private long spawnTime;
         Transform3DNew playerTransform;
         private VisualGameObject visualBullet;
         public Bullet(Vector3 translation): base()
@@ -32,28 +33,30 @@ namespace Shard.GLTest
             
             addTag("Bullet");
             MyBody.MaxForce = 10.0f;
+            spawnTime = Bootstrap.getCurrentMillis();
            // MyBody.PassThrough = true;
            // this.Transient = true;
            // visualBullet.Transform.Translation = new Vector3(0.0f, 0.0f, 0.0f);
         }
         public override void update()
         {
-            /*
-            if (MyBody.getForce().Equals(0f))
+            
+            if (Bootstrap.getCurrentMillis() - spawnTime > 5000)
             {
-                killMe();
-            }*/
+                ToBeDestroyed = true;
+            }
         }
         public void FireMe(System.Numerics.Vector2 direction)
         {
             float force = acc;
             MyBody.addForce(direction, force);
         }
-        public override void onCollisionEnter(PhysicsBody x)
+        public override void onKinematicCollision()
         {
-            base.onCollisionEnter(x);
+            base.onKinematicCollision();
+            ToBeDestroyed = true;
         }
-        
+
         public override void drawUpdate()
         {
             base.drawUpdate();

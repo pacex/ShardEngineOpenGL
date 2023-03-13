@@ -365,10 +365,12 @@ namespace Shard
             // TODO: scale application of force by physDeltaTime
             if (!kinematic && force.Length() > 0.0f)
             {
+                bool kinematicCollision = false;
                 // X direction
                 if (PhysicsManager.getInstance().queryKinematic(this, new OpenTK.Mathematics.Vector2(force.X, 0.0f)))
                 {
                     force.X = 0.0f;
+                    kinematicCollision = true;
                 }
                 else
                 {
@@ -379,11 +381,16 @@ namespace Shard
                 if (PhysicsManager.getInstance().queryKinematic(this, new OpenTK.Mathematics.Vector2(0.0f, force.Y)))
                 {
                     force.Y = 0.0f;
-
+                    kinematicCollision = true;
                 }
                 else
                 {
                     trans.Translate(new OpenTK.Mathematics.Vector3(0.0f, force.Y, 0.0f));
+                }
+
+                if (kinematicCollision)
+                {
+                    parent.onKinematicCollision();
                 }
             }
 
