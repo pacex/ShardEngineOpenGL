@@ -11,9 +11,10 @@ namespace Shard.GLTest
 {
     class Monster : GameObject
     {
-        private static AnimatedMesh mesh;
+        private AnimatedMesh mesh;
         private static Texture textureIdle;
         private static Texture textureDie;
+        long deathTimer = -1;
 
 
         public override void initialize()
@@ -29,6 +30,11 @@ namespace Shard.GLTest
 
         public override void update()
         {
+            if(Bootstrap.getCurrentMillis() - deathTimer > 5000 && deathTimer > 0)
+            {
+                ToBeDestroyed = true;
+            }
+
             base.update();
         }
 
@@ -59,7 +65,7 @@ namespace Shard.GLTest
             base.onCollisionEnter(x);
             if (x.Parent is Bullet)
             {
-                x.Parent.killMe();
+                x.Parent.ToBeDestroyed = true;
 
                 triggerDeath();
                 
@@ -68,7 +74,16 @@ namespace Shard.GLTest
 
         private void triggerDeath()
         {
+            deathTimer = Bootstrap.getCurrentMillis();
+            mesh.ChangeAnimation(textureDie, 8, 8f, AnimationMode.End);
             
+
+            
+        }
+        private void finishMe()
+        {
+            killMe();
+
         }
     }
 }
