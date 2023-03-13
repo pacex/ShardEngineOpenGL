@@ -93,6 +93,8 @@ namespace Shard
             GL.BindVertexArray(0);
             GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
 
+            DisplayOpenGL.GetInstance().Model = Matrix4.Identity;
+
             Shader.ApplyWireframeShader(new OpenTK.Mathematics.Color4(col.R, col.G, col.B, col.A));
             GL.BindVertexArray(vertexArrayObject);
             GL.DrawElements(PrimitiveType.Lines, indices.Length, DrawElementsType.UnsignedInt, indices);

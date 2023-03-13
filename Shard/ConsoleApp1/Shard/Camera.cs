@@ -49,5 +49,12 @@ namespace Shard
         {
             DisplayOpenGL.GetInstance().MainCamera = this;
         }
+
+        public Matrix4 GetBillboardRotMatrix(Vector2 pos)
+        {
+            Vector2 dir = (Transform.Translation.Xy - pos).Normalized();
+
+            return Matrix4.CreateFromAxisAngle(Vector3.UnitZ, (float)Math.Acos(dir.Y));
+        }
     }
 }

@@ -14,6 +14,7 @@ namespace Shard
     {
         private static Shader defaultShader = null;
         private static Shader wireframeShader = null;
+        private static Shader animatedShader = null;
 
         public static Shader GetDefaultShader()
         {
@@ -30,6 +31,15 @@ namespace Shard
                 wireframeShader = new Shader("Shaders/wireframe.vert", "Shaders/wireframe.frag");
             }
             return wireframeShader;
+        }
+
+        public static Shader GetAnimatedShader()
+        {
+            if (animatedShader == null)
+            {
+                animatedShader = new Shader("Shaders/default.vert", "Shaders/animated.frag");
+            }
+            return animatedShader;
         }
 
         public static void ApplyDefaultShader(Texture texture)
@@ -57,6 +67,23 @@ namespace Shard
             GL.UniformMatrix4(GL.GetUniformLocation(GetWireframeShader().Handle, "model"), false, ref display.Model);
             GL.UniformMatrix4(GL.GetUniformLocation(GetWireframeShader().Handle, "view"), false, ref display.View);
             GL.UniformMatrix4(GL.GetUniformLocation(GetWireframeShader().Handle, "proj"), false, ref display.Projection);
+        }
+
+        public static void ApplyAnimatedShader(Texture texture, int frameCount, int frameIndex)
+        {
+            DisplayOpenGL display = Bootstrap.GetDisplayOpenGL();
+
+            texture.Use(TextureUnit.Texture0);
+
+            GetAnimatedShader().Use();
+            GetAnimatedShader().SetSamplerTextureUnit("texture0", TextureUnit.Texture0);
+
+            GL.Uniform1(GL.GetUniformLocation(GetAnimatedShader().Handle, "frameCount"), frameCount);
+            GL.Uniform1(GL.GetUniformLocation(GetAnimatedShader().Handle, "frameIndex"), frameIndex);
+
+            GL.UniformMatrix4(GL.GetUniformLocation(GetAnimatedShader().Handle, "model"), false, ref display.Model);
+            GL.UniformMatrix4(GL.GetUniformLocation(GetAnimatedShader().Handle, "view"), false, ref display.View);
+            GL.UniformMatrix4(GL.GetUniformLocation(GetAnimatedShader().Handle, "proj"), false, ref display.Projection);
         }
 
         public static void Reset()
