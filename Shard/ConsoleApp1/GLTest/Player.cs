@@ -44,7 +44,11 @@ namespace Shard.GLTest
             MyBody.MaxForce = 0.22f;
             acc = 0.04f;
         }
-
+        public void FireRifle(System.Numerics.Vector2 direction)
+        {
+            Bullet b = new Bullet(Transform.Translation);
+            b.FireMe(direction);
+        }
         public override void update() 
         {
             // Interpolate camera position
@@ -94,7 +98,7 @@ namespace Shard.GLTest
             }
             if (DisplayOpenGL.GetInstance().Window.IsMouseButtonPressed(MouseButton.Left))
             {
-                rifle.FireRifle(forward);
+                FireRifle(forward);
             }
         }
 

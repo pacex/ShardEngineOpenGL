@@ -14,6 +14,7 @@ namespace Shard
         Vector3 centre;
         Vector3 boundingBoxMin;
         Vector3 boundingBoxMax;
+        bool checkOffset = true;
         //private bool rotateAtOffset;                           
 
         public abstract void recalculate();
@@ -101,7 +102,10 @@ namespace Shard
        
 
         public abstract float getCentreZ();
-       
+
+        public abstract bool GetCheckOffset();
+        public abstract void SetCheckOffset(bool value);
+
 
     }
 }

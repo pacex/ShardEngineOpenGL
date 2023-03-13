@@ -6,10 +6,11 @@ using System.Linq;
 using OpenTK.Mathematics;
 using System.Text;
 using System.Threading.Tasks;
+using OpenTK.Graphics.OpenGL;
 
 namespace Shard
 {
-    
+
     class ColliderSphere : Collider3D
     {
         private float radius;
@@ -17,6 +18,7 @@ namespace Shard
         Vector3 boundingBoxMin;
         Vector3 boundingBoxMax;
         Transform3DNew mySphere;
+        private bool checkOffset;
         public ColliderSphere(CollisionHandler gob, Transform3DNew t, float radius) : base(gob)
         {
             this.radius = radius;
@@ -30,11 +32,11 @@ namespace Shard
             boundingBoxMin = new Vector3(radius - centre.X, radius - centre.Y, radius - centre.Z);
         }
 
-      
-       
-       public override void recalculate()
+
+
+        public override void recalculate()
         {
-             calculateBoundingBox();
+            calculateBoundingBox();
         }
         public override bool areColliding(ColliderCube c)
         {
@@ -52,7 +54,42 @@ namespace Shard
         }
         public override void DrawMe(Color col)
         {
-            throw new NotImplementedException();
+            float[] vertices = new float[] {    getMinX(), getMinY(), getMinZ(),     getMinX(), getMinY(), getMaxZ(),
+                                                getMinX(), getMaxY(), getMinZ(),     getMinX(), getMaxY(), getMaxZ(),
+                                                getMaxX(), getMinY(), getMinZ(),     getMaxX(), getMinY(), getMaxZ(),
+                                                getMaxX(), getMaxY(), getMinZ(),     getMaxX(), getMaxY(), getMaxZ() };
+
+            uint[] indices = new uint[] { 0, 1, 0, 2, 0, 4,
+                                          1, 3, 1, 5,
+                                          2, 3, 2, 6,
+                                          3, 7,
+                                          4, 5, 4, 6,
+                                          5, 7,
+                                          6, 7};
+
+            int vertexBufferObject, vertexArrayObject;
+
+            vertexArrayObject = GL.GenVertexArray();
+            GL.BindVertexArray(vertexArrayObject);
+
+            vertexBufferObject = GL.GenBuffer();
+
+            GL.BindBuffer(BufferTarget.ArrayBuffer, vertexBufferObject);
+            GL.BufferData(BufferTarget.ArrayBuffer, vertices.Length * sizeof(float), vertices, BufferUsageHint.StaticDraw);
+            GL.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, 0, 0);
+            GL.EnableVertexAttribArray(0);
+
+            GL.BindVertexArray(0);
+            GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
+
+            Shader.ApplyWireframeShader(new OpenTK.Mathematics.Color4(col.R, col.G, col.B, col.A));
+            GL.BindVertexArray(vertexArrayObject);
+            GL.DrawElements(PrimitiveType.Lines, indices.Length, DrawElementsType.UnsignedInt, indices);
+            GL.BindVertexArray(0);
+            Shader.Reset();
+
+            GL.DeleteBuffer(vertexBufferObject);
+            GL.DeleteVertexArray(vertexArrayObject);
         }
 
         public override Vector3 getCentre()
@@ -122,7 +159,7 @@ namespace Shard
                                   ((yDistance - c.getDepth()) * (yDistance - c.getDepth())));
 
             return (cornerDistance_sq < (getRadius() * getRadius()));
-    }
+        }
 
         public override bool areColliding(ColliderSphere c, Vector2 offset)
         {
@@ -134,5 +171,17 @@ namespace Shard
         {
             throw new NotImplementedException();
         }
+
+        public override bool GetCheckOffset()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void SetCheckOffset(bool value)
+        {
+            throw new NotImplementedException();
+        }
+
+        public new bool CheckOffset { get => checkOffset; set => checkOffset = value; }
     }
 }

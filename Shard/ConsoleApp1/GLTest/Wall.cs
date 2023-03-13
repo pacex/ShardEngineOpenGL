@@ -31,5 +31,17 @@ namespace Shard.GLTest
         {
             base.drawUpdate();
         }
+        public override void onCollisionEnter(PhysicsBody x)
+        {
+            base.onCollisionEnter(x);
+
+
+            if (x.Parent is Bullet)
+            {
+                x.Parent.ToBeDestroyed = true;
+
+            }
+         
+        }
     }
 }

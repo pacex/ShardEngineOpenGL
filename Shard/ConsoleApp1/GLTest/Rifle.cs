@@ -11,8 +11,8 @@ namespace Shard.GLTest
     {
        public void FireRifle(Vector2 direction)
         {
-            Bullet b = new Bullet();
-            b.FireMe(direction);
+            //Bullet b = new Bullet();
+            //b.FireMe(direction);
         }
     }
 }

@@ -260,6 +260,10 @@ namespace Shard
             Debug.Log("Reflect is " + reflect);
 
         }
+        public System.Numerics.Vector2 getForce()
+        {
+            return force;
+        }
 
         public void reduceForces(float prop) {
             force *= prop;
@@ -409,6 +413,14 @@ namespace Shard
         public ColliderCube addCubeCollider(float width, float height, float depth)
         {
             ColliderCube cr = new ColliderCube((CollisionHandler)parent, parent.Transform, width, height,depth);
+            add3DCollider(cr);
+            return cr;
+
+        }
+        public ColliderCube addCubeCollider(float width, float height, float depth, bool checkOffset)
+        {
+            ColliderCube cr = new ColliderCube((CollisionHandler)parent, parent.Transform, width, height, depth);
+            cr.SetCheckOffset(checkOffset);
             add3DCollider(cr);
             return cr;
 

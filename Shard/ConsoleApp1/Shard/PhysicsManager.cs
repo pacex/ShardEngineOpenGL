@@ -195,11 +195,11 @@ namespace Shard
          */
         public bool queryKinematic(PhysicsBody body, OpenTK.Mathematics.Vector2 offset)
         {
-            if (kinematicObjects == null) { return false; }
+            if (kinematicObjects == null ) { return false; }
 
             foreach (Collider3D collider in body.get3DColliders())
             {
-                if (queryKinBody(collider, offset))
+                if (queryKinBody(collider, offset) && collider.GetCheckOffset())
                 {
                     return true;
                 }
@@ -260,7 +260,7 @@ namespace Shard
                     {
                         foreach(Collider3D c in body.get3DColliders())
                         {                           
-                        
+                            
                             if (collider.areColliding(c,offset))
                             {
                                 return true;
