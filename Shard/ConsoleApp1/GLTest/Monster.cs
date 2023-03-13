@@ -80,10 +80,5 @@ namespace Shard.GLTest
 
             
         }
-        private void finishMe()
-        {
-            killMe();
-
-        }
     }
 }
