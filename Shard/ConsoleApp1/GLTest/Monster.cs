@@ -16,7 +16,7 @@ namespace Shard.GLTest
         private static Texture textureDie;
         long deathTimer = -1;
         Vector3 targetPos;
-        float acc = 0.01f;
+        private float acc;
         
         public Monster() : base()
         {
@@ -32,7 +32,9 @@ namespace Shard.GLTest
             if (textureDie == null) { textureDie= new Texture("GLTest\\monster_die.png", TextureWrapMode.MirroredRepeat, TextureMinFilter.Nearest, TextureMagFilter.Nearest, 0, 2); }
             if (mesh == null) { mesh = ObjLoader.LoadMesh("GLTest\\billboard.obj").ToAnimatedMesh(textureIdle, 6, 8.0f); }
             MyBody.addCubeCollider(1.0f, 1.0f, 2.0f);
-            
+            MyBody.MaxForce = 0.11f;
+            acc = 0.04f;
+            MyBody.Drag = 0.03f;
         }
 
         public override void update()
@@ -48,12 +50,7 @@ namespace Shard.GLTest
         public override void physicsUpdate()
         {
             base.physicsUpdate();
-            System.Numerics.Vector2 player2dpos = new System.Numerics.Vector2(targetPos.X, targetPos.Y);
-            System.Numerics.Vector2 monster2dpos = new System.Numerics.Vector2(Transform.Translation.X, Transform.Translation.Y);
-            System.Numerics.Vector2 direction = (player2dpos - monster2dpos);
-
-            System.Numerics.Vector2.Normalize(direction);
-            MyBody.addForce(direction, acc);
+            moveToTarget();
             //vector should always have direction towards player
         }
 
@@ -94,7 +91,15 @@ namespace Shard.GLTest
 
             
         }
+        private void moveToTarget()
+        {
+            System.Numerics.Vector2 player2dpos = new System.Numerics.Vector2(targetPos.X, targetPos.Y);
+            System.Numerics.Vector2 monster2dpos = new System.Numerics.Vector2(Transform.Translation.X, Transform.Translation.Y);
+            System.Numerics.Vector2 direction = (player2dpos - monster2dpos);
 
+            System.Numerics.Vector2.Normalize(direction);
+            MyBody.addForce(direction, acc);
+        }
         public void targetPosition(Vector3 targetPos)
         {
             this.targetPos = targetPos;
