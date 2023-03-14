@@ -15,6 +15,9 @@ namespace Shard.GLTest
 
         private VisualGameObject level;
         private Player player;
+        private List<Monster> monsters = new List<Monster>();
+        private int monsterAmount = 2;
+        private float monsterStartPosX = 18.0f;
 
         public void handleInput(InputEvent inp, string eventType)
         {
@@ -39,10 +42,18 @@ namespace Shard.GLTest
             level = new VisualGameObject(ObjLoader.LoadMesh("GLTest\\level2.obj"),new Texture("GLTest\\texture_level2.png", TextureWrapMode.MirroredRepeat, TextureMinFilter.NearestMipmapLinear, TextureMagFilter.Nearest, 0, 3));
             level.Transform.Translation = new Vector3(0.0f, 0.0f, 0.0f);
 
-            Monster m = new Monster();
-            m.Transform.Translation = new Vector3(18.0f, 18.0f, 0.0f);
-            m = new Monster();
-            m.Transform.Translation = new Vector3(22.0f, 18.0f, 0.0f);
+            for(int i = 0; i < monsterAmount; i++)
+            {
+                
+                Monster m = new Monster();
+                m.Transform.Translation = new Vector3(monsterStartPosX, 18.0f, 0.0f);
+                monsters.Add(m);
+                monsterStartPosX = monsterStartPosX + 4.0f;
+            }
+            //Monster m1 = new Monster();
+            //m1.Transform.Translation = new Vector3(18.0f, 18.0f, 0.0f);
+            //Monster m2 = new Monster();
+            //m2.Transform.Translation = new Vector3(22.0f, 18.0f, 0.0f);
 
             #region Wall objects
 
@@ -127,6 +138,10 @@ namespace Shard.GLTest
 
         public override void update()
         {
+            foreach(Monster m in monsters)
+            {
+                m.targetPosition(player.getPlayerPos());
+            }
             // End game
             if (DisplayOpenGL.GetInstance().Window.IsKeyPressed(Keys.Escape))
             {
@@ -138,5 +153,6 @@ namespace Shard.GLTest
         {
 
         }
+
     }
 }

@@ -107,5 +107,9 @@ namespace Shard.GLTest
             base.drawUpdate();
             
         }
+        public Vector3 getPlayerPos()
+        {
+            return Transform.Translation;
+        }
     }
 }

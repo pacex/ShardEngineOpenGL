@@ -15,6 +15,13 @@ namespace Shard.GLTest
         private static Texture textureIdle;
         private static Texture textureDie;
         long deathTimer = -1;
+        Vector3 targetPos;
+        float acc = 0.01f;
+        
+        public Monster() : base()
+        {
+            
+        }
 
 
         public override void initialize()
@@ -41,6 +48,13 @@ namespace Shard.GLTest
         public override void physicsUpdate()
         {
             base.physicsUpdate();
+            System.Numerics.Vector2 player2dpos = new System.Numerics.Vector2(targetPos.X, targetPos.Y);
+            System.Numerics.Vector2 monster2dpos = new System.Numerics.Vector2(Transform.Translation.X, Transform.Translation.Y);
+            System.Numerics.Vector2 direction = (player2dpos - monster2dpos);
+
+            System.Numerics.Vector2.Normalize(direction);
+            MyBody.addForce(direction, acc);
+            //vector should always have direction towards player
         }
 
         public override void drawUpdate()
@@ -79,6 +93,11 @@ namespace Shard.GLTest
             
 
             
+        }
+
+        public void targetPosition(Vector3 targetPos)
+        {
+            this.targetPos = targetPos;
         }
     }
 }
