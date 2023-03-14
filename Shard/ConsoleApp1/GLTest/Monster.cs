@@ -50,7 +50,11 @@ namespace Shard.GLTest
         public override void physicsUpdate()
         {
             base.physicsUpdate();
-            moveToTarget();
+
+            if (deathTimer < 0)
+            {
+                moveToTarget();
+            }
             //vector should always have direction towards player
         }
 
