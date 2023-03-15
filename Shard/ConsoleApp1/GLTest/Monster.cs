@@ -78,7 +78,7 @@ namespace Shard.GLTest
         public override void onCollisionEnter(PhysicsBody x)
         {
             base.onCollisionEnter(x);
-            if (x.Parent is Bullet)
+            if (x.Parent is Bullet && !isDead())
             {
                 x.Parent.ToBeDestroyed = true;
 
