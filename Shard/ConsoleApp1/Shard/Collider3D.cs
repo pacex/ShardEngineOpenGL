@@ -42,7 +42,8 @@ namespace Shard
             }
             if (c is ColliderSphere)
             {
-                return areColliding((ColliderSphere)c, offset);
+                //return areColliding((ColliderSphere)c, offset);
+                return areColliding((ColliderSphere)c);
             }
 
             return false;

@@ -203,19 +203,14 @@ namespace Shard
 
         public override bool areColliding(ColliderSphere c, Vector2 offset)
         {
-            float xDistance = Math.Abs(myCube.Translation.X + offset.X - c.getCentreX());
-            float yDistance = Math.Abs(myCube.Translation.Y + offset.Y - c.getCentreX());
-            float zDistance = Math.Abs(myCube.Translation.Z - c.getCentreX());
+            float xDistance = Math.Max(getMinX(), Math.Min(c.getCentreX(), getMaxX()));
+            float yDistance = Math.Max(getMinY(), Math.Min(c.getCentreY(), getMaxY()));
+            float zDistance = Math.Max(getMinZ(), Math.Min(c.getCentreZ(), getMaxZ()));
 
-            if (xDistance <= (getWidth() / 2 + c.getRadius()) && yDistance <= (getHeight() / 2 + c.getRadius()) && zDistance <= (getDepth() / 2 + c.getRadius()))
-            {
-                return true;
-            }
-            float cornerDistance_sq = ((xDistance - getWidth()) * (xDistance - getWidth())) +
-                                  ((yDistance - getHeight()) * (yDistance - getHeight()) +
-                                  ((yDistance - getDepth()) * (yDistance - getDepth())));
-
-            return (cornerDistance_sq < (c.getRadius() * c.getRadius()));
+            float distance = (float)(Math.Sqrt((xDistance - c.getCentreX()) * (xDistance - c.getCentreX()) +
+                                               (yDistance - c.getCentreY()) * (yDistance - c.getCentreY()) +
+                                               (zDistance - c.getCentreZ()) * (zDistance - c.getCentreZ())));
+            return distance < c.getRadius();
         }
 
         public override bool areColliding(Vector3 c, Vector2 offset)
