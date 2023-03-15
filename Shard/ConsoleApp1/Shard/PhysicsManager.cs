@@ -199,7 +199,7 @@ namespace Shard
 
             foreach (Collider3D collider in body.get3DColliders())
             {
-                if (queryKinBody(collider, offset) && collider.GetCheckOffset())
+                if (queryKinBody(collider, offset))
                 {
                     return true;
                 }

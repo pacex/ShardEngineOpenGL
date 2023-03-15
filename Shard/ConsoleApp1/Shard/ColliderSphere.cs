@@ -17,7 +17,7 @@ namespace Shard
         Vector3 boundingBoxMin;
         Vector3 boundingBoxMax;
         Transform3DNew mySphere;
-        private bool checkOffset;
+        
         public ColliderSphere(CollisionHandler gob, Transform3DNew t, float radius) : base(gob)
         {
             this.radius = radius;
@@ -169,15 +169,7 @@ namespace Shard
             throw new NotImplementedException();
         }
 
-        public override bool GetCheckOffset()
-        {
-            throw new NotImplementedException();
-        }
-
-        public override void SetCheckOffset(bool value)
-        {
-            throw new NotImplementedException();
-        }
+        
 
        
     }

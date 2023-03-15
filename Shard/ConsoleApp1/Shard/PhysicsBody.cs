@@ -427,7 +427,6 @@ namespace Shard
         public ColliderCube addCubeCollider(float width, float height, float depth, bool checkOffset)
         {
             ColliderCube cr = new ColliderCube((CollisionHandler)parent, parent.Transform, width, height, depth);
-            cr.SetCheckOffset(checkOffset);
             add3DCollider(cr);
             return cr;
 

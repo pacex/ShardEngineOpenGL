@@ -20,7 +20,6 @@ namespace Shard
         private float widht;
         private float height;
         private float depth;
-        private bool checkOffset = true;
         private Transform3DNew myCube;
         public ColliderCube(CollisionHandler gob, Transform3DNew t,float wdt, float hgt, float dpt) : base(gob)
         {
@@ -218,14 +217,6 @@ namespace Shard
             throw new NotImplementedException();
         }
 
-        public override bool GetCheckOffset()
-        {
-            return checkOffset;
-        }
-
-        public override void SetCheckOffset(bool value)
-        {
-            checkOffset = value;
-        }
+        
     }
 }
