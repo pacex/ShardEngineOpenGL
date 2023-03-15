@@ -67,7 +67,16 @@ namespace Shard.GLTest
             {
                 camera.Transform.Rotate(Quaternion.FromAxisAngle(camera.Transform.Left, -mouseDelta.Y * sensitivity));
             }
-            
+
+            // Fire bullet
+            if (DisplayOpenGL.GetInstance().Window.IsMouseButtonPressed(MouseButton.Left))
+            {
+                Vector2 f = camera.Transform.Forward.Xy.Normalized();
+                System.Numerics.Vector2 forward = new System.Numerics.Vector2(f.X, f.Y);
+                FireRifle(forward);
+            }
+
+
         }
         public override void physicsUpdate()
         {
@@ -96,10 +105,7 @@ namespace Shard.GLTest
             {
                 MyBody.addForce(-left, force);
             }
-            if (DisplayOpenGL.GetInstance().Window.IsMouseButtonPressed(MouseButton.Left))
-            {
-                FireRifle(forward);
-            }
+            
         }
 
         public override void drawUpdate()

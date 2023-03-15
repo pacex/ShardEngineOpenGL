@@ -28,8 +28,8 @@ namespace Shard.GLTest
            
             acc = 0.3f;
            // visualBullet = new VisualGameObject(ObjLoader.LoadMesh("GLTest\\bullet.obj"), new Texture("GLTest\\texture_level2.png", TextureWrapMode.MirroredRepeat, TextureMinFilter.NearestMipmapLinear, TextureMagFilter.Nearest, 0, 3));
-            //MyBody.addCubeCollider(1.0f,1.0f,1.0f);
-            MyBody.addSphereCollider(1.0f);
+            MyBody.addCubeCollider(1.0f,1.0f,1.0f);
+            //MyBody.addSphereCollider(1.0f);
             
             
             addTag("Bullet");

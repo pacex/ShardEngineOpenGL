@@ -50,7 +50,11 @@ namespace Shard.GLTest
         public override void physicsUpdate()
         {
             base.physicsUpdate();
-            moveToTarget();
+
+            if (deathTimer < 0)
+            {
+                moveToTarget();
+            }
             //vector should always have direction towards player
         }
 
@@ -87,10 +91,13 @@ namespace Shard.GLTest
         {
             deathTimer = Bootstrap.getCurrentMillis();
             mesh.ChangeAnimation(textureDie, 8, 8f, AnimationMode.End);
-            
-
-            
         }
+
+        public bool isDead()
+        {
+            return deathTimer >= 0;
+        }
+
         private void moveToTarget()
         {
             System.Numerics.Vector2 player2dpos = new System.Numerics.Vector2(targetPos.X, targetPos.Y);
