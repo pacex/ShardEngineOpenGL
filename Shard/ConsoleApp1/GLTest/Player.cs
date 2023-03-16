@@ -6,16 +6,18 @@ using System.Threading.Tasks;
 using OpenTK.Mathematics;
 using OpenTK.Input;
 using OpenTK.Windowing.GraphicsLibraryFramework;
+using OpenTK.Graphics.OpenGL;
 
 namespace Shard.GLTest
 {
     class Player : GameObject
     {
 
-        private Rifle rifle;
         private float height;
         private Camera camera;
         private float sensitivity;
+
+        private AnimatedMesh shotgun;
 
         private float acc;
 
@@ -27,7 +29,7 @@ namespace Shard.GLTest
         public override void initialize()
         {
             base.initialize();
-            rifle = new Rifle();
+
             // Camera Setup
             camera = new Camera();
             camera.SetAsMain();
@@ -36,6 +38,20 @@ namespace Shard.GLTest
             sensitivity = 0.002f;
 
             camera.Transform.Translation = Transform.Translation + Vector3.UnitZ * height;
+
+            // Shotgun
+            shotgun = new Mesh(new float[] {  // Vertices
+                                0.2f,  0.2f,  0.0f,     0.0f, 0.0f, -1.0f,      1.0f, 1.0f,
+                                0.2f,  -1.0f, 0.0f,     0.0f, 0.0f, -1.0f,      1.0f, 0.0f,
+                                -1.0f, -1.0f, 0.0f,     0.0f, 0.0f, -1.0f,      0.0f, 0.0f,
+                                -1.0f, 0.2f,  0.0f,     0.0f, 0.0f, -1.0f,      0.0f, 1.0f
+                            },
+                            new uint[]{  // Indices
+                                0, 3, 1,
+                                1, 3, 2
+                            }).ToAnimatedMesh(new Texture("GLTest\\shotgun.png", TextureWrapMode.MirroredRepeat,
+                            TextureMinFilter.Nearest, TextureMagFilter.Nearest, 0, 2), 11, 11.0f);
+            shotgun.Mode = AnimationMode.LoopOnCall;
 
             // Player physics
             setPhysicsEnabled();
@@ -46,8 +62,14 @@ namespace Shard.GLTest
         }
         public void FireRifle(System.Numerics.Vector2 direction)
         {
+            if (shotgun.GetAnimationProgress() > 0.0f)
+            {
+                return;
+            }
+
             Bullet b = new Bullet(Transform.Translation);
             b.FireMe(direction);
+            shotgun.StartAnimation();
         }
         public override void update() 
         {
@@ -111,7 +133,18 @@ namespace Shard.GLTest
         public override void drawUpdate()
         {
             base.drawUpdate();
-            
+
+            Matrix4 v = DisplayOpenGL.GetInstance().View;
+            Matrix4 p = DisplayOpenGL.GetInstance().Projection;
+
+            DisplayOpenGL.GetInstance().Projection = Matrix4.Identity;
+            DisplayOpenGL.GetInstance().View = Matrix4.Identity;
+            DisplayOpenGL.GetInstance().Model = Matrix4.Identity;
+            shotgun.Draw();
+
+            DisplayOpenGL.GetInstance().View = v;
+            DisplayOpenGL.GetInstance().Projection = p;
+
         }
         public Vector3 getPlayerPos()
         {

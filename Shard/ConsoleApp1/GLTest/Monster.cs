@@ -31,7 +31,9 @@ namespace Shard.GLTest
             if (textureIdle == null) { textureIdle = new Texture("GLTest\\monster_idle.png", TextureWrapMode.MirroredRepeat, TextureMinFilter.Nearest, TextureMagFilter.Nearest, 0, 2); }
             if (textureDie == null) { textureDie= new Texture("GLTest\\monster_die.png", TextureWrapMode.MirroredRepeat, TextureMinFilter.Nearest, TextureMagFilter.Nearest, 0, 2); }
             if (mesh == null) { mesh = ObjLoader.LoadMesh("GLTest\\billboard.obj").ToAnimatedMesh(textureIdle, 6, 8.0f); }
-            MyBody.addCubeCollider(1.0f, 1.0f, 2.0f);
+            mesh.StartAnimation();
+
+            MyBody.addCubeCollider(1.5f, 1.5f, 4.0f);
             MyBody.MaxForce = 0.11f;
             acc = 0.04f;
             MyBody.Drag = 0.03f;
@@ -91,6 +93,7 @@ namespace Shard.GLTest
         {
             deathTimer = Bootstrap.getCurrentMillis();
             mesh.ChangeAnimation(textureDie, 8, 8f, AnimationMode.End);
+            mesh.StartAnimation();
         }
 
         public bool isDead()

@@ -42,6 +42,7 @@ namespace Shard
             return animatedShader;
         }
 
+
         public static void ApplyDefaultShader(Texture texture)
         {
             DisplayOpenGL display = Bootstrap.GetDisplayOpenGL();
@@ -85,6 +86,7 @@ namespace Shard
             GL.UniformMatrix4(GL.GetUniformLocation(GetAnimatedShader().Handle, "view"), false, ref display.View);
             GL.UniformMatrix4(GL.GetUniformLocation(GetAnimatedShader().Handle, "proj"), false, ref display.Projection);
         }
+
 
         public static void Reset()
         {

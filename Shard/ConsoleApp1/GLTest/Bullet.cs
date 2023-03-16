@@ -26,14 +26,15 @@ namespace Shard.GLTest
             base.initialize();
             setPhysicsEnabled();
            
-            acc = 0.3f;
+            acc = 1.0f;
            // visualBullet = new VisualGameObject(ObjLoader.LoadMesh("GLTest\\bullet.obj"), new Texture("GLTest\\texture_level2.png", TextureWrapMode.MirroredRepeat, TextureMinFilter.NearestMipmapLinear, TextureMagFilter.Nearest, 0, 3));
             //MyBody.addCubeCollider(1.0f,1.0f,1.0f);
-            MyBody.addSphereCollider(0.5f);
+            MyBody.addSphereCollider(0.1f);
             
             
             addTag("Bullet");
             MyBody.MaxForce = 10.0f;
+            MyBody.Drag = 0.0f;
             spawnTime = Bootstrap.getCurrentMillis();
            // MyBody.PassThrough = true;
            // this.Transient = true;
