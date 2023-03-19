@@ -100,6 +100,15 @@ namespace Shard.GLTest
 
 
         }
+        public override void onCollisionEnter(PhysicsBody x)
+        {
+            base.onCollisionEnter(x);
+            if (x.Parent is Monster)
+            {
+                Bootstrap.endGame();
+
+            }
+        }
         public override void physicsUpdate()
         {
             // Player Movement
