@@ -24,6 +24,7 @@ namespace Shard
         public void Initialize()
         {
             base.Context?.MakeCurrent();
+            base.VSync = VSyncMode.Off;
             OnResize(new ResizeEventArgs(base.Size));
             GL.ClearColor(clearColor);
             GL.Enable(EnableCap.DepthTest);

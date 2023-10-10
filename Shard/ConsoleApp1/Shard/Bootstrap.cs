@@ -28,29 +28,22 @@ namespace Shard
         private static int targetFrameRate;
         private static int millisPerFrame;
         private static double deltaTime;
-        private static double timeElapsed;
-        private static int frames;
-        private static List<long> frameTimes;
-        private static long startTime;
         private static string baseDir;
         private static Dictionary<string,string> enVars;
         private static bool endGameFlag = false;
 
-        public static bool checkEnvironmentalVariable (string id) {
-            return enVars.ContainsKey (id);
+        public static bool checkEnvironmentalVariable(string id) {
+            return enVars.ContainsKey(id);
         }
 
         
-        public static string getEnvironmentalVariable (string id) {
-            if (checkEnvironmentalVariable (id)) {
+        public static string getEnvironmentalVariable(string id) {
+            if (checkEnvironmentalVariable(id)) {
                 return enVars[id];
             }
 
             return null;
         }
-
-
-        public static double TimeElapsed { get => timeElapsed; set => timeElapsed = value; }
 
         public static string getBaseDir() {
             return baseDir;
@@ -80,7 +73,6 @@ namespace Shard
         }
         public static double getDeltaTime()
         {
-
             return deltaTime;
         }
 
@@ -113,7 +105,7 @@ namespace Shard
             return runningGame;
         }
 
-        public static void setup(string path)
+        private static void setup(string path)
         {
             Console.WriteLine ("Path is " + path);
 
@@ -192,51 +184,6 @@ namespace Shard
             return DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
         }
 
-        public static int getFPS()
-        {
-            int fps;
-            double seconds;
-
-            seconds = (getCurrentMillis() - startTime) / 1000.0;
-
-            fps = (int)(frames / seconds);
-
-            return fps;
-        }
-
-        public static int getSecondFPS()
-        {
-            int count = 0;
-            long now = getCurrentMillis();
-            int lastEntry;
-
-
-
-            //Debug.Log ("Frametimes is " + frameTimes.Count);
-
-            if (frameTimes.Count == 0) {
-                return -1;
-            }
-
-            lastEntry = frameTimes.Count - 1;
-
-            while (frameTimes[lastEntry] > (now - 1000) && lastEntry > 0) {
-                lastEntry -= 1;
-                count += 1;
-            }
-
-            if (lastEntry > 0) {
-                frameTimes.RemoveRange (0, lastEntry);
-            }
-
-            return count;
-        }
-
-        public static int getCurrentFrame()
-        {
-            return frames;
-        }
-
         public static void endGame()
         {
             endGameFlag = true;
@@ -244,10 +191,9 @@ namespace Shard
 
         static void Main(string[] args)
         {
-            long timeInMillisecondsStart, lastTick, timeInMillisecondsEnd;
+            long timeInMillisecondsStart, timeInMillisecondsEnd;
             long interval;
             int sleep;
-            int tfro = 1;
             bool physUpdate = false;
             bool physDebug = false;
 
@@ -256,15 +202,9 @@ namespace Shard
             // Setup the engine.
             setup();
 
-            // When we start the program running.
-            startTime = getCurrentMillis();
-            frames = 0;
-            frameTimes = new List<long>();
+
             // Start the game running.
             runningGame.initialize();
-
-            timeInMillisecondsStart = startTime;
-            lastTick = startTime;
 
             phys.GravityModifier = 0.1f;
             // This is our game loop.
@@ -276,8 +216,6 @@ namespace Shard
 
             while (!endGameFlag)
             {
-                frames += 1;
-
                 timeInMillisecondsStart = getCurrentMillis();
                 
                 // Clear the screen.
@@ -334,39 +272,35 @@ namespace Shard
                 // Render the screen.
                 Bootstrap.getDisplay().display();
 
+                // Timing
                 timeInMillisecondsEnd = getCurrentMillis();
-
-                frameTimes.Add (timeInMillisecondsEnd);
-
                 interval = timeInMillisecondsEnd - timeInMillisecondsStart;
 
                 sleep = (int)(millisPerFrame - interval);
-
-
-                TimeElapsed += deltaTime;
-
                 if (sleep >= 0)
                 {
-                    // Frame rate regulator.  Bear in mind since this is millisecond precision, and we 
-                    // only get whole numbers from our interval, it will only rarely match a target 
-                    // FPS.  Milliseconds just aren't precise enough.
-                    //
-                    //  (I'm hinting if this bothers you, you might have found an engine modification to make...)
                     Thread.Sleep(sleep);
                 }
 
-                timeInMillisecondsEnd = getCurrentMillis();
-                deltaTime = (timeInMillisecondsEnd - timeInMillisecondsStart) / 1000.0f;
 
-                millisPerFrame = 1000 / targetFrameRate;
+                deltaTime = (getCurrentMillis() - timeInMillisecondsStart) / 1000.0f;
 
-                lastTick = timeInMillisecondsStart;
-
-                Console.WriteLine(getSecondFPS());
+                Console.WriteLine(deltaTime);
 
             } 
 
 
         }
+
+        private static void RenderThread()
+        {
+
+            // Render Loop
+            while (!endGameFlag)
+            {
+
+            }
+        }
+
     }
 }

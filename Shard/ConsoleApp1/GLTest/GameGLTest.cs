@@ -10,7 +10,7 @@ using OpenTK.Windowing.Common;
 
 namespace Shard.GLTest
 {
-    class GameGLTest : Game, InputListener
+    class GameGLTest : Game
     {
 
         private VisualGameObject level;
@@ -20,11 +20,6 @@ namespace Shard.GLTest
         Random rnd = new Random();
         private Vector3[] monsterSpawnLocations = { new Vector3(18.0f, 18.0f, 0.0f), new Vector3(24.0f, 18.0f, 0.0f), new Vector3(23.0f, -5.0f, 0.0f),
                                                 new Vector3(25.0f, 0.0f, 0.0f), new Vector3(3.0f, -5.0f, 0.0f), new Vector3(-3.0f, 5.0f, 0.0f), new Vector3(20.0f, 13.0f, 0.0f)};
-
-        public void handleInput(InputEvent inp, string eventType)
-        {
-            
-        }
 
         public override void initialize()
         {
