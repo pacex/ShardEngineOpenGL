@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Shard
+namespace Shard.Shard.Graphics
 {
     /*
      * A GameObject with a mesh and a texture that draws itself automatically.
@@ -18,8 +18,8 @@ namespace Shard
 
         public VisualGameObject(Mesh mesh, Texture texture = null)
         {
-            this.Mesh = mesh;
-            this.Texture = texture;
+            Mesh = mesh;
+            Texture = texture;
         }
 
         public override void drawUpdate()
@@ -28,7 +28,7 @@ namespace Shard
             if (Mesh != null)
             {
 
-                Bootstrap.GetDisplayOpenGL().Model = Transform.ToMatrix();
+                Bootstrap.Display.Model = Transform.ToMatrix();
                 Shader.ApplyDefaultShader(Texture);
                 Mesh.Draw();
                 Shader.Reset();

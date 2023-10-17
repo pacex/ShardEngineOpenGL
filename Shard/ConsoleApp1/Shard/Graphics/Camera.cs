@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using OpenTK.Mathematics;
 
-namespace Shard
+namespace Shard.Shard.Graphics
 {
     class Camera : GameObject
     {
@@ -14,7 +14,8 @@ namespace Shard
         public float Near, Far;
 
 
-        public Camera() : base() {
+        public Camera() : base()
+        {
             Fovy = 0.4f * (float)Math.PI;
             Up = Vector3.UnitZ;
             Near = 0.1f;
@@ -42,7 +43,7 @@ namespace Shard
         public Matrix4 GetProjMatrix()
         {
             Vector2i windowSize = DisplayOpenGL.GetInstance().Window.Size;
-            return GetProjMatrix((float)windowSize.X / (float)windowSize.Y);
+            return GetProjMatrix(windowSize.X / (float)windowSize.Y);
         }
 
         public void SetAsMain()

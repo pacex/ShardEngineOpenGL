@@ -8,7 +8,7 @@ using OpenTK.Graphics.OpenGL;
 using OpenTK.Compute.OpenCL;
 using OpenTK.Mathematics;
 
-namespace Shard
+namespace Shard.Shard.Graphics
 {
     class Shader : IDisposable
     {
@@ -45,8 +45,8 @@ namespace Shard
 
         public static void ApplyDefaultShader(Texture texture)
         {
-            DisplayOpenGL display = Bootstrap.GetDisplayOpenGL();
-           
+            DisplayOpenGL display = Bootstrap.Display;
+
             texture.Use(TextureUnit.Texture0);
 
             GetDefaultShader().Use();
@@ -60,7 +60,7 @@ namespace Shard
 
         public static void ApplyWireframeShader(Color4 color)
         {
-            DisplayOpenGL display = Bootstrap.GetDisplayOpenGL();
+            DisplayOpenGL display = Bootstrap.Display;
 
             GetWireframeShader().Use();
 
@@ -72,7 +72,7 @@ namespace Shard
 
         public static void ApplyAnimatedShader(Texture texture, int frameCount, int frameIndex)
         {
-            DisplayOpenGL display = Bootstrap.GetDisplayOpenGL();
+            DisplayOpenGL display = Bootstrap.Display;
 
             texture.Use(TextureUnit.Texture0);
 
@@ -169,7 +169,6 @@ namespace Shard
         }
 
         // Disposal
-
         private bool disposedValue = false;
 
         protected virtual void Dispose(bool disposing)

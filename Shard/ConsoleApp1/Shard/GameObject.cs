@@ -127,7 +127,7 @@ namespace Shard
             transform = new Transform3DNew();
             visible = false;
 
-            runningGame = Bootstrap.getRunningGame();
+            runningGame = Bootstrap.RunningGame;
 
             ToBeDestroyed = false;
             tags = new List<string>();

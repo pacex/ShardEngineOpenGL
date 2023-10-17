@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 using OpenTK.Graphics.OpenGL4;
 using System.ComponentModel;
 
-namespace Shard
+namespace Shard.Shard.Graphics
 {
     class WindowGL : NativeWindow
     {
@@ -23,9 +23,9 @@ namespace Shard
 
         public void Initialize()
         {
-            base.Context?.MakeCurrent();
-            base.VSync = VSyncMode.Off;
-            OnResize(new ResizeEventArgs(base.Size));
+            Context?.MakeCurrent();
+            VSync = VSyncMode.On;
+            OnResize(new ResizeEventArgs(Size));
             GL.ClearColor(clearColor);
             GL.Enable(EnableCap.DepthTest);
             GL.DepthFunc(DepthFunction.Less);
@@ -35,18 +35,18 @@ namespace Shard
 
         public void Display()
         {
-            base.Context.SwapBuffers();
+            Context.SwapBuffers();
         }
 
         public void ProcessWindowEvents()
         {
-            base.ProcessInputEvents();
-            NativeWindow.ProcessWindowEvents(base.IsEventDriven);
+            ProcessInputEvents();
+            ProcessWindowEvents(IsEventDriven);
         }
 
         public Vector2i GetWindowSize()
         {
-            return base.Size;
+            return Size;
         }
 
         protected override void OnResize(ResizeEventArgs e)

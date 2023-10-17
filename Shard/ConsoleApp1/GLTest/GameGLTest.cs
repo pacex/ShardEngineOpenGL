@@ -7,6 +7,7 @@ using OpenTK.Graphics.OpenGL;
 using OpenTK.Mathematics;
 using OpenTK.Windowing.GraphicsLibraryFramework;
 using OpenTK.Windowing.Common;
+using Shard.Shard.Graphics;
 
 namespace Shard.GLTest
 {
@@ -146,14 +147,10 @@ namespace Shard.GLTest
             }
             
 
-            
-
-
-
             // End game
             if (DisplayOpenGL.GetInstance().Window.IsKeyPressed(Keys.Escape))
             {
-                Bootstrap.endGame();
+                Bootstrap.EndGame();
             }        
         }
 

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using StbImageSharp;
 using OpenTK.Graphics.OpenGL;
 
-namespace Shard
+namespace Shard.Shard.Graphics
 {
     class Texture
     {
@@ -15,12 +15,13 @@ namespace Shard
 
         public Texture(string path) : this(path, TextureWrapMode.Repeat, TextureMinFilter.LinearMipmapLinear, TextureMagFilter.Linear, 0, 64) { }
 
-        public Texture(string path, TextureWrapMode wrapMode, TextureMinFilter minFilter, TextureMagFilter magFilter, int texBaseLevel, int texMaxLevel) {
+        public Texture(string path, TextureWrapMode wrapMode, TextureMinFilter minFilter, TextureMagFilter magFilter, int texBaseLevel, int texMaxLevel)
+        {
 
             // Load texture from file
             string assetParentDirectory = Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.Parent.Parent.FullName;
 
-            StbImage.stbi_set_flip_vertically_on_load(1); 
+            StbImage.stbi_set_flip_vertically_on_load(1);
             ImageResult image = ImageResult.FromStream(File.OpenRead(assetParentDirectory + "\\Assets\\" + path), ColorComponents.RedGreenBlueAlpha);
 
             // Upload texture to GPU memory
@@ -49,7 +50,7 @@ namespace Shard
             GL.BindTexture(TextureTarget.Texture2D, Handle);
         }
 
-        
+
 
 
     }

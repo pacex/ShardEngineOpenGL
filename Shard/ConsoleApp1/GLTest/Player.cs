@@ -7,6 +7,7 @@ using OpenTK.Mathematics;
 using OpenTK.Input;
 using OpenTK.Windowing.GraphicsLibraryFramework;
 using OpenTK.Graphics.OpenGL;
+using Shard.Shard.Graphics;
 
 namespace Shard.GLTest
 {

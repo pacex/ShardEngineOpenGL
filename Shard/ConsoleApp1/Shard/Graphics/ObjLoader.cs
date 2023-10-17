@@ -9,11 +9,12 @@ using System.Text;
 using System.Threading.Tasks;
 using OpenTK.Mathematics;
 
-namespace Shard
+namespace Shard.Shard.Graphics
 {
     static class ObjLoader
     {
-        public static Mesh LoadMesh(string path) {
+        public static Mesh LoadMesh(string path)
+        {
 
             List<float[]> pos = new List<float[]>();
             List<float[]> norm = new List<float[]>();
@@ -29,7 +30,7 @@ namespace Shard
             foreach (string line in File.ReadLines(assetParentDirectory + "\\Assets\\" + path))
             {
                 string[] words = line.Split(' ');
-                
+
                 if (words[0].Equals("v"))
                 {
                     // Vertex
@@ -48,20 +49,20 @@ namespace Shard
                 else if (words[0].Equals("f"))
                 {
                     // Face
-                    for(int i = 1; i <= 3; i++)
+                    for (int i = 1; i <= 3; i++)
                     {
                         string[] indStr = words[i].Split('/');
                         int[] ind = new int[] { int.Parse(indStr[0]),
                                                 int.Parse(indStr[1]),
-                                                int.Parse(indStr[2])};                     
-                        
+                                                int.Parse(indStr[2])};
+
                         vertices.AddRange(pos[ind[0] - 1]); // Append pos
                         vertices.AddRange(norm[ind[2] - 1]); // Append norm
                         vertices.AddRange(uv[ind[1] - 1]); // Append uv
 
                         indices.Add(index);
                         index++;
-                        
+
                     }
                 }
             }

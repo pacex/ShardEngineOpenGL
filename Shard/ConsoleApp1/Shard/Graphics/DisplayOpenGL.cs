@@ -9,9 +9,9 @@ using OpenTK.Graphics.OpenGL;
 using OpenTK.Mathematics;
 using OpenTK.Windowing.Desktop;
 
-namespace Shard
+namespace Shard.Shard.Graphics
 {
-    class DisplayOpenGL : Display
+    class DisplayOpenGL
     {
 
         private static DisplayOpenGL instance = null;
@@ -25,7 +25,8 @@ namespace Shard
             return instance;
         }
 
-        private DisplayOpenGL() {
+        private DisplayOpenGL()
+        {
             Model = Matrix4.Identity;
             View = Matrix4.Identity;
             Projection = Matrix4.Identity;
@@ -40,13 +41,17 @@ namespace Shard
 
         public Camera MainCamera;
 
-        public override void clearDisplay()
+        public void ClearDisplay()
         {
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+        }
+
+        public void ProcessWindowEvents()
+        {
             Window.ProcessWindowEvents();
         }
 
-        public void preDraw()
+        public void PreDraw()
         {
             if (MainCamera != null)
             {
@@ -55,27 +60,16 @@ namespace Shard
             }
         }
 
-        public override void display()
+        public void Display()
         {
             Window.Display();
         }
 
-        public override void initialize()
+        public void Initialize()
         {
 
             Window = new WindowGL(Color4.Black);
             Window.Initialize();
         }
-
-        public override void showText(string text, double x, double y, int size, int r, int g, int b)
-        {
-            //throw new NotImplementedException();
-        }
-
-        public override void showText(char[,] text, double x, double y, int size, int r, int g, int b)
-        {
-            //throw new NotImplementedException();
-        }
-
     }
 }

@@ -7,6 +7,7 @@ using OpenTK.Mathematics;
 using System.Text;
 using System.Threading.Tasks;
 using OpenTK.Graphics.OpenGL;
+using Shard.Shard.Graphics;
 
 namespace Shard
 {

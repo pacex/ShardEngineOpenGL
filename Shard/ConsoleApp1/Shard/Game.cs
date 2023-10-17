@@ -17,7 +17,7 @@ namespace Shard
 
         public AssetManagerBase getAssetManager() {
             if (assets == null) {
-                assets = Bootstrap.getAssetManager();
+                assets = Bootstrap.GetAssetManager();
             }
 
             return assets;

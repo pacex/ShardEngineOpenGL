@@ -19,7 +19,7 @@ namespace Shard
             uint length, dev;
             IntPtr buffer;
 
-            file = Bootstrap.getAssetManager().getAssetPath(file);
+            file = Bootstrap.GetAssetManager().getAssetPath(file);
 
             SDL.SDL_LoadWAV(file, out have, out buffer, out length);
             dev = SDL.SDL_OpenAudioDevice(IntPtr.Zero, 0, ref have, out want, 0);

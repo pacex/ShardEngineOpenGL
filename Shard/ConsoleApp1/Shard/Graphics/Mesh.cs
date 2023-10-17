@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using OpenTK.Graphics.OpenGL;
 using OpenTK.Mathematics;
 
-namespace Shard
+namespace Shard.Shard.Graphics
 {
 
     class Mesh
@@ -23,10 +23,10 @@ namespace Shard
                                 1.0f,  -1.0f, 0.0f,     0.0f, 0.0f, -1.0f,      1.0f, 0.0f,
                                 -1.0f, -1.0f, 0.0f,     0.0f, 0.0f, -1.0f,      0.0f, 0.0f,
                                 -1.0f, 1.0f,  0.0f,     0.0f, 0.0f, -1.0f,      0.0f, 1.0f
-                            }, 
+                            },
                             new uint[]{  // Indices
-                                0, 3, 1,   
-                                1, 3, 2    
+                                0, 3, 1,
+                                1, 3, 2
                             })
         {
         }
@@ -65,7 +65,8 @@ namespace Shard
             GL.BindVertexArray(0);
         }
 
-        public AnimatedMesh ToAnimatedMesh(Texture texture, int frameCount, float animationSpeed) {
+        public AnimatedMesh ToAnimatedMesh(Texture texture, int frameCount, float animationSpeed)
+        {
             return new AnimatedMesh(vertices, indices, texture, frameCount, animationSpeed);
         }
     }

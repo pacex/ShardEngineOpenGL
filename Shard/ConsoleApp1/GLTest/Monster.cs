@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using OpenTK.Graphics.OpenGL;
 using System.Transactions;
+using Shard.Shard.Graphics;
 
 namespace Shard.GLTest
 {

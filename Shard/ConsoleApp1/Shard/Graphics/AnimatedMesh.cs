@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Shard
+namespace Shard.Shard.Graphics
 {
     enum AnimationMode
     {
@@ -22,7 +22,8 @@ namespace Shard
         private float animationSpeed;
         private long startTime;
 
-        public AnimatedMesh(Texture texture, int frameCount, float animationSpeed) : base() {
+        public AnimatedMesh(Texture texture, int frameCount, float animationSpeed) : base()
+        {
             this.texture = texture;
             this.frameCount = frameCount;
             this.animationSpeed = animationSpeed;
@@ -30,7 +31,8 @@ namespace Shard
             startTime = -1;
         }
 
-        public AnimatedMesh(float[] vert, uint[] ind, Texture texture, int frameCount, float animationSpeed) : base(vert, ind) {
+        public AnimatedMesh(float[] vert, uint[] ind, Texture texture, int frameCount, float animationSpeed) : base(vert, ind)
+        {
             this.texture = texture;
             this.frameCount = frameCount;
             this.animationSpeed = animationSpeed;
@@ -41,7 +43,7 @@ namespace Shard
         public override void Draw()
         {
             int frameIndex = getFrameIndex();
-         
+
             Shader.ApplyAnimatedShader(texture, frameCount, frameIndex);
             base.Draw();
             Shader.Reset();
@@ -64,7 +66,7 @@ namespace Shard
                     frameIndex = (int)(framesSinceStart % frameCount);
                     break;
                 case AnimationMode.LoopOnCall:
-                    frameIndex = (framesSinceStart >= frameCount) ? 0 : (int)framesSinceStart;
+                    frameIndex = framesSinceStart >= frameCount ? 0 : (int)framesSinceStart;
                     break;
                 case AnimationMode.End:
                     frameIndex = (int)Math.Min(framesSinceStart, frameCount - 1);
@@ -76,7 +78,7 @@ namespace Shard
 
         public float GetAnimationProgress()
         {
-            return (float)getFrameIndex() / (float)frameCount;
+            return getFrameIndex() / (float)frameCount;
         }
 
         public void StartAnimation()
@@ -89,7 +91,7 @@ namespace Shard
             this.texture = texture;
             this.frameCount = frameCount;
             this.animationSpeed = animationSpeed;
-            this.Mode = mode;
+            Mode = mode;
         }
     }
 }

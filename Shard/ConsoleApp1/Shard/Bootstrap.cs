@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading;
+using Shard.Shard.Graphics;
 
 namespace Shard
 {
@@ -21,7 +22,6 @@ namespace Shard
         private static Game runningGame;
         private static DisplayOpenGL displayEngine;
         private static Sound soundEngine;
-        private static InputSystem input;
         private static PhysicsManager phys;
         private static AssetManagerBase asset;
 
@@ -29,8 +29,23 @@ namespace Shard
         private static int millisPerFrame;
         private static double deltaTime;
         private static string baseDir;
-        private static Dictionary<string,string> enVars;
+        private static Dictionary<string, string> enVars;
         private static bool endGameFlag = false;
+
+        public static Game RunningGame
+        {
+            get { return runningGame; }
+        }
+
+        public static DisplayOpenGL Display
+        {
+            get { return (DisplayOpenGL)displayEngine; }
+        }
+
+        public static double DeltaTime
+        {
+            get { return deltaTime; }
+        }
 
         public static bool checkEnvironmentalVariable(string id) {
             return enVars.ContainsKey(id);
@@ -71,39 +86,16 @@ namespace Shard
                     enVars[kvp.Key] = kvp.Value;
                 }
         }
-        public static double getDeltaTime()
-        {
-            return deltaTime;
-        }
 
-        public static Display getDisplay()
-        {
-            return displayEngine;
-        }
-
-        public static DisplayOpenGL GetDisplayOpenGL()
-        {
-            return (DisplayOpenGL)displayEngine;
-        }
-
-        public static Sound getSound()
+        public static Sound GetSound()
         {
             return soundEngine;
         }
 
-        public static InputSystem getInput()
-        {
-            return input;
-        }
-
-        public static AssetManagerBase getAssetManager() {
+        public static AssetManagerBase GetAssetManager() {
             return asset;
         }
 
-        public static Game getRunningGame()
-        {
-            return runningGame;
-        }
 
         private static void setup(string path)
         {
@@ -116,7 +108,7 @@ namespace Shard
 
             phys = PhysicsManager.getInstance();
             displayEngine = DisplayOpenGL.GetInstance();
-            displayEngine.initialize();
+            displayEngine.Initialize();
 
             foreach (KeyValuePair<string, string> kvp in config)
             {
@@ -144,10 +136,6 @@ namespace Shard
                         runningGame = (Game)ob;
                         targetFrameRate = runningGame.getTargetFrameRate();
                         millisPerFrame = 1000 / targetFrameRate;
-                        break;
-                    case "input":
-                        input = (InputSystem)ob;
-                        input.initialize();
                         break;
 
                 }
@@ -184,7 +172,7 @@ namespace Shard
             return DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
         }
 
-        public static void endGame()
+        public static void EndGame()
         {
             endGameFlag = true;
         }
@@ -219,19 +207,15 @@ namespace Shard
                 timeInMillisecondsStart = getCurrentMillis();
                 
                 // Clear the screen.
-                Bootstrap.getDisplay().clearDisplay();
+                Display.ClearDisplay();
+
+                Display.ProcessWindowEvents();
 
                 // Update 
-                runningGame.update();
-                // Input
+                RunningGame.update();
 
                 if (runningGame.isRunning() == true)
                 {
-
-                    // Get input, which works at 50 FPS to make sure it doesn't interfere with the 
-                    // variable frame rates.
-                    input.getInput();
-
                     // Update runs as fast as the system lets it.  Any kind of movement or counter 
                     // increment should be based then on the deltaTime variable.
                     GameObjectManager.getInstance().update();
@@ -259,7 +243,7 @@ namespace Shard
                     }
 
                     // Execute display predraw
-                    displayEngine.preDraw();
+                    displayEngine.PreDraw();
 
                     // Let Game draw to the screen
                     runningGame.draw();
@@ -270,7 +254,7 @@ namespace Shard
                 }
 
                 // Render the screen.
-                Bootstrap.getDisplay().display();
+                Display.Display();
 
                 // Timing
                 timeInMillisecondsEnd = getCurrentMillis();
@@ -282,25 +266,9 @@ namespace Shard
                     Thread.Sleep(sleep);
                 }
 
-
+                // Set DeltaTime for next frame
                 deltaTime = (getCurrentMillis() - timeInMillisecondsStart) / 1000.0f;
-
-                Console.WriteLine(deltaTime);
-
             } 
-
-
         }
-
-        private static void RenderThread()
-        {
-
-            // Render Loop
-            while (!endGameFlag)
-            {
-
-            }
-        }
-
     }
 }

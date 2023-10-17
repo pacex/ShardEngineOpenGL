@@ -39,8 +39,6 @@ namespace Shard
 {
     class PhysicsBody
     {
-        List<Collider> myColliders;
-        List<Collider> collisionCandidates;
         List<Collider3D> my3DColliders;
         List<Collider3D> collision3Dcandidates;
         GameObject parent;
@@ -93,11 +91,6 @@ namespace Shard
 
         public void drawMe()
         {
-            foreach (Collider col in myColliders)
-            {
-                col.drawMe(DebugColor);
-            }
-
             foreach (Collider3D col in my3DColliders)
             {
                 col.DrawMe(DebugColor);
@@ -142,9 +135,7 @@ namespace Shard
         {
             DebugColor = Color.Green;
 
-            myColliders = new List<Collider>();
             my3DColliders = new List<Collider3D>();
-            collisionCandidates = new List<Collider>();
 
             Parent = p;
             Trans = p.Transform;
@@ -325,10 +316,6 @@ namespace Shard
 
         public void recalculateColliders()
         {
-            foreach (Collider col in getColliders())
-            {
-                col.recalculate();
-            }
 
             foreach (Collider3D col in get3DColliders())
             {
@@ -431,87 +418,16 @@ namespace Shard
             return cr;
 
         }
-        public ColliderRect addRectCollider(float width, float height)
-        {
-            ColliderRect cr = new ColliderRect((CollisionHandler)parent, parent.Transform, width, height);
 
-            addCollider(cr);
-
-            return cr;
-        }
-
-        public ColliderCircle addCircleCollider()
-        {
-            ColliderCircle cr = new ColliderCircle((CollisionHandler)parent, parent.TransformOld);
-
-            addCollider(cr);
-
-            return cr;
-        }
-
-        public ColliderCircle addCircleCollider(int x, int y, int rad)
-        {
-            ColliderCircle cr = new ColliderCircle((CollisionHandler)parent, parent.TransformOld, x, y, rad);
-
-            addCollider(cr);
-
-            return cr;
-        }
-
-
-        public void addCollider(Collider col)
-        {
-            myColliders.Add(col);
-        }
         public void add3DCollider(Collider3D col)
         {
             my3DColliders.Add(col);
         }
 
-        public List<Collider> getColliders()
-        {
-            return myColliders;
-        }
         public List<Collider3D> get3DColliders()
         {
             return my3DColliders;
         }
          
-        public System.Numerics.Vector2? checkCollisions(System.Numerics.Vector2 other)
-        {
-            System.Numerics.Vector2? d;
-
-
-            foreach (Collider c in myColliders)
-            {
-                d = c.checkCollision(other);
-
-                if (d != null)
-                {
-                    return d;
-                }
-            }
-
-            return null;
-        }
-
-
-        public System.Numerics.Vector2? checkCollisions(Collider other)
-        {
-            System.Numerics.Vector2? d;
-
-//            Debug.Log("Checking collision with " + other);
-            foreach (Collider c in myColliders)
-            {
-                d = c.checkCollision(other);
-
-                if (d != null)
-                {
-                    return d;
-                }
-            }
-
-            return null;
-        }
     }
 }
