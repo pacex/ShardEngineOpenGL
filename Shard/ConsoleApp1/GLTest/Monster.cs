@@ -19,9 +19,9 @@ namespace Shard.GLTest
         Vector3 targetPos;
         private float acc;
         
-        public Monster() : base()
+        public Monster(float maxForce) : base()
         {
-            
+            this.MyBody.MaxForce = maxForce;
         }
 
 
@@ -35,7 +35,6 @@ namespace Shard.GLTest
             mesh.StartAnimation();
 
             MyBody.addCubeCollider(1.5f, 1.5f, 4.0f);
-            MyBody.MaxForce = 0.11f;
             acc = 0.04f;
             MyBody.Drag = 0.03f;
         }

@@ -16,7 +16,12 @@ namespace Shard.GLTest
 
         private VisualGameObject level;
         private Player player;
-        private Monster monster = null;
+        private List<Monster> monsters = new List<Monster>();
+        private int killCount = 0;
+        private int amountToSpawn = 1;
+        private float maxSpeed = 0.1125f;
+        private int requriedKills = 4;
+
 
         Random rnd = new Random();
         private Vector3[] monsterSpawnLocations = { new Vector3(18.0f, 18.0f, 0.0f), new Vector3(24.0f, 18.0f, 0.0f), new Vector3(23.0f, -5.0f, 0.0f),
@@ -39,9 +44,9 @@ namespace Shard.GLTest
 
             level = new VisualGameObject(ObjLoader.LoadMesh("GLTest\\level2.obj"),new Texture("GLTest\\texture_level2.png", TextureWrapMode.MirroredRepeat, TextureMinFilter.NearestMipmapLinear, TextureMagFilter.Nearest, 0, 3));
             level.Transform.Translation = new Vector3(0.0f, 0.0f, 0.0f);
-      
-            monster = new Monster();
-            monster.Transform.Translation = new Vector3(18.0f, 18.0f, 0.0f);
+
+            spawnMonsters(amountToSpawn);
+           
             //Monster m1 = new Monster();
             //m1.Transform.Translation = new Vector3(18.0f, 18.0f, 0.0f);
             //Monster m2 = new Monster();
@@ -130,21 +135,42 @@ namespace Shard.GLTest
 
         public override void update()
         {
-            if (monster == null)
+            if (monsters.Count == 0)
             {
                 // Spawn new monster
-                monster = new Monster();
-                monster.Transform.Translation = new Vector3(monsterSpawnLocations[rnd.Next(monsterSpawnLocations.Length)]);
+                spawnMonsters(amountToSpawn);
             }
-
-            // Update monster target position
-            monster.targetPosition(player.getPlayerPos());
-
-            //Check if dead
-            if (monster.isDead())
+            if(killCount >= requriedKills)
             {
-                monster = null;
+                increaseDifficulty();
             }
+
+            try
+            {
+                foreach (Monster m in monsters)
+                {
+
+                    m.targetPosition(player.getPlayerPos());
+
+                    //Check if dead
+                    if (m.isDead())
+                    {
+                        killCount++;
+                        monsters.Remove(m);
+
+
+                    }
+                }
+                   
+                
+            }
+            catch
+            {
+
+            }
+            // Update monster target position
+            
+          
             
 
             // End game
@@ -154,9 +180,32 @@ namespace Shard.GLTest
             }        
         }
 
+        private void increaseDifficulty()
+        {
+            if(amountToSpawn <= 4)
+            {
+                maxSpeed += 0.010f;
+                amountToSpawn++;
+                if(requriedKills < 16)
+                {
+                    requriedKills *= 2;
+                }
+            }
+        }
+
         public override void draw()
         {
 
+        }
+        public void spawnMonsters(int amount)
+        {
+            for(int i = 0; i < amount; i++)
+            {
+                Monster m = new Monster(maxSpeed);
+                m.Transform.Translation = new Vector3(monsterSpawnLocations[rnd.Next(monsterSpawnLocations.Length)]);
+                monsters.Add(m);
+            }
+            
         }
 
     }
