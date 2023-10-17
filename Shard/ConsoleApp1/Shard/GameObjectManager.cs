@@ -14,69 +14,46 @@ namespace Shard
 {
     class GameObjectManager
     {
-        private static GameObjectManager me;
-        List<GameObject> myObjects;
+        private static GameObjectManager gameObjectManager;
+        private List<GameObject> myObjects;
 
         private GameObjectManager()
         {
             myObjects = new List<GameObject>();
         }
 
-        public static GameObjectManager getInstance()
+        public static GameObjectManager GetInstance()
         {
-            if (me == null)
+            if (gameObjectManager == null)
             {
-                me = new GameObjectManager();
+                gameObjectManager = new GameObjectManager();
             }
 
-            return me;
+            return gameObjectManager;
         }
 
-        public void addGameObject(GameObject gob)
+        public void AddGameObject(GameObject gob)
         {
             myObjects.Add(gob);
-
         }
 
-        public void removeGameObject(GameObject gob)
+        public void RemoveGameObject(GameObject gob)
         {
             myObjects.Remove(gob);
         }
 
-
-        public void physicsUpdate()
-        {
-            GameObject gob;
-            for (int i = 0; i < myObjects.Count; i++)
-            {
-                gob = myObjects[i];
-                gob.physicsUpdate();
-            }
-        }
-
-        public void prePhysicsUpdate()
+        public void Draw()
         {
             GameObject gob;
             for (int i = 0; i < myObjects.Count; i++)
             {
                 gob = myObjects[i];
 
-                gob.prePhysicsUpdate();
+                gob.Draw();
             }
         }
 
-        public void drawUpdate()
-        {
-            GameObject gob;
-            for (int i = 0; i < myObjects.Count; i++)
-            {
-                gob = myObjects[i];
-
-                gob.drawUpdate();
-            }
-        }
-
-        public void update()
+        public void Update()
         {
             List<int> toDestroy = new List<int>();
             GameObject gob;
@@ -84,9 +61,8 @@ namespace Shard
             {
                 gob = myObjects[i];
 
-                gob.update();
+                gob.Update();
 
-                gob.checkDestroyMe();
 
                 if (gob.ToBeDestroyed == true)
                 {
@@ -99,15 +75,13 @@ namespace Shard
                 for (int i = toDestroy.Count - 1; i >= 0; i--)
                 {
                     gob = myObjects[toDestroy[i]];
-                    myObjects[toDestroy[i]].killMe();
+                    myObjects[toDestroy[i]].OnDestroy();
                     myObjects.RemoveAt(toDestroy[i]);
 
                 }
             }
 
             toDestroy.Clear();
-
-            //            Debug.Log ("NUm Objects is " + myObjects.Count);
         }
 
     }

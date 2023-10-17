@@ -22,12 +22,11 @@ namespace Shard
         private static Game runningGame;
         private static DisplayOpenGL displayEngine;
         private static Sound soundEngine;
-        private static PhysicsManager phys;
         private static AssetManagerBase asset;
 
         private static int targetFrameRate;
         private static int millisPerFrame;
-        private static double deltaTime;
+        private static float deltaTime;
         private static string baseDir;
         private static Dictionary<string, string> enVars;
         private static bool endGameFlag = false;
@@ -42,7 +41,7 @@ namespace Shard
             get { return (DisplayOpenGL)displayEngine; }
         }
 
-        public static double DeltaTime
+        public static float DeltaTime
         {
             get { return deltaTime; }
         }
@@ -106,7 +105,6 @@ namespace Shard
             object ob;
             bool bailOut = false;
 
-            phys = PhysicsManager.getInstance();
             displayEngine = DisplayOpenGL.GetInstance();
             displayEngine.Initialize();
 
@@ -134,7 +132,7 @@ namespace Shard
                         break;
                     case "game":
                         runningGame = (Game)ob;
-                        targetFrameRate = runningGame.getTargetFrameRate();
+                        targetFrameRate = runningGame.GetTargetFramerate();
                         millisPerFrame = 1000 / targetFrameRate;
                         break;
 
@@ -182,7 +180,6 @@ namespace Shard
             long timeInMillisecondsStart, timeInMillisecondsEnd;
             long interval;
             int sleep;
-            bool physUpdate = false;
             bool physDebug = false;
 
 
@@ -192,10 +189,8 @@ namespace Shard
 
 
             // Start the game running.
-            runningGame.initialize();
+            runningGame.Initialize();
 
-            phys.GravityModifier = 0.1f;
-            // This is our game loop.
 
             if (getEnvironmentalVariable("physics_debug") == "1")
             {
@@ -212,44 +207,22 @@ namespace Shard
                 Display.ProcessWindowEvents();
 
                 // Update 
-                RunningGame.update();
+                RunningGame.Update();
 
-                if (runningGame.isRunning() == true)
+                if (runningGame.IsRunning() == true)
                 {
                     // Update runs as fast as the system lets it.  Any kind of movement or counter 
                     // increment should be based then on the deltaTime variable.
-                    GameObjectManager.getInstance().update();
-
-                    // This will update every 20 milliseconds or thereabouts.  Our physics system aims 
-                    // at a 50 FPS cycle.
-                    if (phys.willTick())
-                    {
-                        GameObjectManager.getInstance().prePhysicsUpdate();
-                    }
-
-                    // Update the physics.  If it's too soon, it'll return false.   Otherwise 
-                    // it'll return true.
-                    physUpdate = phys.update();
-
-                    if (physUpdate)
-                    {
-                        // If it did tick, give every object an update
-                        // that is pinned to the timing of the physics system.
-                        GameObjectManager.getInstance().physicsUpdate();
-                    }
-
-                    if (physDebug) {
-                        phys.drawDebugColliders();
-                    }
+                    GameObjectManager.GetInstance().Update();
 
                     // Execute display predraw
                     displayEngine.PreDraw();
 
                     // Let Game draw to the screen
-                    runningGame.draw();
+                    runningGame.Draw();
 
                     // Let GameObjects draw to the screen
-                    GameObjectManager.getInstance().drawUpdate();
+                    GameObjectManager.GetInstance().Draw();
 
                 }
 

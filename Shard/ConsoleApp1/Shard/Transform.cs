@@ -1,153 +1,110 @@
-﻿/*
-*
-*   The transform class handles position, independent of physics and forces (although the physics
-*       system will make use of the rotation and translation functions here).  Essentially this class
-*       is a game object's location (X, Y), rotation and scale.  Usefully it also calculates the 
-*       centre of an object as well as relative directions such as forwards and right.  If you want 
-*       backwards and left, multiply forward or right by -1.
-*       
-*   @author Michael Heron
-*   @version 1.0
-*   
-*/
-
-
-using System;
-using System.Numerics;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using OpenTK.Mathematics;
 
 namespace Shard
 {
-
     class Transform
     {
-        private GameObject owner;
-        private float x, y;
-        private float lx, ly;
-        private float rotz;
-        private int wid, ht;
-        private float scalex, scaley;
-        private string spritePath;
-        private Vector2 forward;
-        private Vector2 right, centre;
-
-        public Vector2 getLastDirection()
+        public Vector3 Translation
         {
-            float dx, dy;
-            dx = (X - Lx);
-            dy = (Y - Ly);
-
-            return new Vector2(-dx, -dy);
+            get { return translation; }
+            set 
+            { 
+                translation = value;
+                updateMatrix();
+            }
         }
-
-        public Transform(GameObject ow)
-        {
-            Owner = ow;
-            forward = new Vector2();
-            right = new Vector2();
-            centre = new Vector2();
-
-            scalex = 1.0f;
-            scaley = 1.0f;
-
-            x = 0;
-            y = 0;
-
-            lx = 0;
-            ly = 0;
-
-            rotate(0);
+        private Vector3 translation;
+        public Quaternion Rotation { 
+            get { return rotation; }
+            set
+            {
+                rotation = value;
+                updateMatrix();
+            }
         }
-
-        public void recalculateCentre()
+        private Quaternion rotation;
+        public Vector3 Scale
         {
-
-            centre.X = (float)(x + ((this.Wid * scalex) / 2));
-            centre.Y = (float)(y + ((this.Ht * scaley) / 2));
-
+            get { return scale; }
+            set { 
+                scale = value;
+                updateMatrix();
+            }
         }
+        private Vector3 scale;
 
-        public void translate(double nx, double ny)
+        public Vector3 Forward
         {
-            translate ((float)nx, (float)ny);
+            get
+            { return InverseMatrix.Row0.Xyz; }
+        }
+        public Vector3 Left
+        {
+            get
+            { return InverseMatrix.Row1.Xyz; }
+        }
+        public Vector3 Up
+        {
+            get
+            { return InverseMatrix.Row2.Xyz; }
         }
 
 
+        public Matrix4 Matrix { get; private set; }
+        public Matrix4 InverseMatrix { get; private set; }
 
-        public void translate(float nx, float ny)
+        public Transform()
         {
-            Lx = X;
-            Ly = Y;
-
-            x += (float)nx;
-            y += (float)ny;
-
-
-            recalculateCentre();
+            translation = Vector3.Zero;
+            rotation = Quaternion.Identity;
+            scale = Vector3.One;
+            updateMatrix();
         }
 
-        public void translate(Vector2 vect)
+        public Transform(Vector3 t, Quaternion r, Vector3 s)
         {
-            translate(vect.X, vect.Y);
-        }
-
-
-
-        public void rotate(float dir)
-        {
-            rotz += (float)dir;
-
-            rotz %= 360;
-
-            float angle = (float)(Math.PI * rotz / 180.0f);
-            float sin = (float)Math.Sin(angle);
-            float cos = (float)Math.Cos(angle);
-
-            forward.X = cos;
-            forward.Y = sin;
-
-
-            right.X = -1 * forward.Y;
-            right.Y = forward.X;
-
-
-
-
+            translation = t;
+            rotation = r;
+            scale = s;
+            updateMatrix();
         }
 
 
-
-        public float X
+        public void Rotate(Quaternion q)
         {
-            get => x;
-            set => x = value;
-        }
-        public float Y
-        {
-            get => y;
-            set => y = value;
+            Rotation *= q;
         }
 
-        public float Rotz
+        public void Translate(Vector3 t)
         {
-            get => rotz;
-            set => rotz = value;
+            Translation += t;
         }
 
-
-        public string SpritePath
+        public Matrix4 ToMatrix()
         {
-            get => spritePath;
-            set => spritePath = value;
+            return Matrix;
         }
-        public ref Vector2 Forward { get => ref forward; }
-        public int Wid { get => wid; set => wid = value; }
-        public int Ht { get => ht; set => ht = value; }
-        public ref Vector2 Right { get => ref right; }
-        internal GameObject Owner { get => owner; set => owner = value; }
-        public ref Vector2 Centre { get => ref centre; }
-        public float Scalex { get => scalex; set => scalex = value; }
-        public float Scaley { get => scaley; set => scaley = value; }
-        public float Lx { get => lx; set => lx = value; }
-        public float Ly { get => ly; set => ly = value; }
+
+        private void updateMatrix()
+        {
+            Matrix4 m;
+
+            // Rotation
+            Matrix4.CreateFromQuaternion(Rotation, out m);
+
+            // Scale
+            m = m * Matrix4.CreateScale(Scale);
+
+            // Translation
+            m.M41 = Translation.X; m.M42 = Translation.Y; m.M43 = Translation.Z;
+
+            Matrix = m;
+            InverseMatrix = m.Inverted();
+        }
     }
 }

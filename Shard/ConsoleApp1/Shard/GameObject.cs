@@ -13,178 +13,40 @@ using System.Collections.Generic;
 
 namespace Shard
 {
-    class GameObject : CollisionHandler
+    abstract class GameObject
     {
-        private Transform3D transformOld;
-        private Transform3DNew transform;
-        private bool transient;
+        private Transform transform;
         private bool toBeDestroyed;
-        private bool visible;
-        private PhysicsBody myBody;
-        private List<string> tags;
 
-        protected Game runningGame { get; private set; }
-
-        public void addTag(string str)
-        {
-            if (tags.Contains(str))
-            {
-                return;
-            }
-
-            tags.Add(str);
-        }
-
-        public void removeTag(string str)
-        {
-            tags.Remove(str);
-        }
-
-        public bool checkTag(string tag)
-        {
-            return tags.Contains(tag);
-        }
-
-        public String getTags()
-        {
-            string str = "";
-
-            foreach (string s in tags)
-            {
-                str += s;
-                str += ";";
-            }
-
-            return str;
-        }
-
-        public void setPhysicsEnabled()
-        {
-            MyBody = new PhysicsBody(this);
-        }
-
-
-        public bool queryPhysicsEnabled()
-        {
-            if (MyBody == null)
-            {
-                return false;
-            }
-            return true;
-        }
-
-        internal Transform3D TransformOld
-        {
-            get => transformOld;
-        }
-
-        internal Transform3DNew Transform
+        public Transform Transform
         {
             get => transform;
         }
 
-        internal Transform Transform2D
-        {
-            get => (Transform)transformOld;
-        }
+        public bool ToBeDestroyed { get => toBeDestroyed; }
 
+        public abstract void Initialize();
 
-        public bool Visible
-        {
-            get => visible;
-            set => visible = value;
-        }
-        public bool Transient { get => transient; set => transient = value; }
-        public bool ToBeDestroyed { get => toBeDestroyed; set => toBeDestroyed = value; }
-        internal PhysicsBody MyBody { get => myBody; set => myBody = value; }
+        public abstract void Update();
 
-        public virtual void initialize()
-        {
-        }
+        public abstract void Draw();
 
-        public virtual void update()
-        {
-
-        }
-
-        public virtual void physicsUpdate()
-        {
-        }
-
-        public virtual void prePhysicsUpdate()
-        {
-        }
-
-        public virtual void drawUpdate()
-        {
-        }
+        public abstract void OnDestroy();
 
         public GameObject()
         {
-            GameObjectManager.getInstance().addGameObject(this);
+            GameObjectManager.GetInstance().AddGameObject(this);
 
-            transformOld = new Transform3D(this);
-            transform = new Transform3DNew();
-            visible = false;
+            transform = new Transform();
+            toBeDestroyed = false;
 
-            runningGame = Bootstrap.RunningGame;
-
-            ToBeDestroyed = false;
-            tags = new List<string>();
-
-            this.initialize();
-
+            Initialize();
         }
 
-        public void checkDestroyMe()
+        public void Destroy()
         {
-
-            if (!transient)
-            {
-                return;
-            }
-
-            /*
-            if (TransformOld.X > 0 && TransformOld.X < Bootstrap.getDisplay().getWidth())
-            {
-                if (TransformOld.Y > 0 && TransformOld.Y < Bootstrap.getDisplay().getHeight())
-                {
-                    return;
-                }
-            }*/
-
-
-            ToBeDestroyed = true;
-
+            toBeDestroyed = true;
         }
 
-        public virtual void killMe()
-        {
-            PhysicsManager.getInstance().removePhysicsObject(myBody);
-
-            myBody = null;
-            transformOld = null;
-
-        }
-
-        public virtual void onCollisionEnter(PhysicsBody x)
-        {
-            
-        }
-
-        public virtual void onCollisionExit(PhysicsBody x)
-        {
-            
-        }
-
-        public virtual void onCollisionStay(PhysicsBody x)
-        {
-            
-        }
-
-        public virtual void onKinematicCollision()
-        {
-
-        }
     }
 }

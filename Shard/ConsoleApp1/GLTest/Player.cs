@@ -20,17 +20,13 @@ namespace Shard.GLTest
 
         private AnimatedMesh shotgun;
 
-        private float acc;
-
         public Player() : base()
         {
             
         }
 
-        public override void initialize()
+        public override void Initialize()
         {
-            base.initialize();
-
             // Camera Setup
             camera = new Camera();
             camera.SetAsMain();
@@ -53,26 +49,9 @@ namespace Shard.GLTest
                             }).ToAnimatedMesh(new Texture("GLTest\\shotgun.png", TextureWrapMode.MirroredRepeat,
                             TextureMinFilter.Nearest, TextureMagFilter.Nearest, 0, 2), 11, 11.0f);
             shotgun.Mode = AnimationMode.LoopOnCall;
-
-            // Player physics
-            setPhysicsEnabled();
-            MyBody.addCubeCollider(0.6f, 0.6f,1.2f);
-            MyBody.Drag = 0.03f;
-            MyBody.MaxForce = 0.22f;
-            acc = 0.04f;
         }
-        public void FireRifle(System.Numerics.Vector2 direction)
-        {
-            if (shotgun.GetAnimationProgress() > 0.0f)
-            {
-                return;
-            }
 
-            Bullet b = new Bullet(Transform.Translation);
-            b.FireMe(direction);
-            shotgun.StartAnimation();
-        }
-        public override void update() 
+        public override void Update() 
         {
             // Interpolate camera position
             Vector3 goal = Transform.Translation + Vector3.UnitZ * height;
@@ -91,19 +70,6 @@ namespace Shard.GLTest
                 camera.Transform.Rotate(Quaternion.FromAxisAngle(camera.Transform.Left, -mouseDelta.Y * sensitivity));
             }
 
-            // Fire bullet
-            if (DisplayOpenGL.GetInstance().Window.IsMouseButtonPressed(MouseButton.Left))
-            {
-                Vector2 f = camera.Transform.Forward.Xy.Normalized();
-                System.Numerics.Vector2 forward = new System.Numerics.Vector2(f.X, f.Y);
-                FireRifle(forward);
-            }
-
-
-        }
-
-        public override void physicsUpdate()
-        {
             // Player Movement
             Vector2 f = camera.Transform.Forward.Xy.Normalized();
             Vector2 l = camera.Transform.Left.Xy.Normalized();
@@ -111,31 +77,29 @@ namespace Shard.GLTest
             System.Numerics.Vector2 forward = new System.Numerics.Vector2(f.X, f.Y);
             System.Numerics.Vector2 left = new System.Numerics.Vector2(l.X, l.Y);
 
-            float force = acc;
+            float dist = 20f * Bootstrap.DeltaTime;
 
             if (DisplayOpenGL.GetInstance().Window.IsKeyDown(Keys.W))
             {
-                MyBody.addForce(forward, force);
+                Transform.Translate(new Vector3(forward.X, forward.Y, 0.0f) * dist);
             }
             if (DisplayOpenGL.GetInstance().Window.IsKeyDown(Keys.S))
             {
-                MyBody.addForce(-forward, force);
+                Transform.Translate(new Vector3(-forward.X, -forward.Y, 0.0f) * dist);
             }
             if (DisplayOpenGL.GetInstance().Window.IsKeyDown(Keys.A))
             {
-                MyBody.addForce(left, force);
+                Transform.Translate(new Vector3(left.X, left.Y, 0.0f) * dist);
             }
             if (DisplayOpenGL.GetInstance().Window.IsKeyDown(Keys.D))
             {
-                MyBody.addForce(-left, force);
+                Transform.Translate(new Vector3(-left.X, -left.Y, 0.0f) * dist);
             }
-            
+
         }
 
-        public override void drawUpdate()
+        public override void Draw()
         {
-            base.drawUpdate();
-
             Matrix4 v = DisplayOpenGL.GetInstance().View;
             Matrix4 p = DisplayOpenGL.GetInstance().Projection;
 
@@ -148,9 +112,9 @@ namespace Shard.GLTest
             DisplayOpenGL.GetInstance().Projection = p;
 
         }
-        public Vector3 getPlayerPos()
+
+        public override void OnDestroy()
         {
-            return Transform.Translation;
         }
     }
 }

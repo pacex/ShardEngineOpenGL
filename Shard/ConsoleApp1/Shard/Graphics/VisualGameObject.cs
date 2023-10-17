@@ -16,15 +16,16 @@ namespace Shard.Shard.Graphics
         public Mesh Mesh;
         public Texture Texture;
 
-        public VisualGameObject(Mesh mesh, Texture texture = null)
+        public VisualGameObject(Mesh mesh, Texture texture = null) : base()
         {
             Mesh = mesh;
             Texture = texture;
         }
 
-        public override void drawUpdate()
+        
+
+        public override void Draw()
         {
-            base.drawUpdate();
             if (Mesh != null)
             {
 
@@ -33,6 +34,18 @@ namespace Shard.Shard.Graphics
                 Mesh.Draw();
                 Shader.Reset();
             }
+        }
+
+        public override void Initialize()
+        {
+        }
+
+        public override void Update()
+        {
+        }
+
+        public override void OnDestroy()
+        {
         }
     }
 }

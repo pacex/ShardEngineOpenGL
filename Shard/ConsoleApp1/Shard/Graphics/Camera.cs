@@ -42,7 +42,7 @@ namespace Shard.Shard.Graphics
 
         public Matrix4 GetProjMatrix()
         {
-            Vector2i windowSize = DisplayOpenGL.GetInstance().Window.Size;
+            Vector2i windowSize = Bootstrap.Display.Window.Size;
             return GetProjMatrix(windowSize.X / (float)windowSize.Y);
         }
 
@@ -56,6 +56,26 @@ namespace Shard.Shard.Graphics
             Vector2 dir = (Transform.Translation.Xy - pos).Normalized();
 
             return Matrix4.CreateFromAxisAngle(Vector3.UnitZ, (float)Math.Acos(dir.Y));
+        }
+
+        public override void Initialize()
+        {
+            
+        }
+
+        public override void Update()
+        {
+            
+        }
+
+        public override void Draw()
+        {
+            
+        }
+
+        public override void OnDestroy()
+        {
+            
         }
     }
 }
