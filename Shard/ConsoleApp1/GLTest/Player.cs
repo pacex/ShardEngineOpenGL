@@ -8,6 +8,7 @@ using OpenTK.Input;
 using OpenTK.Windowing.GraphicsLibraryFramework;
 using OpenTK.Graphics.OpenGL;
 using Shard.Shard.Graphics;
+using Shard.Shard.GameObjects;
 
 namespace Shard.GLTest
 {

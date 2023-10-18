@@ -11,7 +11,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Shard
+namespace Shard.Shard.GameObjects
 {
     abstract class GameObject
     {

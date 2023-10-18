@@ -10,7 +10,7 @@
 
 using System.Collections.Generic;
 
-namespace Shard
+namespace Shard.Shard.GameObjects
 {
     class GameObjectManager
     {

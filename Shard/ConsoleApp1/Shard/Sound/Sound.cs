@@ -6,7 +6,7 @@
 *   
 */
 
-namespace Shard
+namespace Shard.Shard.Sound
 {
     abstract public class Sound
     {

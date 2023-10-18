@@ -10,7 +10,10 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading;
+using Shard.Shard.Assets;
+using Shard.Shard.GameObjects;
 using Shard.Shard.Graphics;
+using Shard.Shard.Sound;
 
 namespace Shard
 {
@@ -46,30 +49,30 @@ namespace Shard
             get { return deltaTime; }
         }
 
-        public static bool checkEnvironmentalVariable(string id) {
+        public static bool CheckEnvironmentalVariable(string id) {
             return enVars.ContainsKey(id);
         }
 
         
-        public static string getEnvironmentalVariable(string id) {
-            if (checkEnvironmentalVariable(id)) {
+        public static string GetEnvironmentalVariable(string id) {
+            if (CheckEnvironmentalVariable(id)) {
                 return enVars[id];
             }
 
             return null;
         }
 
-        public static string getBaseDir() {
+        public static string GetBaseDir() {
             return baseDir;
         }
 
-        public static void setup()
+        public static void Setup()
         {
             string workDir = Environment.CurrentDirectory;
             baseDir = Directory.GetParent(workDir).Parent.Parent.Parent.Parent.FullName;;
 
             setupEnvironmentalVariables(baseDir + "\\" + "envar.cfg");
-            setup(baseDir + "\\" + DEFAULT_CONFIG);
+            Setup(baseDir + "\\" + DEFAULT_CONFIG);
 
         }
 
@@ -96,7 +99,7 @@ namespace Shard
         }
 
 
-        private static void setup(string path)
+        private static void Setup(string path)
         {
             Console.WriteLine ("Path is " + path);
 
@@ -107,6 +110,9 @@ namespace Shard
 
             displayEngine = DisplayOpenGL.GetInstance();
             displayEngine.Initialize();
+            soundEngine = new SoundSDL();
+            asset = (AssetManagerBase)new AssetManager();
+            asset.registerAssets();
 
             foreach (KeyValuePair<string, string> kvp in config)
             {
@@ -123,19 +129,11 @@ namespace Shard
 
                 switch (kvp.Key)
                 {
-                    case "sound":
-                        soundEngine = (Sound)ob;
-                        break;
-                    case "asset":
-                        asset = (AssetManagerBase)ob;
-                        asset.registerAssets();
-                        break;
                     case "game":
                         runningGame = (Game)ob;
                         targetFrameRate = runningGame.GetTargetFramerate();
                         millisPerFrame = 1000 / targetFrameRate;
                         break;
-
                 }
 
                 Debug.getInstance().log("Config file... setting " + kvp.Key + " to " + kvp.Value);
@@ -185,14 +183,14 @@ namespace Shard
 
 
             // Setup the engine.
-            setup();
+            Setup();
 
 
             // Start the game running.
             runningGame.Initialize();
 
 
-            if (getEnvironmentalVariable("physics_debug") == "1")
+            if (GetEnvironmentalVariable("physics_debug") == "1")
             {
                 physDebug = true;
             }
@@ -241,7 +239,9 @@ namespace Shard
 
                 // Set DeltaTime for next frame
                 deltaTime = (getCurrentMillis() - timeInMillisecondsStart) / 1000.0f;
-            } 
+            }
+
+            runningGame.GameEnd();
         }
     }
 }

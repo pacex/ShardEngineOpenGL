@@ -55,7 +55,10 @@ namespace Shard.GLTest
         {
 
         }
-        
 
+        public override void GameEnd()
+        {
+            
+        }
     }
 }

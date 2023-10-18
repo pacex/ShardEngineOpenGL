@@ -64,7 +64,7 @@ namespace Shard
                 key = bits[0].Trim();
                 value = bits[1].Trim();
 
-                value = value.Replace ("%BASE_DIR%", Bootstrap.getBaseDir());
+                value = value.Replace ("%BASE_DIR%", Bootstrap.GetBaseDir());
 
                 configEntries[key] = value;
 

@@ -9,7 +9,7 @@
 using SDL2;
 using System;
 
-namespace Shard
+namespace Shard.Shard.Sound
 {
     public class SoundSDL : Sound
     {

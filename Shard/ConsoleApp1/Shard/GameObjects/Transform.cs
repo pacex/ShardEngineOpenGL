@@ -5,21 +5,22 @@ using System.Text;
 using System.Threading.Tasks;
 using OpenTK.Mathematics;
 
-namespace Shard
+namespace Shard.Shard.GameObjects
 {
     class Transform
     {
         public Vector3 Translation
         {
             get { return translation; }
-            set 
-            { 
+            set
+            {
                 translation = value;
                 updateMatrix();
             }
         }
         private Vector3 translation;
-        public Quaternion Rotation { 
+        public Quaternion Rotation
+        {
             get { return rotation; }
             set
             {
@@ -31,7 +32,8 @@ namespace Shard
         public Vector3 Scale
         {
             get { return scale; }
-            set { 
+            set
+            {
                 scale = value;
                 updateMatrix();
             }

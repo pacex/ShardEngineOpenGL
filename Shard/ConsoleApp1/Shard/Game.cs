@@ -17,6 +17,8 @@ namespace Shard
         public abstract void Update();
         public abstract void Draw();
 
+        public abstract void GameEnd();
+
         public virtual bool IsRunning()
         {
             return true;
