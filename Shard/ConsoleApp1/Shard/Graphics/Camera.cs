@@ -58,25 +58,5 @@ namespace Shard.Shard.Graphics
 
             return Matrix4.CreateFromAxisAngle(Vector3.UnitZ, (float)Math.Acos(dir.Y));
         }
-
-        public override void Initialize()
-        {
-            
-        }
-
-        public override void Update()
-        {
-            
-        }
-
-        public override void Draw()
-        {
-            
-        }
-
-        public override void OnDestroy()
-        {
-            
-        }
     }
 }

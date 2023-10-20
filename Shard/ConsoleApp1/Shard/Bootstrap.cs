@@ -71,12 +71,12 @@ namespace Shard
             string workDir = Environment.CurrentDirectory;
             baseDir = Directory.GetParent(workDir).Parent.Parent.Parent.Parent.FullName;;
 
-            setupEnvironmentalVariables(baseDir + "\\" + "envar.cfg");
+            SetupEnvironmentalVariables(baseDir + "\\" + "envar.cfg");
             Setup(baseDir + "\\" + DEFAULT_CONFIG);
 
         }
 
-        public static void setupEnvironmentalVariables (String path) {
+        public static void SetupEnvironmentalVariables (String path) {
                 Console.WriteLine("Path is " + path);
 
                 Dictionary<string, string> config = BaseFunctionality.getInstance().readConfigFile(path);
@@ -163,7 +163,7 @@ namespace Shard
             }
         }
 
-        public static long getCurrentMillis()
+        public static long GetCurrentMillis()
         {
             return DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
         }
@@ -197,7 +197,7 @@ namespace Shard
 
             while (!endGameFlag)
             {
-                timeInMillisecondsStart = getCurrentMillis();
+                timeInMillisecondsStart = GetCurrentMillis();
                 
                 // Clear the screen.
                 Display.ClearDisplay();
@@ -228,7 +228,7 @@ namespace Shard
                 Display.Display();
 
                 // Timing
-                timeInMillisecondsEnd = getCurrentMillis();
+                timeInMillisecondsEnd = GetCurrentMillis();
                 interval = timeInMillisecondsEnd - timeInMillisecondsStart;
 
                 sleep = (int)(millisPerFrame - interval);
@@ -238,7 +238,7 @@ namespace Shard
                 }
 
                 // Set DeltaTime for next frame
-                deltaTime = (getCurrentMillis() - timeInMillisecondsStart) / 1000.0f;
+                deltaTime = (GetCurrentMillis() - timeInMillisecondsStart) / 1000.0f;
             }
 
             runningGame.GameEnd();

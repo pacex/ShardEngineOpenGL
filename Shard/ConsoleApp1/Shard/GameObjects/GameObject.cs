@@ -17,6 +17,7 @@ namespace Shard.Shard.GameObjects
     {
         private Transform transform;
         private bool toBeDestroyed;
+        private List<Component> components;
 
         public Transform Transform
         {
@@ -25,27 +26,65 @@ namespace Shard.Shard.GameObjects
 
         public bool ToBeDestroyed { get => toBeDestroyed; }
 
-        public abstract void Initialize();
+        public void Initialize()
+        {
+            foreach (Component c in components)
+            {
+                c.Initialize();
+            }
+        }
 
-        public abstract void Update();
+        public void Update()
+        {
+            foreach (Component c in components)
+            {
+                c.Update();
+            }
+        }
 
-        public abstract void Draw();
+        public void Draw()
+        {
+            foreach (Component c in components)
+            {
+                c.Draw();
+            }
+        }
 
-        public abstract void OnDestroy();
+        public void OnDestroy()
+        {
+            foreach (Component c in components)
+            {
+                c.OnDestroy();
+            }
+        }
 
         public GameObject()
         {
-            GameObjectManager.GetInstance().AddGameObject(this);
-
             transform = new Transform();
             toBeDestroyed = false;
-
-            Initialize();
+            components = new List<Component>();
         }
 
         public void Destroy()
         {
             toBeDestroyed = true;
+        }
+
+        public void AddComponent(Component c)
+        {
+            components.Add(c);
+        }
+
+        public T GetComponent<T>() where T : Component
+        {
+            foreach(Component c in components)
+            {
+                if (c is T t)
+                {
+                    return t;
+                }
+            }
+            return null;
         }
 
     }

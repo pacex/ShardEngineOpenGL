@@ -51,7 +51,7 @@ namespace Shard.Shard.Graphics
 
         private int getFrameIndex()
         {
-            long millisSinceStart = Bootstrap.getCurrentMillis() - startTime;
+            long millisSinceStart = Bootstrap.GetCurrentMillis() - startTime;
             long framesSinceStart = (long)(millisSinceStart * 0.001f * animationSpeed);
             if (startTime == -1)
             {
@@ -83,7 +83,7 @@ namespace Shard.Shard.Graphics
 
         public void StartAnimation()
         {
-            startTime = Bootstrap.getCurrentMillis();
+            startTime = Bootstrap.GetCurrentMillis();
         }
 
         public void ChangeAnimation(Texture texture, int frameCount, float animationSpeed, AnimationMode mode)

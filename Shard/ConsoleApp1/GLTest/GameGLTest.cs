@@ -8,6 +8,7 @@ using OpenTK.Mathematics;
 using OpenTK.Windowing.GraphicsLibraryFramework;
 using OpenTK.Windowing.Common;
 using Shard.Shard.Graphics;
+using Shard.Shard.GameObjects;
 
 namespace Shard.GLTest
 {
@@ -37,9 +38,12 @@ namespace Shard.GLTest
             // GameObjects
             player = new Player();
             player.Transform.Translation = new Vector3(-4.0f, 1.0f, 0.7f);
+            GameObjectManager.CreateGameObject(player);
+            
 
             level = new VisualGameObject(ObjLoader.LoadMesh("GLTest\\level2.obj"),new Texture("GLTest\\texture_level2.png", TextureWrapMode.MirroredRepeat, TextureMinFilter.NearestMipmapLinear, TextureMagFilter.Nearest, 0, 3));
             level.Transform.Translation = new Vector3(0.0f, 0.0f, 0.0f);
+            GameObjectManager.CreateGameObject(level);
         }
 
         public override void Update()

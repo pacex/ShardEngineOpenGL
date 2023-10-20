@@ -32,14 +32,10 @@ namespace Shard.Shard.GameObjects
             return gameObjectManager;
         }
 
-        public void AddGameObject(GameObject gob)
+        public static void CreateGameObject(GameObject gob)
         {
-            myObjects.Add(gob);
-        }
-
-        public void RemoveGameObject(GameObject gob)
-        {
-            myObjects.Remove(gob);
+            GetInstance().myObjects.Add(gob);
+            gob.Initialize();
         }
 
         public void Draw()
