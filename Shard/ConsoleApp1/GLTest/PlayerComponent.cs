@@ -77,23 +77,33 @@ namespace Shard.GLTest
             System.Numerics.Vector2 left = new System.Numerics.Vector2(l.X, l.Y);
 
             float dist = 20f * Bootstrap.DeltaTime;
+            bool hasMoved = false;
 
             if (DisplayOpenGL.GetInstance().Window.IsKeyDown(Keys.W))
             {
                 Host.Transform.Translate(new Vector3(forward.X, forward.Y, 0.0f) * dist);
+                hasMoved = true;
             }
             if (DisplayOpenGL.GetInstance().Window.IsKeyDown(Keys.S))
             {
                 Host.Transform.Translate(new Vector3(-forward.X, -forward.Y, 0.0f) * dist);
+                hasMoved = true;
             }
             if (DisplayOpenGL.GetInstance().Window.IsKeyDown(Keys.A))
             {
                 Host.Transform.Translate(new Vector3(left.X, left.Y, 0.0f) * dist);
+                hasMoved = true;
             }
             if (DisplayOpenGL.GetInstance().Window.IsKeyDown(Keys.D))
             {
                 Host.Transform.Translate(new Vector3(-left.X, -left.Y, 0.0f) * dist);
+                hasMoved = true;
             }
+
+            if (hasMoved)
+                Console.WriteLine("[ " + Host.Transform.Translation.X.ToString() + ", " + Host.Transform.Translation.Y.ToString() + " ]");
+
+
 
         }
 
