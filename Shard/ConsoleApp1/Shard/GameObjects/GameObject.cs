@@ -72,11 +72,13 @@ namespace Shard.Shard.GameObjects
 
         public void AddComponent(Component c)
         {
+            // TODO: Check same type of component is not added twice
             components.Add(c);
         }
 
         public T GetComponent<T>() where T : Component
         {
+            // TODO: Optimize this (hashmap)
             foreach(Component c in components)
             {
                 if (c is T t)

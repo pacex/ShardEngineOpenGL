@@ -34,6 +34,9 @@ namespace Shard
         private static Dictionary<string, string> enVars;
         private static bool endGameFlag = false;
 
+        private static bool physDebug = false;
+        public static bool PhysDebug { get => physDebug; }
+
         public static Game RunningGame
         {
             get { return runningGame; }
@@ -178,7 +181,6 @@ namespace Shard
             long timeInMillisecondsStart, timeInMillisecondsEnd;
             long interval;
             int sleep;
-            bool physDebug = false;
 
 
 

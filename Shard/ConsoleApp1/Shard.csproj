@@ -40,7 +40,6 @@
 
 	<ItemGroup>
 	  <Folder Include="SDL2\" />
-	  <Folder Include="Shard\Physics\" />
 	</ItemGroup>
 
 </Project>

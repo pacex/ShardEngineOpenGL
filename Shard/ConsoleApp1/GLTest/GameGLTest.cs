@@ -37,7 +37,7 @@ namespace Shard.GLTest
 
             // GameObjects
             player = new Player();
-            player.Transform.Translation = new Vector3(-4.0f, 1.0f, 0.7f);
+            player.Transform.Translation = new Vector3(-4.0f, 1.0f, 0.0f);
             GameObjectManager.CreateGameObject(player);
             
 

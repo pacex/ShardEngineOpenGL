@@ -19,6 +19,8 @@ namespace Shard.GLTest
 
         private AnimatedMesh shotgun;
 
+        private Player player;
+
         public PlayerComponent(GameObject parent) : base(parent)
         {
 
@@ -26,10 +28,12 @@ namespace Shard.GLTest
 
         public override void Initialize()
         {
+            player = (Player)Host;
+
             // Camera Setup
             camera = new Camera();
             camera.SetAsMain();
-            height = 0.6f;
+            height = 1.6f;
 
             sensitivity = 0.002f;
 
@@ -76,29 +80,32 @@ namespace Shard.GLTest
             System.Numerics.Vector2 forward = new System.Numerics.Vector2(f.X, f.Y);
             System.Numerics.Vector2 left = new System.Numerics.Vector2(l.X, l.Y);
 
-            float dist = 20f * Bootstrap.DeltaTime;
+            float dist = 8f * Bootstrap.DeltaTime;
             bool hasMoved = false;
+            Vector3 move = Vector3.Zero;
 
             if (DisplayOpenGL.GetInstance().Window.IsKeyDown(Keys.W))
             {
-                Host.Transform.Translate(new Vector3(forward.X, forward.Y, 0.0f) * dist);
+                move += new Vector3(forward.X, forward.Y, 0.0f) * dist;
                 hasMoved = true;
             }
             if (DisplayOpenGL.GetInstance().Window.IsKeyDown(Keys.S))
             {
-                Host.Transform.Translate(new Vector3(-forward.X, -forward.Y, 0.0f) * dist);
+                move += new Vector3(-forward.X, -forward.Y, 0.0f) * dist;
                 hasMoved = true;
             }
             if (DisplayOpenGL.GetInstance().Window.IsKeyDown(Keys.A))
             {
-                Host.Transform.Translate(new Vector3(left.X, left.Y, 0.0f) * dist);
+                move += new Vector3(left.X, left.Y, 0.0f) * dist;
                 hasMoved = true;
             }
             if (DisplayOpenGL.GetInstance().Window.IsKeyDown(Keys.D))
             {
-                Host.Transform.Translate(new Vector3(-left.X, -left.Y, 0.0f) * dist);
+                move += new Vector3(-left.X, -left.Y, 0.0f) * dist;
                 hasMoved = true;
             }
+
+            player.DynamicBody.MoveAndSlide(move);
 
             if (hasMoved)
                 Console.WriteLine("[ " + Host.Transform.Translation.X.ToString() + ", " + Host.Transform.Translation.Y.ToString() + " ]");

@@ -8,11 +8,13 @@ namespace Shard.Shard.GameObjects
 {
     abstract class Component
     {
-        public GameObject Host;
+        private GameObject host;
+
+        public GameObject Host { get => host; }
 
         public Component(GameObject parent)
         {
-            Host = parent;
+            host = parent;
         }
 
         public abstract void Initialize();
