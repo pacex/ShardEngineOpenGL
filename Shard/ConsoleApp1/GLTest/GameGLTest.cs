@@ -9,6 +9,7 @@ using OpenTK.Windowing.GraphicsLibraryFramework;
 using OpenTK.Windowing.Common;
 using Shard.Shard.Graphics;
 using Shard.Shard.GameObjects;
+using Shard.Shard.Physics;
 
 namespace Shard.GLTest
 {
@@ -17,6 +18,7 @@ namespace Shard.GLTest
 
         private VisualGameObject level;
         private Player player;
+        private Wall wall;
         private int killCount = 0;
         private int amountToSpawn = 1;
         private float maxSpeed = 0.1125f;
@@ -44,6 +46,10 @@ namespace Shard.GLTest
             level = new VisualGameObject(ObjLoader.LoadMesh("GLTest\\level2_1.obj"),new Texture("GLTest\\texture_level2.png", TextureWrapMode.MirroredRepeat, TextureMinFilter.NearestMipmapLinear, TextureMagFilter.Nearest, 0, 3));
             level.Transform.Translation = new Vector3(0.0f, 0.0f, 0.0f);
             GameObjectManager.CreateGameObject(level);
+
+            wall = new Wall(new ColliderCuboid(new Box3(-1.0f, -1.0f, 0.0f, 1.0f, 1.0f, 2.0f)));
+            wall.Transform.Translation = new Vector3(-6.0f, 6.0f, 0.0f);
+            GameObjectManager.CreateGameObject(wall);
         }
 
         public override void Update()

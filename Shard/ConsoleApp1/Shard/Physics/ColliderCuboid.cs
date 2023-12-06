@@ -12,19 +12,43 @@ namespace Shard.Shard.Physics
 {
     class ColliderCuboid : Collider
     {
-        public Box3 Bounds;
 
         public ColliderCuboid(Box3 bounds)
         {
             Bounds = bounds;
+            Position = Vector3.Zero;
         }
 
-        public override void Draw(Vector3 pos, Color4 col)
+        public override Collider CopyOffset(Vector3 offset)
         {
-            float[] vertices = new float[] {    Bounds.Min.X + pos.X, Bounds.Min.Y + pos.Y, Bounds.Min.Z + pos.Z,     Bounds.Min.X + pos.X, Bounds.Min.Y + pos.Y, Bounds.Max.Z + pos.Z,
-                                                Bounds.Min.X + pos.X, Bounds.Max.Y + pos.Y, Bounds.Min.Z + pos.Z,     Bounds.Min.X + pos.X, Bounds.Max.Y + pos.Y, Bounds.Max.Z + pos.Z,
-                                                Bounds.Max.X + pos.X, Bounds.Min.Y + pos.Y, Bounds.Min.Z + pos.Z,     Bounds.Max.X + pos.X, Bounds.Min.Y + pos.Y, Bounds.Max.Z + pos.Z,
-                                                Bounds.Max.X + pos.X, Bounds.Max.Y + pos.Y, Bounds.Min.Z + pos.Z,     Bounds.Max.X + pos.X, Bounds.Max.Y + pos.Y, Bounds.Max.Z + pos.Z };
+            ColliderCuboid c = new ColliderCuboid(Bounds);
+            c.Position = Position + offset;
+            return c;
+        }
+
+        public override bool Intersects(Collider other)
+        {
+            if (Bounds.Translated(Position).Contains(other.Bounds.Translated(other.Position)))
+            {
+                if (other is ColliderCuboid)
+                    return true;
+                else
+                    throw new NotImplementedException();
+            }
+            return false;
+        }
+
+        public override Vector3 Response(Collider other)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void Draw(Color4 col)
+        {
+            float[] vertices = new float[] {    Bounds.Min.X + Position.X, Bounds.Min.Y + Position.Y, Bounds.Min.Z + Position.Z,     Bounds.Min.X + Position.X, Bounds.Min.Y + Position.Y, Bounds.Max.Z + Position.Z,
+                                                Bounds.Min.X + Position.X, Bounds.Max.Y + Position.Y, Bounds.Min.Z + Position.Z,     Bounds.Min.X + Position.X, Bounds.Max.Y + Position.Y, Bounds.Max.Z + Position.Z,
+                                                Bounds.Max.X + Position.X, Bounds.Min.Y + Position.Y, Bounds.Min.Z + Position.Z,     Bounds.Max.X + Position.X, Bounds.Min.Y + Position.Y, Bounds.Max.Z + Position.Z,
+                                                Bounds.Max.X + Position.X, Bounds.Max.Y + Position.Y, Bounds.Min.Z + Position.Z,     Bounds.Max.X + Position.X, Bounds.Max.Y + Position.Y, Bounds.Max.Z + Position.Z };
 
             uint[] indices = new uint[] { 0, 1, 0, 2, 0, 4,
                                           1, 3, 1, 5,

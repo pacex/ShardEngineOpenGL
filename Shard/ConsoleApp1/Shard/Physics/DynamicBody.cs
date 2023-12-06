@@ -15,8 +15,7 @@ namespace Shard.Shard.Physics
             this.collider = collider;
         }
 
-        private Vector3 position;
-        public Vector3 Position { get => position; }
+        public Vector3 Position { get => collider.Position; }
 
         private Collider collider;
         public Collider Collider { get => collider; }
@@ -27,14 +26,18 @@ namespace Shard.Shard.Physics
          * */
         public bool MoveAndSlide(Vector3 v)
         {
-            position += v;
-            Host.Transform.Translation = position;
+            Collider c = collider.CopyOffset(v);
+            if (Bootstrap.Physics.IntersectsStatic(c))
+                return true;
+
+            collider.Position += v;
+            Host.Transform.Translation = collider.Position;
             return false;
         }
 
         public override void Initialize()
         {
-            position = Host.Transform.Translation;
+            collider.Position = Host.Transform.Translation;
         }
 
         public override void OnDestroy()
@@ -44,14 +47,14 @@ namespace Shard.Shard.Physics
 
         public override void Update()
         {
-            position = Host.Transform.Translation;
+            collider.Position = Host.Transform.Translation;
         }
 
         public override void Draw()
         {
             if (Bootstrap.PhysDebug)
             {
-                collider.Draw(position, Color4.Green);
+                collider.Draw(Color4.Green);
             }
         }
     }

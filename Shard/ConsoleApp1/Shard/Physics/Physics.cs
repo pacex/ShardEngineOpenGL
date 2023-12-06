@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OpenTK.Mathematics;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -18,11 +19,72 @@ namespace Shard.Shard.Physics
             return physics;
         }
 
-        // 
-
+        // Properties
+        private List<StaticBody>[,,] staticBodies;
+        private Box3 bounds;
+        private Vector3i cellCounts;
 
         private Physics() { }
 
+        // Initializes and clears static body grid
+        public void Initialize(Box3 bounds, Vector3 cellSize)
+        {
+            this.bounds = bounds;
+            cellCounts = (Vector3i)(bounds.Size / cellSize);
+            staticBodies = new List<StaticBody>[cellCounts.X, cellCounts.Y, cellCounts.Z];
+        }
+
+        public void AddStaticBody(StaticBody body)
+        {
+            Box3i cells = getIntersectingCells(body.Collider.Bounds);
+            for(int i = cells.Min.X; i <= cells.Max.X; i++)
+            {
+                for (int j = cells.Min.Y; j <= cells.Max.Y; j++)
+                {
+                    for (int k = cells.Min.Z; k <= cells.Max.Z; k++)
+                    {
+                        if (staticBodies[i, j, k] == null)
+                            staticBodies[i, j, k] = new List<StaticBody>();
+                        staticBodies[i,j,k].Add(body);
+                    }
+                }
+            }
+        }
+
+        public bool IntersectsStatic(Collider collider)
+        {
+            Box3i cells = getIntersectingCells(collider.Bounds);
+            for (int i = cells.Min.X; i <= cells.Max.X; i++)
+            {
+                for (int j = cells.Min.Y; j <= cells.Max.Y; j++)
+                {
+                    for (int k = cells.Min.Z; k <= cells.Max.Z; k++)
+                    {
+                        if (staticBodies[i, j, k] == null)
+                            continue;
+                        
+                        foreach(StaticBody b in staticBodies[i, j, k])
+                        {
+                            if (b.Collider.Intersects(collider))
+                                return true;
+                        }
+                    }
+                }
+            }
+            return false;
+        }
+
+
+        private Box3i getIntersectingCells(Box3 b)
+        {
+            return new Box3i(getIntersectingCell(b.Min), getIntersectingCell(b.Max));
+        }
+
+        private Vector3i getIntersectingCell(Vector3 p)
+        {
+            Vector3i nonClamped = (Vector3i)(((p - bounds.Min) / bounds.Size) * (Vector3)cellCounts);
+            return new Vector3i(Math.Clamp(nonClamped.X, 0, cellCounts.X - 1), Math.Clamp(nonClamped.Y, 0, cellCounts.Y - 1), Math.Clamp(nonClamped.Z, 0, cellCounts.Z - 1));
+        }
 
     }
 }

@@ -13,6 +13,7 @@ using System.Threading;
 using Shard.Shard.Assets;
 using Shard.Shard.GameObjects;
 using Shard.Shard.Graphics;
+using Shard.Shard.Physics;
 using Shard.Shard.Sound;
 
 namespace Shard
@@ -26,6 +27,7 @@ namespace Shard
         private static DisplayOpenGL displayEngine;
         private static Sound soundEngine;
         private static AssetManagerBase asset;
+        private static Physics physics;
 
         private static int targetFrameRate;
         private static int millisPerFrame;
@@ -45,6 +47,10 @@ namespace Shard
         public static DisplayOpenGL Display
         {
             get { return (DisplayOpenGL)displayEngine; }
+        }
+
+        public static Physics Physics { 
+            get { return physics; }
         }
 
         public static float DeltaTime
@@ -114,6 +120,8 @@ namespace Shard
             displayEngine = DisplayOpenGL.GetInstance();
             displayEngine.Initialize();
             soundEngine = new SoundSDL();
+            physics = Physics.GetInstance();
+            physics.Initialize(new OpenTK.Mathematics.Box3(-30.0f, -10.0f, -2.0f, 10.0f, 30.0f, 6.0f), new OpenTK.Mathematics.Vector3(2.0f)); // Replace this after scene implementation
             asset = (AssetManagerBase)new AssetManager();
             asset.registerAssets();
 
