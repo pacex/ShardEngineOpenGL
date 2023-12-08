@@ -49,9 +49,5 @@ namespace Shard.Shard.Graphics
             GL.ActiveTexture(textureUnit);
             GL.BindTexture(TextureTarget.Texture2D, Handle);
         }
-
-
-
-
     }
 }

@@ -18,6 +18,12 @@ namespace Shard.Shard.Graphics
         private float[] vertices;
         private uint[] indices;
 
+        public static void DrawFullscreenQuad()
+        {
+            Mesh quad = new Mesh();
+            quad.Draw();
+        }
+
         public Mesh() : this(new float[] {  // Vertices
                                 1.0f,  1.0f,  0.0f,     0.0f, 0.0f, -1.0f,      1.0f, 1.0f,
                                 1.0f,  -1.0f, 0.0f,     0.0f, 0.0f, -1.0f,      1.0f, 0.0f,

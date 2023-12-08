@@ -15,6 +15,7 @@ namespace Shard.Shard.Graphics
         private static Shader defaultShader = null;
         private static Shader wireframeShader = null;
         private static Shader animatedShader = null;
+        private static Shader guiShader = null;
 
         public static Shader GetDefaultShader()
         {
@@ -40,6 +41,15 @@ namespace Shard.Shard.Graphics
                 animatedShader = new Shader("Shaders/default.vert", "Shaders/animated.frag");
             }
             return animatedShader;
+        }
+
+        public static Shader GetGUIShader()
+        {
+            if (guiShader == null)
+            {
+                guiShader = new Shader("Shaders/gui.vert", "Shaders/gui.frag");
+            }
+            return guiShader;
         }
 
 
@@ -87,6 +97,13 @@ namespace Shard.Shard.Graphics
             GL.UniformMatrix4(GL.GetUniformLocation(GetAnimatedShader().Handle, "proj"), false, ref display.Projection);
         }
 
+        public static void ApplyGUIShader(Texture texture)
+        {
+            texture.Use(TextureUnit.Texture0);
+
+            GetGUIShader().Use();
+            GetGUIShader().SetSamplerTextureUnit("texture0", TextureUnit.Texture0);
+        }
 
         public static void Reset()
         {
@@ -144,6 +161,11 @@ namespace Shard.Shard.Graphics
                 string infoLog = GL.GetProgramInfoLog(Handle);
                 Console.WriteLine(infoLog);
             }
+            else
+            {
+                // Linking succeeded
+                Console.WriteLine("Shader program linking successful");
+            }
 
             // Cleanup
             GL.DetachShader(Handle, vertexShader);
@@ -159,13 +181,15 @@ namespace Shard.Shard.Graphics
 
         public int GetAttribLocation(string attribName)
         {
-            return GL.GetAttribLocation(Handle, attribName);
+            return GL.GetUniformLocation(Handle, attribName);
         }
 
         public void SetSamplerTextureUnit(string samplerName, TextureUnit textureUnit)
         {
             int t0 = (int)TextureUnit.Texture0;
-            GL.Uniform1(GetAttribLocation(samplerName), (int)textureUnit - t0);
+            int loc = GetAttribLocation(samplerName);
+            int t = (int)textureUnit - t0;
+            GL.Uniform1(loc, t);
         }
 
         // Disposal

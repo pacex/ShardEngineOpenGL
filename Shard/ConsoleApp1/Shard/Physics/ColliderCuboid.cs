@@ -77,8 +77,10 @@ namespace Shard.Shard.Physics
 
             Shader.ApplyWireframeShader(col);
             GL.BindVertexArray(vertexArrayObject);
+            GL.Disable(EnableCap.DepthTest);
             GL.DrawElements(PrimitiveType.Lines, indices.Length, DrawElementsType.UnsignedInt, indices);
             GL.BindVertexArray(0);
+            GL.Enable(EnableCap.DepthTest);
             Shader.Reset();
 
             GL.DeleteBuffer(vertexBufferObject);

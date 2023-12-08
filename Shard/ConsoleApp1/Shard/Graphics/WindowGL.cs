@@ -53,6 +53,7 @@ namespace Shard.Shard.Graphics
         {
             base.OnResize(e);
             GL.Viewport(0, 0, e.Width, e.Height);
+            DisplayOpenGL.GetInstance().Resize();
         }
 
         protected override void OnClosing(CancelEventArgs e)
