@@ -37,10 +37,13 @@ namespace Shard.Shard.Graphics
         {
         }
 
-        public Mesh(float[] vert, uint[] ind)
+        public Mesh(float[] vert, uint[] ind, bool buildVao = true)
         {
             vertices = vert;
             indices = ind;
+
+            if (!buildVao)
+                return;
 
             vertexArrayObject = GL.GenVertexArray();
             GL.BindVertexArray(vertexArrayObject);

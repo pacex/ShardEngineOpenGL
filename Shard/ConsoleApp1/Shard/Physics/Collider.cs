@@ -9,10 +9,15 @@ namespace Shard.Shard.Physics
 {
     abstract class Collider
     {
-        public Box3 Bounds;
+        public Box3 Bounds { get => bounds; }
+        protected Box3 bounds;
+
         public Vector3 Position;
 
-        public abstract Box3 TranslatedBounds();
+        public Box3 TranslatedBounds()
+        {
+            return Bounds.Translated(Position);
+        }
         public abstract Collider CopyOffset(Vector3 offset);
         public abstract bool Intersects(Collider other);
         public abstract Vector3 Response(Collider other);

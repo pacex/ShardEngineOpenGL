@@ -15,13 +15,8 @@ namespace Shard.Shard.Physics
 
         public ColliderCuboid(Box3 bounds)
         {
-            Bounds = bounds;
+            this.bounds = bounds;
             Position = Vector3.Zero;
-        }
-
-        public override Box3 TranslatedBounds()
-        {
-            return Bounds.Translated(Position);
         }
 
         public override Collider CopyOffset(Vector3 offset)

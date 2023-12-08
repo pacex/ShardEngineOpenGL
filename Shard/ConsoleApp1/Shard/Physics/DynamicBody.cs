@@ -28,12 +28,12 @@ namespace Shard.Shard.Physics
         {
             Collider c = collider.CopyOffset(v);
             
-            Vector3 response = Bootstrap.Physics.ResponseStatic(c);
+            //Vector3 response = Bootstrap.Physics.ResponseStatic(c);
             
-            //if (Bootstrap.Physics.IntersectsStatic(c))
-                //return true;
+            if (Bootstrap.Physics.IntersectsStatic(c))
+                return true;
 
-            collider.Position += v + response;
+            collider.Position += v/* + response*/;
             Host.Transform.Translation = collider.Position;
             return false;
         }

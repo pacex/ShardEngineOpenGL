@@ -80,7 +80,7 @@ namespace Shard.GLTest
             System.Numerics.Vector2 forward = new System.Numerics.Vector2(f.X, f.Y);
             System.Numerics.Vector2 left = new System.Numerics.Vector2(l.X, l.Y);
 
-            float dist = 2f * Bootstrap.DeltaTime;
+            float dist = 6f * Bootstrap.DeltaTime;
             bool hasMoved = false;
             Vector3 move = Vector3.Zero;
 

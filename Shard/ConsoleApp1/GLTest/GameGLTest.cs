@@ -50,6 +50,18 @@ namespace Shard.GLTest
             wall = new Wall(new ColliderCuboid(new Box3(-1.0f, -1.0f, 0.0f, 1.0f, 1.0f, 2.0f)));
             wall.Transform.Translation = new Vector3(-6.0f, 6.0f, 0.0f);
             GameObjectManager.CreateGameObject(wall);
+
+            wall = new Wall(new ColliderCuboid(new Box3(-1.0f, -1.0f, 0.0f, 1.0f, 1.0f, 2.0f)));
+            wall.Transform.Translation = new Vector3(-8.0f, 4.0f, 0.0f);
+            GameObjectManager.CreateGameObject(wall);
+
+            wall = new Wall(new ColliderCuboid(new Box3(-1.0f, -1.0f, 0.0f, 1.0f, 1.0f, 2.0f)));
+            wall.Transform.Translation = new Vector3(-8.0f, 1.5f, 0.0f);
+            GameObjectManager.CreateGameObject(wall);
+
+            wall = new Wall(new ColliderTriangle(new Vector3(0.0f, -1.0f, 0.0f), new Vector3(0.0f, 1.0f, 0.0f), new Vector3(0.0f, 1.0f, 2.0f)));
+            wall.Transform.Translation = new Vector3(-8.0f, -1.5f, 0.0f);
+            GameObjectManager.CreateGameObject(wall);
         }
 
         public override void Update()
