@@ -91,7 +91,32 @@ namespace Shard.Shard.Physics
 
         public override Vector3 Response(Collider other)
         {
-            return Vector3.Zero;
+            if (!Intersects(other))
+                return Vector3.Zero;
+
+            if (other is ColliderCuboid)
+            {
+                // triangle p0 as origin
+                Vector3 c, e;
+                c = (other.Bounds.Center + other.Position) - (p[0] + Position);
+                e = other.Bounds.HalfSize;
+
+                Vector3[] cuboidVertices = new Vector3[] {  c + new Vector3(e.X, e.Y, e.Z),     c + new Vector3(e.X, e.Y, -e.Z),
+                                                            c + new Vector3(e.X, -e.Y, e.Z),    c + new Vector3(e.X, -e.Y, -e.Z),
+                                                            c + new Vector3(-e.X, e.Y, e.Z),    c + new Vector3(-e.X, e.Y, -e.Z),
+                                                            c + new Vector3(-e.X, -e.Y, e.Z),   c + new Vector3(-e.X, -e.Y, -e.Z), };
+
+                float minProjected = float.MaxValue;
+                for(int i = 0; i < cuboidVertices.Length; i++)
+                {
+                    float projected = Vector3.Dot(cuboidVertices[i], n);
+                    minProjected = Math.Min(minProjected, projected);
+                }
+
+                return -n * minProjected;
+            }
+            else
+                throw new NotImplementedException();
         }
 
         public override void Draw(Color4 col)
