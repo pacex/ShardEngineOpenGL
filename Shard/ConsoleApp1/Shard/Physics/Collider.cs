@@ -11,6 +11,8 @@ namespace Shard.Shard.Physics
     {
         public Box3 Bounds;
         public Vector3 Position;
+
+        public abstract Box3 TranslatedBounds();
         public abstract Collider CopyOffset(Vector3 offset);
         public abstract bool Intersects(Collider other);
         public abstract Vector3 Response(Collider other);

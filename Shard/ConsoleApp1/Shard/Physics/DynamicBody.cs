@@ -27,10 +27,13 @@ namespace Shard.Shard.Physics
         public bool MoveAndSlide(Vector3 v)
         {
             Collider c = collider.CopyOffset(v);
-            if (Bootstrap.Physics.IntersectsStatic(c))
-                return true;
+            
+            Vector3 response = Bootstrap.Physics.ResponseStatic(c);
+            
+            //if (Bootstrap.Physics.IntersectsStatic(c))
+                //return true;
 
-            collider.Position += v;
+            collider.Position += v + response;
             Host.Transform.Translation = collider.Position;
             return false;
         }

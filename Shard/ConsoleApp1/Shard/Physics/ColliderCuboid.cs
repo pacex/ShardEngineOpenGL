@@ -19,6 +19,11 @@ namespace Shard.Shard.Physics
             Position = Vector3.Zero;
         }
 
+        public override Box3 TranslatedBounds()
+        {
+            return Bounds.Translated(Position);
+        }
+
         public override Collider CopyOffset(Vector3 offset)
         {
             ColliderCuboid c = new ColliderCuboid(Bounds);
@@ -28,7 +33,7 @@ namespace Shard.Shard.Physics
 
         public override bool Intersects(Collider other)
         {
-            if (Bounds.Translated(Position).Contains(other.Bounds.Translated(other.Position)))
+            if (TranslatedBounds().Contains(other.TranslatedBounds()))
             {
                 if (other is ColliderCuboid)
                     return true;
@@ -40,7 +45,48 @@ namespace Shard.Shard.Physics
 
         public override Vector3 Response(Collider other)
         {
-            throw new NotImplementedException();
+            static float nonNeg(float a)
+            {
+                return a >= 0.0f ? a : float.MaxValue; 
+            }
+
+            if (!Intersects(other))
+                return Vector3.Zero;
+
+            if (other is ColliderCuboid)
+            {
+                Box3 t1, t2;
+                t1 = TranslatedBounds();
+                t2 = other.TranslatedBounds();
+
+                float[] edgeToEdge = {  nonNeg(t2.Max.X - t1.Min.X), nonNeg(t1.Max.X - t2.Min.X),
+                                        nonNeg(t2.Max.Y - t1.Min.Y), nonNeg(t1.Max.Y - t2.Min.Y),
+                                        nonNeg(t2.Max.Z - t1.Min.Z), nonNeg(t1.Max.Z - t2.Min.Z) };
+
+                float minElement = edgeToEdge.Min();
+                int minIndex = Array.IndexOf(edgeToEdge, minElement);
+
+                switch (minIndex)
+                {
+                    case 0:
+                        return -Vector3.UnitX * minElement;
+                    case 1:
+                        return Vector3.UnitX * minElement;
+                    case 2:
+                        return -Vector3.UnitY * minElement;
+                    case 3:
+                        return Vector3.UnitY * minElement;
+                    case 4:
+                        return -Vector3.UnitZ * minElement;
+                    case 5:
+                        return Vector3.UnitZ * minElement;
+                }
+                
+                return Vector3.Zero;
+            }
+            else
+                throw new NotImplementedException();
+
         }
 
         public override void Draw(Color4 col)
@@ -86,6 +132,5 @@ namespace Shard.Shard.Physics
             GL.DeleteBuffer(vertexBufferObject);
             GL.DeleteVertexArray(vertexArrayObject);
         }
-
     }
 }

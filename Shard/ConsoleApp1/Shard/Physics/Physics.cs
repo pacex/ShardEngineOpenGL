@@ -36,7 +36,7 @@ namespace Shard.Shard.Physics
 
         public void AddStaticBody(StaticBody body)
         {
-            Box3i cells = getIntersectingCells(body.Collider.Bounds);
+            Box3i cells = getIntersectingCells(body.Collider.TranslatedBounds());
             for(int i = cells.Min.X; i <= cells.Max.X; i++)
             {
                 for (int j = cells.Min.Y; j <= cells.Max.Y; j++)
@@ -53,7 +53,32 @@ namespace Shard.Shard.Physics
 
         public bool IntersectsStatic(Collider collider)
         {
-            Box3i cells = getIntersectingCells(collider.Bounds);
+            Box3i cells = getIntersectingCells(collider.TranslatedBounds());
+                    
+            foreach(StaticBody b in getStaticBodies(cells))
+            {
+                if (b.Collider.Intersects(collider))
+                    return true;
+            }
+
+            return false;
+        }
+
+        public Vector3 ResponseStatic(Collider collider)
+        {
+            Box3i cells = getIntersectingCells(collider.TranslatedBounds());
+            Vector3 response = Vector3.Zero;
+
+            foreach (StaticBody b in getStaticBodies(cells))
+            {
+                response += b.Collider.Response(collider);
+            }
+            return response;
+        }
+
+        private List<StaticBody> getStaticBodies(Box3i cells)
+        {
+            List<StaticBody> r = new List<StaticBody>();
             for (int i = cells.Min.X; i <= cells.Max.X; i++)
             {
                 for (int j = cells.Min.Y; j <= cells.Max.Y; j++)
@@ -62,18 +87,13 @@ namespace Shard.Shard.Physics
                     {
                         if (staticBodies[i, j, k] == null)
                             continue;
-                        
-                        foreach(StaticBody b in staticBodies[i, j, k])
-                        {
-                            if (b.Collider.Intersects(collider))
-                                return true;
-                        }
+
+                        r.AddRange(staticBodies[i, j, k]);
                     }
                 }
             }
-            return false;
+            return r;
         }
-
 
         private Box3i getIntersectingCells(Box3 b)
         {
