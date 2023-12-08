@@ -13,7 +13,7 @@ namespace Shard.Shard.Graphics
 {
     static class ObjLoader
     {
-        public static Mesh LoadMesh(string path)
+        public static Mesh LoadMesh(string path, bool buildVao = true)
         {
 
             List<float[]> pos = new List<float[]>();
@@ -67,7 +67,7 @@ namespace Shard.Shard.Graphics
                 }
             }
 
-            return new Mesh(vertices.ToArray(), indices.ToArray());
+            return new Mesh(vertices.ToArray(), indices.ToArray(), buildVao);
         }
     }
 }

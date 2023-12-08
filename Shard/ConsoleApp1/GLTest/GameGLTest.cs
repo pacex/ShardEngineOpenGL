@@ -41,11 +41,14 @@ namespace Shard.GLTest
             player = new Player();
             player.Transform.Translation = new Vector3(-4.0f, 1.0f, 0.0f);
             GameObjectManager.CreateGameObject(player);
-            
 
-            level = new VisualGameObject(ObjLoader.LoadMesh("GLTest\\level2_1.obj"),new Texture("GLTest\\texture_level2.png", TextureWrapMode.MirroredRepeat, TextureMinFilter.NearestMipmapLinear, TextureMagFilter.Nearest, 0, 3));
+            Mesh levelMesh = ObjLoader.LoadMesh("GLTest\\level2_1.obj");
+            Physics.GetInstance().AddStaticMesh(levelMesh, Vector3.Zero);
+
+            level = new VisualGameObject(levelMesh, new Texture("GLTest\\texture_level2.png", TextureWrapMode.MirroredRepeat, TextureMinFilter.NearestMipmapLinear, TextureMagFilter.Nearest, 0, 3));
             level.Transform.Translation = new Vector3(0.0f, 0.0f, 0.0f);
             GameObjectManager.CreateGameObject(level);
+
 
             wall = new Wall(new ColliderCuboid(new Box3(-1.0f, -1.0f, 0.0f, 1.0f, 1.0f, 2.0f)));
             wall.Transform.Translation = new Vector3(-6.0f, 6.0f, 0.0f);

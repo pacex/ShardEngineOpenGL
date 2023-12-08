@@ -23,7 +23,7 @@ namespace Shard.Shard.Physics
         public override void Initialize()
         {
             collider.Position = Host.Transform.Translation;
-            Bootstrap.Physics.AddStaticBody(this);
+            Bootstrap.Physics.AddStatic(collider);
         }
 
         public override void OnDestroy()
@@ -38,10 +38,7 @@ namespace Shard.Shard.Physics
 
         public override void Draw()
         {
-            if (Bootstrap.PhysDebug)
-            {
-                collider.Draw(Color4.Green);
-            }
+            
         }
     }
 }

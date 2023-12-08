@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using OpenTK.Graphics.OpenGL;
 using OpenTK.Mathematics;
+using Shard.Shard.Physics;
 
 namespace Shard.Shard.Graphics
 {
@@ -25,10 +26,10 @@ namespace Shard.Shard.Graphics
         }
 
         public Mesh() : this(new float[] {  // Vertices
-                                1.0f,  1.0f,  0.0f,     0.0f, 0.0f, -1.0f,      1.0f, 1.0f,
-                                1.0f,  -1.0f, 0.0f,     0.0f, 0.0f, -1.0f,      1.0f, 0.0f,
-                                -1.0f, -1.0f, 0.0f,     0.0f, 0.0f, -1.0f,      0.0f, 0.0f,
-                                -1.0f, 1.0f,  0.0f,     0.0f, 0.0f, -1.0f,      0.0f, 1.0f
+                                1.0f,  1.0f,  0.0f,     0.0f, 0.0f, -1.0f,      1.0f, 1.0f, // 0
+                                1.0f,  -1.0f, 0.0f,     0.0f, 0.0f, -1.0f,      1.0f, 0.0f, // 1
+                                -1.0f, -1.0f, 0.0f,     0.0f, 0.0f, -1.0f,      0.0f, 0.0f, // 2
+                                -1.0f, 1.0f,  0.0f,     0.0f, 0.0f, -1.0f,      0.0f, 1.0f  // 3
                             },
                             new uint[]{  // Indices
                                 0, 3, 1,
@@ -72,6 +73,25 @@ namespace Shard.Shard.Graphics
             GL.BindVertexArray(vertexArrayObject);
             GL.DrawElements(PrimitiveType.Triangles, indices.Length, DrawElementsType.UnsignedInt, indices);
             GL.BindVertexArray(0);
+        }
+
+        public List<Collider> ExportTriangleColliders(Vector3 offset)
+        {
+            List<Collider> colliders = new List<Collider>();
+
+            for (int i = 0; i < indices.Length; i += 3)
+            {
+                Vector3 v0, v1, v2;
+                v0 = new Vector3(vertices[indices[i] * 8 + 0], vertices[indices[i] * 8 + 1], vertices[indices[i] * 8 + 2]);
+                v1 = new Vector3(vertices[indices[i + 1] * 8 + 0], vertices[indices[i + 1] * 8 + 1], vertices[indices[i + 1] * 8 + 2]);
+                v2 = new Vector3(vertices[indices[i + 2] * 8 + 0], vertices[indices[i + 2] * 8 + 1], vertices[indices[i + 2] * 8 + 2]);
+
+                Collider c = new ColliderTriangle(v0, v1, v2);
+                c.Position = offset;
+                colliders.Add(c);
+            }
+
+            return colliders;
         }
 
         public AnimatedMesh ToAnimatedMesh(Texture texture, int frameCount, float animationSpeed)

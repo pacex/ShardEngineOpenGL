@@ -232,6 +232,9 @@ namespace Shard
                     // Let GameObjects draw to the screen
                     GameObjectManager.GetInstance().Draw();
 
+                    // Physics Debug Draw
+                    if (physDebug)
+                        Physics.DebugDraw();
                 }
 
                 // Render the screen.
@@ -249,6 +252,7 @@ namespace Shard
 
                 // Set DeltaTime for next frame
                 deltaTime = (GetCurrentMillis() - timeInMillisecondsStart) / 1000.0f;
+                
             }
 
             runningGame.GameEnd();

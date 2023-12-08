@@ -107,8 +107,8 @@ namespace Shard.GLTest
 
             player.DynamicBody.MoveAndSlide(move);
 
-            if (hasMoved)
-                Console.WriteLine("[ " + Host.Transform.Translation.X.ToString() + ", " + Host.Transform.Translation.Y.ToString() + " ]");
+            //if (hasMoved)
+                //Console.WriteLine("[ " + Host.Transform.Translation.X.ToString() + ", " + Host.Transform.Translation.Y.ToString() + " ]");
 
 
 

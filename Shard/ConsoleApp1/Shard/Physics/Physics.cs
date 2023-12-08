@@ -1,4 +1,5 @@
 ﻿using OpenTK.Mathematics;
+using Shard.Shard.Graphics;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -20,7 +21,8 @@ namespace Shard.Shard.Physics
         }
 
         // Properties
-        private List<StaticBody>[,,] staticBodies;
+        private List<Collider>[,,] staticColliders;
+        private List<Collider> allStaticColliders;
         private Box3 bounds;
         private Vector3i cellCounts;
 
@@ -31,23 +33,34 @@ namespace Shard.Shard.Physics
         {
             this.bounds = bounds;
             cellCounts = (Vector3i)(bounds.Size / cellSize);
-            staticBodies = new List<StaticBody>[cellCounts.X, cellCounts.Y, cellCounts.Z];
+            staticColliders = new List<Collider>[cellCounts.X, cellCounts.Y, cellCounts.Z];
+            allStaticColliders = new List<Collider>();
         }
 
-        public void AddStaticBody(StaticBody body)
+        public void AddStatic(Collider collider)
         {
-            Box3i cells = getIntersectingCells(body.Collider.TranslatedBounds());
+            Box3i cells = getIntersectingCells(collider.TranslatedBounds());
             for(int i = cells.Min.X; i <= cells.Max.X; i++)
             {
                 for (int j = cells.Min.Y; j <= cells.Max.Y; j++)
                 {
                     for (int k = cells.Min.Z; k <= cells.Max.Z; k++)
                     {
-                        if (staticBodies[i, j, k] == null)
-                            staticBodies[i, j, k] = new List<StaticBody>();
-                        staticBodies[i,j,k].Add(body);
+                        if (staticColliders[i, j, k] == null)
+                            staticColliders[i, j, k] = new List<Collider>();
+                        staticColliders[i,j,k].Add(collider);
                     }
                 }
+            }
+            allStaticColliders.Add(collider);
+        }
+
+        public void AddStaticMesh(Mesh mesh, Vector3 offset)
+        {
+            List<Collider> colliders = mesh.ExportTriangleColliders(offset);
+            foreach(Collider c in colliders)
+            {
+                AddStatic(c);
             }
         }
 
@@ -55,9 +68,9 @@ namespace Shard.Shard.Physics
         {
             Box3i cells = getIntersectingCells(collider.TranslatedBounds());
                     
-            foreach(StaticBody b in getStaticBodies(cells))
+            foreach(Collider c in getStaticBodies(cells))
             {
-                if (b.Collider.Intersects(collider))
+                if (c.Intersects(collider))
                     return true;
             }
 
@@ -69,26 +82,35 @@ namespace Shard.Shard.Physics
             Box3i cells = getIntersectingCells(collider.TranslatedBounds());
             Vector3 response = Vector3.Zero;
 
-            foreach (StaticBody b in getStaticBodies(cells))
+            List<Collider> l = getStaticBodies(cells);
+            //Console.WriteLine(l.Count);
+
+            int n = 0;
+            foreach (Collider c in l)
             {
-                response += b.Collider.Response(collider);
+                Vector3 r = c.Response(collider);
+                
+                if (r.LengthSquared > 0.0f)
+                    n++;
+
+                response += r;
             }
-            return response;
+            return n > 1 ? response / (float)n : response;
         }
 
-        private List<StaticBody> getStaticBodies(Box3i cells)
+        private List<Collider> getStaticBodies(Box3i cells)
         {
-            List<StaticBody> r = new List<StaticBody>();
+            List<Collider> r = new List<Collider>();
             for (int i = cells.Min.X; i <= cells.Max.X; i++)
             {
                 for (int j = cells.Min.Y; j <= cells.Max.Y; j++)
                 {
                     for (int k = cells.Min.Z; k <= cells.Max.Z; k++)
                     {
-                        if (staticBodies[i, j, k] == null)
+                        if (staticColliders[i, j, k] == null)
                             continue;
 
-                        r.AddRange(staticBodies[i, j, k]);
+                        r.AddRange(staticColliders[i, j, k]);
                     }
                 }
             }
@@ -104,6 +126,16 @@ namespace Shard.Shard.Physics
         {
             Vector3i nonClamped = (Vector3i)(((p - bounds.Min) / bounds.Size) * (Vector3)cellCounts);
             return new Vector3i(Math.Clamp(nonClamped.X, 0, cellCounts.X - 1), Math.Clamp(nonClamped.Y, 0, cellCounts.Y - 1), Math.Clamp(nonClamped.Z, 0, cellCounts.Z - 1));
+        }
+
+
+
+        public void DebugDraw()
+        {
+            foreach(Collider c in allStaticColliders)
+            {
+                c.Draw(Color4.Green);
+            }
         }
 
     }
