@@ -13,22 +13,24 @@ namespace Shard.Shard.Physics
     class ColliderCuboid : Collider
     {
 
-        public ColliderCuboid(Box3 bounds)
+        public ColliderCuboid(Box3 bounds, uint mask = 0xFFFFFFFF)
         {
             this.bounds = bounds;
             Position = Vector3.Zero;
+
+            this.mask = mask;
         }
 
         public override Collider CopyOffset(Vector3 offset)
         {
-            ColliderCuboid c = new ColliderCuboid(Bounds);
+            ColliderCuboid c = new ColliderCuboid(Bounds, Mask);
             c.Position = Position + offset;
             return c;
         }
 
         public override bool Intersects(Collider other)
         {
-            if (TranslatedBounds().Contains(other.TranslatedBounds()))
+            if (TranslatedBounds().Contains(other.TranslatedBounds()) && (Mask & other.Mask) != 0x0)
             {
                 if (other is ColliderCuboid)
                     return true;

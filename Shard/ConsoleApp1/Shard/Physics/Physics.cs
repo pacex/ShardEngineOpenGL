@@ -91,7 +91,8 @@ namespace Shard.Shard.Physics
             Vector3 response = Vector3.Zero;
 
             List<Collider> l = getStaticBodies(cells);
-            //Console.WriteLine(l.Count);
+            if (Bootstrap.PhysDebug)
+                Console.WriteLine("#Colliders to check = " + l.Count);
 
             float minResponse = float.MaxValue;
 

@@ -82,7 +82,7 @@ namespace Shard.GLTest
 
             float dist = 6f * Bootstrap.DeltaTime;
             bool hasMoved = false;
-            Vector3 move = Vector3.Zero;
+            Vector3 move = -Vector3.UnitZ * 0.03f;
 
             if (DisplayOpenGL.GetInstance().Window.IsKeyDown(Keys.W))
             {

@@ -12,6 +12,9 @@ namespace Shard.Shard.Physics
         public Box3 Bounds { get => bounds; }
         protected Box3 bounds;
 
+        public uint Mask { get => mask; }
+        protected uint mask;
+
         public Vector3 Position;
 
         public Box3 TranslatedBounds()
