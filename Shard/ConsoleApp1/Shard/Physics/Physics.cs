@@ -21,10 +21,16 @@ namespace Shard.Shard.Physics
         }
 
         // Properties
+
+        public float EPSILON = 0.01f;
+        public float MAX_RESPONSE = 0.4f;
+
         private List<Collider>[,,] staticColliders;
         private List<Collider> allStaticColliders;
         private Box3 bounds;
         private Vector3i cellCounts;
+
+        private const int MAX_DEPTH = 32;
 
         private Physics() { }
 
@@ -77,14 +83,41 @@ namespace Shard.Shard.Physics
             return false;
         }
 
-        public Vector3 ResponseStatic(Collider collider)
+        public Vector3 ResponseStatic(Collider collider, int depth = 0)
         {
+
+            
             Box3i cells = getIntersectingCells(collider.TranslatedBounds());
             Vector3 response = Vector3.Zero;
 
             List<Collider> l = getStaticBodies(cells);
             //Console.WriteLine(l.Count);
 
+            float minResponse = float.MaxValue;
+
+            foreach(Collider c in l)
+            {
+                Vector3 r = c.Response(collider);
+                r += EPSILON * r.Normalized();
+                if (r.Length >= float.Epsilon && r.Length < MAX_RESPONSE)
+                {
+                    minResponse = Math.Min(minResponse, r.Length);
+                    response = r;
+                }  
+            }
+
+            if (Bootstrap.PhysDebug)
+                Console.WriteLine("ResponseStatic at depth = " + depth + ", response.Length = " + response.Length);
+
+            if (response.Length >= float.Epsilon && depth < MAX_DEPTH)
+            {
+                Collider afterResponse = collider.CopyOffset(response);
+                response += ResponseStatic(afterResponse, depth + 1);
+            }
+
+            return response;
+
+            /*
             int n = 0;
             foreach (Collider c in l)
             {
@@ -96,6 +129,7 @@ namespace Shard.Shard.Physics
                 response += r;
             }
             return n > 1 ? response / (float)n : response;
+            */
         }
 
         private List<Collider> getStaticBodies(Box3i cells)
@@ -134,7 +168,7 @@ namespace Shard.Shard.Physics
         {
             foreach(Collider c in allStaticColliders)
             {
-                c.Draw(Color4.Green);
+                c.Draw(Color4.LightGreen);
             }
         }
 

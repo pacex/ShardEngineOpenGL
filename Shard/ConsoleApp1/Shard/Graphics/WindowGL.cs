@@ -31,6 +31,7 @@ namespace Shard.Shard.Graphics
             GL.DepthFunc(DepthFunction.Less);
             GL.Enable(EnableCap.CullFace);
             GL.CullFace(CullFaceMode.Back);
+            GL.LineWidth(4);
         }
 
         public void Display()

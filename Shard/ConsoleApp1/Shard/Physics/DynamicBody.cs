@@ -35,7 +35,7 @@ namespace Shard.Shard.Physics
 
             collider.Position += v + response;
             Host.Transform.Translation = collider.Position;
-            return false;
+            return response.LengthSquared > float.Epsilon;
         }
 
         public override void Initialize()

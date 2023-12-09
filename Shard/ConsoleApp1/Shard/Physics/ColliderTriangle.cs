@@ -113,7 +113,7 @@ namespace Shard.Shard.Physics
                     minProjected = Math.Min(minProjected, projected);
                 }
 
-                return -n * minProjected;
+                return -n * minProjected/* + 0.01f * n*/;
             }
             else
                 throw new NotImplementedException();
@@ -143,6 +143,8 @@ namespace Shard.Shard.Physics
             GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
 
             DisplayOpenGL.GetInstance().Model = Matrix4.Identity;
+
+            float nl = n.Length;
 
             Shader.ApplyWireframeShader(col);
             GL.BindVertexArray(vertexArrayObject);

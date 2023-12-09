@@ -121,7 +121,7 @@ namespace Shard
             displayEngine.Initialize();
             soundEngine = new SoundSDL();
             physics = Physics.GetInstance();
-            physics.Initialize(new OpenTK.Mathematics.Box3(-30.0f, -10.0f, -2.0f, 10.0f, 30.0f, 6.0f), new OpenTK.Mathematics.Vector3(2.0f)); // Replace this after scene implementation
+            physics.Initialize(new OpenTK.Mathematics.Box3(-30.0f, -10.0f, -2.0f, 10.0f, 30.0f, 6.0f), new OpenTK.Mathematics.Vector3(1.417435634f)); // Replace this after scene implementation
             asset = (AssetManagerBase)new AssetManager();
             asset.registerAssets();
 
