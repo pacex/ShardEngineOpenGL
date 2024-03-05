@@ -10,13 +10,9 @@ namespace Shard.GLTest
 {
     class Wall : GameObject
     {
-        private StaticBody staticBody;
-        public StaticBody StaticBody { get { return staticBody; } }
-
         public Wall(Collider collider) : base()
         {
-            staticBody = new StaticBody(collider, this);
-            AddComponent(staticBody);
+            AddComponent(new StaticBody(collider, this));
         }
     }
 }

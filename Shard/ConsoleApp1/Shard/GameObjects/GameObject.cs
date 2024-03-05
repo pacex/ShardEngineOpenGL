@@ -17,7 +17,7 @@ namespace Shard.Shard.GameObjects
     {
         private Transform transform;
         private bool toBeDestroyed;
-        private List<Component> components;
+        private Dictionary<Type, Component> components;
 
         public Transform Transform
         {
@@ -28,7 +28,7 @@ namespace Shard.Shard.GameObjects
 
         public void Initialize()
         {
-            foreach (Component c in components)
+            foreach (Component c in components.Values)
             {
                 c.Initialize();
             }
@@ -36,7 +36,7 @@ namespace Shard.Shard.GameObjects
 
         public void Update()
         {
-            foreach (Component c in components)
+            foreach (Component c in components.Values)
             {
                 c.Update();
             }
@@ -44,7 +44,7 @@ namespace Shard.Shard.GameObjects
 
         public void Draw()
         {
-            foreach (Component c in components)
+            foreach (Component c in components.Values)
             {
                 c.Draw();
             }
@@ -52,7 +52,7 @@ namespace Shard.Shard.GameObjects
 
         public void OnDestroy()
         {
-            foreach (Component c in components)
+            foreach (Component c in components.Values)
             {
                 c.OnDestroy();
             }
@@ -62,7 +62,7 @@ namespace Shard.Shard.GameObjects
         {
             transform = new Transform();
             toBeDestroyed = false;
-            components = new List<Component>();
+            components = new Dictionary<Type, Component>();
         }
 
         public void Destroy()
@@ -72,21 +72,17 @@ namespace Shard.Shard.GameObjects
 
         public void AddComponent(Component c)
         {
-            // TODO: Check same type of component is not added twice
-            components.Add(c);
+            Type t = c.GetType();
+            if (components.ContainsKey(t))
+            {
+                throw new ArgumentException("Component of type " + t.Name + " already added!");
+            }
+            components.Add(t, c);
         }
 
         public T GetComponent<T>() where T : Component
         {
-            // TODO: Optimize this (hashmap)
-            foreach(Component c in components)
-            {
-                if (c is T t)
-                {
-                    return t;
-                }
-            }
-            return null;
+            return (T)components[typeof(T)];
         }
 
     }

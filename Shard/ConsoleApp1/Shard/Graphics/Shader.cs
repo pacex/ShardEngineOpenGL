@@ -38,7 +38,7 @@ namespace Shard.Shard.Graphics
         {
             if (animatedShader == null)
             {
-                animatedShader = new Shader("Shaders/default.vert", "Shaders/animated.frag");
+                animatedShader = new Shader("Shaders/animated.vert", "Shaders/default.frag");
             }
             return animatedShader;
         }
@@ -80,7 +80,7 @@ namespace Shard.Shard.Graphics
             GL.UniformMatrix4(GL.GetUniformLocation(GetWireframeShader().Handle, "proj"), false, ref display.Projection);
         }
 
-        public static void ApplyAnimatedShader(Texture texture, int frameCount, int frameIndex)
+        public static void ApplyAnimatedShader(Texture texture, float[] boneMatrices)
         {
             DisplayOpenGL display = Bootstrap.Display;
 
@@ -89,12 +89,12 @@ namespace Shard.Shard.Graphics
             GetAnimatedShader().Use();
             GetAnimatedShader().SetSamplerTextureUnit("texture0", TextureUnit.Texture0);
 
-            GL.Uniform1(GL.GetUniformLocation(GetAnimatedShader().Handle, "frameCount"), frameCount);
-            GL.Uniform1(GL.GetUniformLocation(GetAnimatedShader().Handle, "frameIndex"), frameIndex);
-
             GL.UniformMatrix4(GL.GetUniformLocation(GetAnimatedShader().Handle, "model"), false, ref display.Model);
             GL.UniformMatrix4(GL.GetUniformLocation(GetAnimatedShader().Handle, "view"), false, ref display.View);
             GL.UniformMatrix4(GL.GetUniformLocation(GetAnimatedShader().Handle, "proj"), false, ref display.Projection);
+
+
+            GL.UniformMatrix4(GL.GetUniformLocation(GetAnimatedShader().Handle, "boneMatrices"), boneMatrices.Length / 16, false, boneMatrices);
         }
 
         public static void ApplyGUIShader(Texture texture)

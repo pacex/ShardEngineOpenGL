@@ -17,8 +17,6 @@ namespace Shard.GLTest
         private Camera camera;
         private float sensitivity;
 
-        private AnimatedMesh shotgun;
-
         private Player player;
 
         public PlayerComponent(GameObject parent) : base(parent)
@@ -38,20 +36,6 @@ namespace Shard.GLTest
             sensitivity = 0.002f;
 
             camera.Transform.Translation = Host.Transform.Translation + Vector3.UnitZ * height;
-
-            // Shotgun
-            shotgun = new Mesh(new float[] {  // Vertices
-                                0.2f,  0.2f,  0.0f,     0.0f, 0.0f, -1.0f,      1.0f, 1.0f,
-                                0.2f,  -1.0f, 0.0f,     0.0f, 0.0f, -1.0f,      1.0f, 0.0f,
-                                -1.0f, -1.0f, 0.0f,     0.0f, 0.0f, -1.0f,      0.0f, 0.0f,
-                                -1.0f, 0.2f,  0.0f,     0.0f, 0.0f, -1.0f,      0.0f, 1.0f
-                            },
-                            new uint[]{  // Indices
-                                0, 3, 1,
-                                1, 3, 2
-                            }).ToAnimatedMesh(new Texture("GLTest\\shotgun.png", TextureWrapMode.MirroredRepeat,
-                            TextureMinFilter.Nearest, TextureMagFilter.Nearest, 0, 2), 11, 11.0f);
-            shotgun.Mode = AnimationMode.LoopOnCall;
         }
 
         public override void Update()
@@ -105,27 +89,12 @@ namespace Shard.GLTest
                 hasMoved = true;
             }
 
-            player.DynamicBody.MoveAndSlide(move);
-
-            //if (hasMoved)
-                //Console.WriteLine("[ " + Host.Transform.Translation.X.ToString() + ", " + Host.Transform.Translation.Y.ToString() + " ]");
-
-
+            Host.GetComponent<Shard.Physics.DynamicBody>().MoveAndSlide(move);
 
         }
 
         public override void Draw()
         {
-            Matrix4 v = DisplayOpenGL.GetInstance().View;
-            Matrix4 p = DisplayOpenGL.GetInstance().Projection;
-
-            DisplayOpenGL.GetInstance().Projection = Matrix4.Identity;
-            DisplayOpenGL.GetInstance().View = Matrix4.Identity;
-            DisplayOpenGL.GetInstance().Model = Matrix4.Identity;
-            shotgun.Draw();
-
-            DisplayOpenGL.GetInstance().View = v;
-            DisplayOpenGL.GetInstance().Projection = p;
 
         }
 

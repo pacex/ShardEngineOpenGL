@@ -15,19 +15,11 @@ namespace Shard.GLTest
 {
     class Player : GameObject
     {
-        private PlayerComponent playerComponent;
-        public PlayerComponent PlayerComponent { get => playerComponent; }
-
-        private DynamicBody dynamicBody;
-        public DynamicBody DynamicBody { get => dynamicBody; }
-
 
         public Player() : base()
         {
-            playerComponent = new PlayerComponent(this);
-            AddComponent(playerComponent);
-            dynamicBody = new DynamicBody( new ColliderCuboid( new Box3(-0.4f, -0.4f, 0.0f, 0.4f, 0.4f, 1.6f)), this);
-            AddComponent(dynamicBody);
+            AddComponent(new PlayerComponent(this));
+            AddComponent(new DynamicBody(new ColliderCuboid(new Box3(-0.4f, -0.4f, 0.0f, 0.4f, 0.4f, 1.6f)), this));
         }
     }
 }

@@ -17,6 +17,7 @@ namespace Shard.GLTest
     {
 
         private VisualGameObject level;
+        private VisualGameObject box;
         private Player player;
         private Wall wall;
         private int killCount = 0;
@@ -42,13 +43,20 @@ namespace Shard.GLTest
             player.Transform.Translation = new Vector3(-4.0f, 1.0f, 0.0f);
             GameObjectManager.CreateGameObject(player);
 
-            Mesh colMesh = ObjLoader.LoadMesh("GLTest\\level2_2.obj");
+            Mesh colMesh = ObjLoader.LoadMeshObj("GLTest\\level2_2.obj");
             Physics.GetInstance().AddStaticMesh(colMesh, Vector3.Zero);
 
-            Mesh levelMesh = ObjLoader.LoadMesh("GLTest\\level2_2.obj");
-            level = new VisualGameObject(levelMesh, new Texture("GLTest\\texture_level2.png", TextureWrapMode.MirroredRepeat, TextureMinFilter.NearestMipmapLinear, TextureMagFilter.Nearest, 0, 3));
+            Mesh levelMesh = ObjLoader.LoadMeshObj("GLTest\\level2_2.obj");
+            level = new VisualGameObject(levelMesh, 
+                new Texture("GLTest\\texture_level2.png", TextureWrapMode.MirroredRepeat, TextureMinFilter.NearestMipmapLinear, TextureMagFilter.Nearest, 0, 3));
             level.Transform.Translation = new Vector3(0.0f, 0.0f, 0.0f);
             GameObjectManager.CreateGameObject(level);
+
+            AnimatedMesh gltfTest = ObjLoader.LoadAnimatedMesh("GLTest\\Snake\\snake.fbx", 0);
+            box = new VisualGameObject(gltfTest,
+                new Texture("GLTest\\CesiumMan\\CesiumMan_img0.jpg", TextureWrapMode.MirroredRepeat, TextureMinFilter.NearestMipmapLinear, TextureMagFilter.Nearest, 0, 3));
+            box.Transform.Translation = Vector3.Zero;
+            GameObjectManager.CreateGameObject(box);
 
         }
 
