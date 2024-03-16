@@ -148,6 +148,7 @@ namespace Shard.Shard.Graphics
                     }
                 }
 
+
                 for (int i = 0; i < nVertices; i++)
                 {
                     int j = 0;
@@ -161,10 +162,28 @@ namespace Shard.Shard.Graphics
                     }
                 }
 
-                // Load Animation
-                Animation anim = new Animation(numBones, (float)scene.Animations[1].DurationInTicks);
+                for (int i = 0; i < nVertices; i++)
+                {
+                    float sum = 0.0f;
+                    foreach(Tuple<uint, float> t in vertexBoneWeights[i])
+                    {
+                        sum += t.Item2;
+                    }
+                    for(int j = 0; j < vertexBoneWeights[i].Count; j++)
+                    {
+                        vertexBoneWeights[i][j] = new Tuple<uint, float>(vertexBoneWeights[i][j].Item1, vertexBoneWeights[i][j].Item2 / sum);
+                    }
+                    sum = 0.0f;
+                    foreach (Tuple<uint, float> t in vertexBoneWeights[i])
+                    {
+                        sum += t.Item2;
+                    }
+                }
 
-                foreach (NodeAnimationChannel channel in scene.Animations[1].NodeAnimationChannels)
+                // Load Animation
+                Animation anim = new Animation(numBones, (float)scene.Animations[2].DurationInTicks);
+
+                foreach (NodeAnimationChannel channel in scene.Animations[2].NodeAnimationChannels)
                 {
                     if (!boneNameToID.ContainsKey(channel.NodeName))
                         continue;

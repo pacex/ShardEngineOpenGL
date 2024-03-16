@@ -17,7 +17,7 @@ namespace Shard.GLTest
     {
 
         private VisualGameObject level;
-        private VisualGameObject box;
+        private VisualGameObject character;
         private Player player;
         private Wall wall;
         private int killCount = 0;
@@ -52,11 +52,21 @@ namespace Shard.GLTest
             level.Transform.Translation = new Vector3(0.0f, 0.0f, 0.0f);
             GameObjectManager.CreateGameObject(level);
 
-            AnimatedMesh gltfTest = ObjLoader.LoadAnimatedMesh("GLTest\\Snake\\snake.fbx", 0);
-            box = new VisualGameObject(gltfTest,
+            
+            AnimatedMesh gltfTest = ObjLoader.LoadAnimatedMesh("GLTest\\Character\\RobotC.fbx", 0);
+            character = new VisualGameObject(gltfTest,
                 new Texture("GLTest\\CesiumMan\\CesiumMan_img0.jpg", TextureWrapMode.MirroredRepeat, TextureMinFilter.NearestMipmapLinear, TextureMagFilter.Nearest, 0, 3));
-            box.Transform.Translation = Vector3.Zero;
-            GameObjectManager.CreateGameObject(box);
+            character.Transform.Translation = Vector3.Zero;
+            GameObjectManager.CreateGameObject(character);
+            
+
+            /*
+            Mesh gltfTest = ObjLoader.LoadMeshGLTF("GLTest\\Character\\RobotC.fbx", 0);
+            character = new VisualGameObject(gltfTest,
+                new Texture("GLTest\\CesiumMan\\CesiumMan_img0.jpg", TextureWrapMode.MirroredRepeat, TextureMinFilter.NearestMipmapLinear, TextureMagFilter.Nearest, 0, 3));
+            character.Transform.Translation = Vector3.Zero;
+            GameObjectManager.CreateGameObject(character);
+            */
 
         }
 
@@ -66,7 +76,8 @@ namespace Shard.GLTest
             if (DisplayOpenGL.GetInstance().Window.IsKeyPressed(Keys.Escape))
             {
                 Bootstrap.EndGame();
-            }        
+            }
+            
         }
 
         public override void Draw()

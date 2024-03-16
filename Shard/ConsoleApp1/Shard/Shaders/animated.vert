@@ -16,7 +16,9 @@ uniform mat4 model;
 uniform mat4 view;
 uniform mat4 proj;
 
-uniform mat4[MAX_BONES] boneMatrices;
+layout(std140) uniform BoneMatrices {
+    mat4 boneMatrices[MAX_BONES];
+};
 
 void main()
 {
@@ -26,7 +28,7 @@ void main()
     vec4 animatedPos = (aWeight.x * boneMatrices[int(aBoneId.x)] + 
                         aWeight.y * boneMatrices[int(aBoneId.y)] + 
                         aWeight.z * boneMatrices[int(aBoneId.z)] + 
-                        aWeight.w * boneMatrices[int(aBoneId.w)]) * vec4(aPosition, 1.0); 
+                        aWeight.w * boneMatrices[int(aBoneId.w)]) * vec4(aPosition, 1.0);
 
     gl_Position = proj * view * model * animatedPos;
 }

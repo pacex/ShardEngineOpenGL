@@ -79,10 +79,11 @@ namespace Shard.Shard.Graphics
                 if (Mesh is AnimatedMesh) {
                     AnimatedMesh aMesh = (AnimatedMesh)Mesh;
 
-                    
+                    // TODO: remove debug code
                     float[] boneMatrices = new float[aMesh.BoneHierarchy.NumBones * 16];
-                    aMesh.BoneHierarchy.ComputeBoneMatrices(ref boneMatrices, Matrix4.Identity, aMesh.Animation, 0.0f);
-
+                    float t = 24f * (Bootstrap.GetCurrentMillis() % 875) / 1000.0f;
+                    aMesh.BoneHierarchy.ComputeBoneMatrices(ref boneMatrices, Matrix4.Identity, aMesh.Animation, t);
+                    Console.WriteLine((long)t);
                     Shader.ApplyAnimatedShader(Texture, boneMatrices);
                 }
                 else

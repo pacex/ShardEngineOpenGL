@@ -94,7 +94,22 @@ namespace Shard.Shard.Graphics
             GL.UniformMatrix4(GL.GetUniformLocation(GetAnimatedShader().Handle, "proj"), false, ref display.Projection);
 
 
-            GL.UniformMatrix4(GL.GetUniformLocation(GetAnimatedShader().Handle, "boneMatrices"), boneMatrices.Length / 16, false, boneMatrices);
+            //GL.UniformMatrix4(GL.GetUniformLocation(GetAnimatedShader().Handle, "boneMatrices"), boneMatrices.Length / 16, false, boneMatrices);
+
+            // Assuming you have the matrix data in a float[] array
+            int bindingPoint = 0; // You can choose any binding point
+            int uniformBlockIndex = GL.GetUniformBlockIndex(GetAnimatedShader().Handle, "BoneMatrices");
+            GL.UniformBlockBinding(GetAnimatedShader().Handle, uniformBlockIndex, bindingPoint);
+
+            // Create and bind a buffer object
+            int bufferSize = boneMatrices.Length * sizeof(float); // 4x4 matrices
+            int uboHandle;
+            GL.GenBuffers(1, out uboHandle);
+            GL.BindBuffer(BufferTarget.UniformBuffer, uboHandle);
+            GL.BufferData(BufferTarget.UniformBuffer, bufferSize, boneMatrices, BufferUsageHint.StaticDraw);
+
+            // Bind the buffer object to the binding point
+            GL.BindBufferBase(BufferRangeTarget.UniformBuffer, bindingPoint, uboHandle);
         }
 
         public static void ApplyGUIShader(Texture texture)

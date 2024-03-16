@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Channels;
 using System.Threading.Tasks;
 using OpenTK.Graphics.OpenGL;
 using OpenTK.Mathematics;
@@ -38,6 +39,7 @@ namespace Shard.Shard.Graphics
             Matrix4 own = parent * anim.GetTransform(ID, timestamp);
 
             Matrix4 final = own * Offset;
+            final.Transpose();
 
             boneMatrices[16 * ID + 0] = final.M11; boneMatrices[16 * ID + 1] = final.M12; boneMatrices[16 * ID + 2] = final.M13; boneMatrices[16 * ID + 3] = final.M14;
             boneMatrices[16 * ID + 4] = final.M21; boneMatrices[16 * ID + 5] = final.M22; boneMatrices[16 * ID + 6] = final.M23; boneMatrices[16 * ID + 7] = final.M24;
@@ -60,93 +62,108 @@ namespace Shard.Shard.Graphics
         }
     }
 
-    class Channel<T>
+    class Channel
     {
-        public List<Keyframe<T>> Keyframes;
-        public int LastIndex = 0;
+        public List<Keyframe<Vector3>> PosKeyframes;
+        public List<Keyframe<Quaternion>> RotKeyframes;
+        public List<Keyframe<Vector3>> ScaleKeyframes;
+
+        public Channel()
+        {
+            PosKeyframes = new List<Keyframe<Vector3>>();
+            RotKeyframes = new List<Keyframe<Quaternion>>();
+            ScaleKeyframes = new List<Keyframe<Vector3>>();
+        }
     }
 
     class Animation
     {
-        public Channel<Vector3>[] PosChannel { get; private set; }
-        public Channel<Quaternion>[] RotChannel { get; private set; }
-        public Channel<Vector3>[] ScaleChannel { get; private set; }
+        public Channel[] Channels;
 
         public float Length { get; private set; }
 
         public Animation(int nBones, float length)
         {
-            PosChannel = new Channel<Vector3>[nBones];
-            RotChannel = new Channel<Quaternion>[nBones];
-            ScaleChannel = new Channel<Vector3>[nBones];
+            Channels = new Channel[nBones];
+            for(int i = 0; i < nBones; i++)
+            {
+                Channels[i] = new Channel();
+            }
             Length = length;
         }
 
         public void AddPosKeyframe(uint boneId, float timestamp, Vector3 posKey)
         {
-            if (PosChannel[boneId] == null)
-            {
-                PosChannel[boneId] = new Channel<Vector3>();
-                PosChannel[boneId].Keyframes = new List<Keyframe<Vector3>>();
-            }
-                
-
             Keyframe<Vector3> keyframe = new Keyframe<Vector3>(timestamp, posKey);
-            PosChannel[boneId].Keyframes.Add(keyframe);
+            Channels[boneId].PosKeyframes.Add(keyframe);
         }
 
         public void AddRotKeyframe(uint boneId, float timestamp, Quaternion rotKey)
         {
-            if (RotChannel[boneId] == null)
-            {
-                RotChannel[boneId] = new Channel<Quaternion>();
-                RotChannel[boneId].Keyframes = new List<Keyframe<Quaternion>>();
-            }
-
-
             Keyframe<Quaternion> keyframe = new Keyframe<Quaternion>(timestamp, rotKey);
-            RotChannel[boneId].Keyframes.Add(keyframe);
+            Channels[boneId].RotKeyframes.Add(keyframe);
         }
 
         public void AddScaleKeyframe(uint boneId, float timestamp, Vector3 scaleKey)
         {
-            if (ScaleChannel[boneId] == null)
-            {
-                ScaleChannel[boneId] = new Channel<Vector3>();
-                ScaleChannel[boneId].Keyframes = new List<Keyframe<Vector3>>();
-            }
-
-
             Keyframe<Vector3> keyframe = new Keyframe<Vector3>(timestamp, scaleKey);
-            ScaleChannel[boneId].Keyframes.Add(keyframe);
+            Channels[boneId].ScaleKeyframes.Add(keyframe);
         }
 
-        public Matrix4 GetTransform(uint boneId, float timestamp)
+        public Matrix4 GetTransform(uint boneId, float timeStamp)
         {
-            Matrix4 t = Matrix4.CreateTranslation(PosChannel[boneId].Keyframes[0].Value);
-            t.Transpose();
-            Matrix4 r = Matrix4.CreateFromQuaternion(RotChannel[boneId].Keyframes[0].Value);
-            Matrix4 s = Matrix4.CreateScale(ScaleChannel[boneId].Keyframes[0].Value);
-            return t * r * s;
-        }
+            Channel c = Channels[boneId];
 
-        private int findIndex<T>(Channel<T> channel, float timeStamp)
-        {
-            int n = channel.Keyframes.Count;
-
-            if (n == 0)
-                return 0;
-
-            for (int i = 0; i < n; i++)
+            Keyframe<Vector3> kp0 = c.PosKeyframes[0], kp1 = c.PosKeyframes[0];
+            for(int i = 0; i < c.PosKeyframes.Count-1; i++)
             {
-                int index = (i + channel.LastIndex) % n;
-                // TODO: complete index search
+                kp0 = c.PosKeyframes[i];
+                kp1 = c.PosKeyframes[i + 1];
+                if (c.PosKeyframes[i].TimeStamp <= timeStamp && c.PosKeyframes[i + 1].TimeStamp > timeStamp)
+                    break;
+                    
             }
+            float w = (timeStamp - kp0.TimeStamp) / (kp1.TimeStamp - kp0.TimeStamp);
+            w = Math.Clamp(w, 0.0f, 1.0f);
+            Vector3 translation = w * kp1.Value + (1.0f - w) * kp0.Value;
 
-            return 0;
 
+            Keyframe<Quaternion> kr0 = c.RotKeyframes[0], kr1 = c.RotKeyframes[0];
+            for (int i = 0; i < c.RotKeyframes.Count - 1; i++)
+            {
+                kr0 = c.RotKeyframes[i];
+                kr1 = c.RotKeyframes[i + 1];
+                if (c.RotKeyframes[i].TimeStamp <= timeStamp && c.RotKeyframes[i + 1].TimeStamp > timeStamp)
+                    break;
+
+            }
+            w = (timeStamp - kr0.TimeStamp) / (kr1.TimeStamp - kr0.TimeStamp);
+            w = Math.Clamp(w, 0.0f, 1.0f);
+            Quaternion rotation = Quaternion.Slerp(kr0.Value, kr1.Value, w);
+            //Quaternion rotation = Quaternion.Identity;
+
+            Keyframe<Vector3> ks0 = c.ScaleKeyframes[0], ks1 = c.ScaleKeyframes[0];
+            for (int i = 0; i < c.ScaleKeyframes.Count - 1; i++)
+            {
+                ks0 = c.ScaleKeyframes[i];
+                ks1 = c.ScaleKeyframes[i + 1];
+                if (c.ScaleKeyframes[i].TimeStamp <= timeStamp && c.ScaleKeyframes[i + 1].TimeStamp > timeStamp)
+                    break;
+
+            }
+            w = (timeStamp - ks0.TimeStamp) / (ks1.TimeStamp - ks0.TimeStamp);
+            w = Math.Clamp(w, 0.0f, 1.0f);
+            Vector3 scale = w * ks1.Value + (1.0f - w) * ks0.Value;
+
+
+            Matrix4 t = Matrix4.CreateTranslation(translation);
+            t.Transpose();
+            Matrix4 r = Matrix4.CreateFromQuaternion(rotation);
+            Matrix4 s = Matrix4.CreateScale(scale);
+
+            Matrix4 res = t * r * s;
+            return res;
         }
-
     }
 
     class AnimatedMesh : Mesh
