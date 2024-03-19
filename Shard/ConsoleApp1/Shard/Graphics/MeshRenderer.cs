@@ -83,7 +83,6 @@ namespace Shard.Shard.Graphics
                     float[] boneMatrices = new float[aMesh.BoneHierarchy.NumBones * 16];
                     float t = 24f * (Bootstrap.GetCurrentMillis() % 875) / 1000.0f;
                     aMesh.BoneHierarchy.ComputeBoneMatrices(ref boneMatrices, Matrix4.Identity, aMesh.Animation, t);
-                    Console.WriteLine((long)t);
                     Shader.ApplyAnimatedShader(Texture, boneMatrices);
                 }
                 else

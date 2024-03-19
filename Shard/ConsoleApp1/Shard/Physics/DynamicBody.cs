@@ -13,12 +13,16 @@ namespace Shard.Shard.Physics
         public DynamicBody(Collider collider, GameObject parent) : base(parent)
         {
             this.collider = collider;
+            SlideAngle = 0.75f;
         }
 
         public Vector3 Position { get => collider.Position; }
 
         private Collider collider;
         public Collider Collider { get => collider; }
+
+        // Properties
+        public float SlideAngle;
 
         /* Move Host by v.
          * If target position is obstructed, resolve ubstruction.
@@ -29,7 +33,10 @@ namespace Shard.Shard.Physics
             Collider c = collider.CopyOffset(v);
             
             Vector3 response = Bootstrap.Physics.ResponseStatic(c);
-            
+
+            if (Vector3.CalculateAngle(response, Vector3.UnitZ) < SlideAngle)
+                response = Vector3.UnitZ * response.Length;
+
             //if (Bootstrap.Physics.IntersectsStatic(c))
                 //return true;
 
