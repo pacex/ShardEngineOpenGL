@@ -17,10 +17,11 @@ namespace Shard.Shard.Graphics
         public Matrix4 Offset { get; private set; }
         public uint ID { get; private set; }
         public uint NumBones { get; private set; }
+        public string Name { get; private set; }
 
         public Matrix4 Transform { get; private set; }
 
-        public BoneNode(List<BoneNode> children, Matrix4 offset, uint iD, Matrix4 transform)
+        public BoneNode(List<BoneNode> children, Matrix4 offset, uint iD, Matrix4 transform, string name)
         {
             Children = children;
             Offset = offset;
@@ -32,6 +33,7 @@ namespace Shard.Shard.Graphics
             NumBones = n;
 
             Transform = transform;
+            Name = name;
         }
 
         public void ComputeBoneMatrices(ref float[] boneMatrices, Matrix4 parent, Animation anim, float timestamp)
@@ -114,46 +116,57 @@ namespace Shard.Shard.Graphics
         {
             Channel c = Channels[boneId];
 
-            Keyframe<Vector3> kp0 = c.PosKeyframes[0], kp1 = c.PosKeyframes[0];
-            for(int i = 0; i < c.PosKeyframes.Count-1; i++)
+            Vector3 translation = Vector3.Zero;
+            if (c.PosKeyframes.Count > 0)
             {
-                kp0 = c.PosKeyframes[i];
-                kp1 = c.PosKeyframes[i + 1];
-                if (c.PosKeyframes[i].TimeStamp <= timeStamp && c.PosKeyframes[i + 1].TimeStamp > timeStamp)
-                    break;
-                    
+                Keyframe<Vector3> kp0 = c.PosKeyframes[0], kp1 = c.PosKeyframes[0];
+                for (int i = 0; i < c.PosKeyframes.Count - 1; i++)
+                {
+                    kp0 = c.PosKeyframes[i];
+                    kp1 = c.PosKeyframes[i + 1];
+                    if (c.PosKeyframes[i].TimeStamp <= timeStamp && c.PosKeyframes[i + 1].TimeStamp > timeStamp)
+                        break;
+
+                }
+                float w = (timeStamp - kp0.TimeStamp) / (kp1.TimeStamp - kp0.TimeStamp);
+                w = Math.Clamp(w, 0.0f, 1.0f);
+                translation = w * kp1.Value + (1.0f - w) * kp0.Value;
             }
-            float w = (timeStamp - kp0.TimeStamp) / (kp1.TimeStamp - kp0.TimeStamp);
-            w = Math.Clamp(w, 0.0f, 1.0f);
-            Vector3 translation = w * kp1.Value + (1.0f - w) * kp0.Value;
 
-
-            Keyframe<Quaternion> kr0 = c.RotKeyframes[0], kr1 = c.RotKeyframes[0];
-            for (int i = 0; i < c.RotKeyframes.Count - 1; i++)
+            Quaternion rotation = Quaternion.Identity;
+            if (c.RotKeyframes.Count > 0)
             {
-                kr0 = c.RotKeyframes[i];
-                kr1 = c.RotKeyframes[i + 1];
-                if (c.RotKeyframes[i].TimeStamp <= timeStamp && c.RotKeyframes[i + 1].TimeStamp > timeStamp)
-                    break;
+                Keyframe<Quaternion> kr0 = c.RotKeyframes[0], kr1 = c.RotKeyframes[0];
+                for (int i = 0; i < c.RotKeyframes.Count - 1; i++)
+                {
+                    kr0 = c.RotKeyframes[i];
+                    kr1 = c.RotKeyframes[i + 1];
+                    if (c.RotKeyframes[i].TimeStamp <= timeStamp && c.RotKeyframes[i + 1].TimeStamp > timeStamp)
+                        break;
 
+                }
+                float w = (timeStamp - kr0.TimeStamp) / (kr1.TimeStamp - kr0.TimeStamp);
+                w = Math.Clamp(w, 0.0f, 1.0f);
+                rotation = Quaternion.Slerp(kr0.Value, kr1.Value, w).Inverted();
             }
-            w = (timeStamp - kr0.TimeStamp) / (kr1.TimeStamp - kr0.TimeStamp);
-            w = Math.Clamp(w, 0.0f, 1.0f);
-            Quaternion rotation = Quaternion.Slerp(kr0.Value, kr1.Value, w);
-            //Quaternion rotation = Quaternion.Identity;
 
-            Keyframe<Vector3> ks0 = c.ScaleKeyframes[0], ks1 = c.ScaleKeyframes[0];
-            for (int i = 0; i < c.ScaleKeyframes.Count - 1; i++)
+            Vector3 scale = Vector3.Zero;
+            if (c.ScaleKeyframes.Count > 0)
             {
-                ks0 = c.ScaleKeyframes[i];
-                ks1 = c.ScaleKeyframes[i + 1];
-                if (c.ScaleKeyframes[i].TimeStamp <= timeStamp && c.ScaleKeyframes[i + 1].TimeStamp > timeStamp)
-                    break;
+                Keyframe<Vector3> ks0 = c.ScaleKeyframes[0], ks1 = c.ScaleKeyframes[0];
+                for (int i = 0; i < c.ScaleKeyframes.Count - 1; i++)
+                {
+                    ks0 = c.ScaleKeyframes[i];
+                    ks1 = c.ScaleKeyframes[i + 1];
+                    if (c.ScaleKeyframes[i].TimeStamp <= timeStamp && c.ScaleKeyframes[i + 1].TimeStamp > timeStamp)
+                        break;
 
+                }
+                float w = (timeStamp - ks0.TimeStamp) / (ks1.TimeStamp - ks0.TimeStamp);
+                w = Math.Clamp(w, 0.0f, 1.0f);
+                scale = w * ks1.Value + (1.0f - w) * ks0.Value;
             }
-            w = (timeStamp - ks0.TimeStamp) / (ks1.TimeStamp - ks0.TimeStamp);
-            w = Math.Clamp(w, 0.0f, 1.0f);
-            Vector3 scale = w * ks1.Value + (1.0f - w) * ks0.Value;
+            
 
 
             Matrix4 t = Matrix4.CreateTranslation(translation);

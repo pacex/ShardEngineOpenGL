@@ -94,19 +94,17 @@ namespace Shard.Shard.GameObjects
 
         private void updateMatrix()
         {
-            Matrix4 m;
-
             // Rotation
-            Matrix4.CreateFromQuaternion(Rotation, out m);
+            Matrix4 rot = Matrix4.CreateFromQuaternion(Rotation);
 
             // Scale
-            m = m * Matrix4.CreateScale(Scale);
+            Matrix4 scale = Matrix4.CreateScale(Scale);
 
             // Translation
-            m.M41 = Translation.X; m.M42 = Translation.Y; m.M43 = Translation.Z;
+            Matrix4 trans = Matrix4.CreateTranslation(Translation);
 
-            Matrix = m;
-            InverseMatrix = m.Inverted();
+            Matrix = trans * rot * scale;
+            InverseMatrix = Matrix.Inverted();
         }
     }
 }

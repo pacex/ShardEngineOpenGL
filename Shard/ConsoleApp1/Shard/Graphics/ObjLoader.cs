@@ -121,17 +121,16 @@ namespace Shard.Shard.Graphics
                 // Assign IDs to bone names
                 Dictionary<string, uint> boneNameToID = new Dictionary<string, uint>();
                 Dictionary<string, Matrix4> boneOffsets = new Dictionary<string, Matrix4>();
-                uint id = 0;
                 foreach (Bone b in m.Bones)
                 {
-                    boneNameToID.Add(b.Name, id++);
                     boneOffsets.Add(b.Name, ToOpenTKMatrix(b.OffsetMatrix));
                 }
-                int numBones = (int)id;
 
                 // Load Bone Hierarchy
-                BoneNode root = LoadBoneHierarchy(scene.RootNode, boneNameToID, boneOffsets);
+                uint bId = 0;
+                BoneNode root = LoadBoneHierarchy(FindRootNode(scene.RootNode), boneNameToID, boneOffsets, ref bId);
 
+                int numBones = (int)bId;
 
                 // Vertex bone weights
                 List<Tuple<uint, float>>[] vertexBoneWeights = new List<Tuple<uint, float>>[nVertices];
@@ -162,6 +161,7 @@ namespace Shard.Shard.Graphics
                     }
                 }
 
+                // Normalize weights
                 for (int i = 0; i < nVertices; i++)
                 {
                     float sum = 0.0f;
@@ -173,17 +173,12 @@ namespace Shard.Shard.Graphics
                     {
                         vertexBoneWeights[i][j] = new Tuple<uint, float>(vertexBoneWeights[i][j].Item1, vertexBoneWeights[i][j].Item2 / sum);
                     }
-                    sum = 0.0f;
-                    foreach (Tuple<uint, float> t in vertexBoneWeights[i])
-                    {
-                        sum += t.Item2;
-                    }
                 }
 
                 // Load Animation
-                Animation anim = new Animation(numBones, (float)scene.Animations[2].DurationInTicks);
+                Animation anim = new Animation(numBones, (float)scene.Animations[0].DurationInTicks);
 
-                foreach (NodeAnimationChannel channel in scene.Animations[2].NodeAnimationChannels)
+                foreach (NodeAnimationChannel channel in scene.Animations[0].NodeAnimationChannels)
                 {
                     if (!boneNameToID.ContainsKey(channel.NodeName))
                         continue;
@@ -217,36 +212,38 @@ namespace Shard.Shard.Graphics
             }
         }
 
-        private static BoneNode LoadBoneHierarchy(Node n, Dictionary<string,uint> boneNameToID, Dictionary<string,Matrix4> offsets)
+        private static BoneNode LoadBoneHierarchy(Node n, Dictionary<string,uint> boneNameToID, Dictionary<string,Matrix4> offsets, ref uint id)
         {
-            if (boneNameToID.ContainsKey(n.Name))
+
+            List<BoneNode> children = new List<BoneNode>();
+            uint boneID = id;
+            id++;
+            boneNameToID[n.Name] = boneID;
+
+            foreach (Node c in n.Children)
             {
-                List<BoneNode> children = new List<BoneNode>();
-
-                foreach (Node c in n.Children)
-                {
-                    BoneNode childnode = LoadBoneHierarchy(c, boneNameToID, offsets);
-                    if (childnode != null)
-                        children.Add(childnode);
-                }
-
-                BoneNode bone = new BoneNode(children, offsets[n.Name], boneNameToID[n.Name], ToOpenTKMatrix(n.Transform));
-                return bone;
+                BoneNode childnode = LoadBoneHierarchy(c, boneNameToID, offsets, ref id);
+                if (childnode != null)
+                    children.Add(childnode);
             }
-            else
+
+            BoneNode bone = new BoneNode(children, offsets.ContainsKey(n.Name) ? offsets[n.Name] : Matrix4.Identity, boneID, ToOpenTKMatrix(n.Transform), n.Name);
+
+            return bone;
+            
+        }
+
+        private static Node FindRootNode(Node n)
+        {
+            if (n.Name.Equals("Pelvis"))
+                return n;
+            foreach (Node c in n.Children)
             {
-                if (!n.HasChildren)
-                    return null;
-
-                BoneNode passthrough;
-                foreach (Node c in n.Children)
-                {
-                    passthrough = LoadBoneHierarchy(c, boneNameToID, offsets);
-                    if (passthrough != null)
-                        return passthrough;
-                }
-                return null;
+                Node root = FindRootNode(c);
+                if (root != null) 
+                    return root;
             }
+            return null;
         }
 
         private static Matrix4 ToOpenTKMatrix(Assimp.Matrix4x4 m)

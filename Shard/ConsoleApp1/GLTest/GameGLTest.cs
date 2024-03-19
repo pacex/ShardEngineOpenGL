@@ -53,20 +53,12 @@ namespace Shard.GLTest
             GameObjectManager.CreateGameObject(level);
 
             
-            AnimatedMesh gltfTest = ObjLoader.LoadAnimatedMesh("GLTest\\Character\\RobotC.fbx", 0);
+            AnimatedMesh gltfTest = ObjLoader.LoadAnimatedMesh("GLTest\\Character\\RobotB.fbx", 1);
             character = new VisualGameObject(gltfTest,
                 new Texture("GLTest\\CesiumMan\\CesiumMan_img0.jpg", TextureWrapMode.MirroredRepeat, TextureMinFilter.NearestMipmapLinear, TextureMagFilter.Nearest, 0, 3));
-            character.Transform.Translation = Vector3.Zero;
+            character.Transform.Translation = Vector3.UnitZ * 2.7f;
+            character.Transform.Scale = Vector3.One * 0.4f;
             GameObjectManager.CreateGameObject(character);
-            
-
-            /*
-            Mesh gltfTest = ObjLoader.LoadMeshGLTF("GLTest\\Character\\RobotC.fbx", 0);
-            character = new VisualGameObject(gltfTest,
-                new Texture("GLTest\\CesiumMan\\CesiumMan_img0.jpg", TextureWrapMode.MirroredRepeat, TextureMinFilter.NearestMipmapLinear, TextureMagFilter.Nearest, 0, 3));
-            character.Transform.Translation = Vector3.Zero;
-            GameObjectManager.CreateGameObject(character);
-            */
 
         }
 
