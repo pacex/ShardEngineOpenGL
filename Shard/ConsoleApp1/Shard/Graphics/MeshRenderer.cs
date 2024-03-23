@@ -86,8 +86,10 @@ namespace Shard.Shard.Graphics
                     Shader.ApplyAnimatedShader(Texture, boneMatrices);
                 }
                 else
-                    Shader.ApplyDefaultShader(Texture);
-
+                {
+                    Shader.ApplyLevelDebugShader();
+                }
+                    
                 GL.BindVertexArray(vertexArrayObject);
                 GL.DrawElements(PrimitiveType.Triangles, Mesh.Indices.Length, DrawElementsType.UnsignedInt, Mesh.Indices);
                 GL.BindVertexArray(0);

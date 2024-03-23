@@ -7,6 +7,7 @@ using System.IO;
 using OpenTK.Graphics.OpenGL;
 using OpenTK.Compute.OpenCL;
 using OpenTK.Mathematics;
+using Assimp.Unmanaged;
 
 namespace Shard.Shard.Graphics
 {
@@ -17,12 +18,26 @@ namespace Shard.Shard.Graphics
         private static Shader animatedShader = null;
         private static Shader guiShader = null;
 
+        private static Shader leveldebugShader = null;
+        private static Texture leveldebugTexture = null;
+
         public static Shader GetDefaultShader()
         {
             if (defaultShader == null)
                 defaultShader = new Shader("Shaders/default.vert", "Shaders/default.frag");
 
             return defaultShader;
+        }
+
+        public static Shader GetLevelDebugShader()
+        {
+            if (leveldebugShader == null)
+                leveldebugShader = new Shader("Shaders/default.vert", "Shaders/leveldebug.frag");
+
+            if (leveldebugTexture == null)
+                leveldebugTexture = new Texture("level_debug.png");
+
+            return leveldebugShader;
         }
 
         public static Shader GetWireframeShader()
@@ -65,6 +80,20 @@ namespace Shard.Shard.Graphics
             GL.UniformMatrix4(GL.GetUniformLocation(GetDefaultShader().Handle, "model"), false, ref display.Model);
             GL.UniformMatrix4(GL.GetUniformLocation(GetDefaultShader().Handle, "view"), false, ref display.View);
             GL.UniformMatrix4(GL.GetUniformLocation(GetDefaultShader().Handle, "proj"), false, ref display.Projection);
+        }
+
+        public static void ApplyLevelDebugShader()
+        {
+            DisplayOpenGL display = Bootstrap.Display;
+
+            GetLevelDebugShader().Use();
+
+            leveldebugTexture.Use(TextureUnit.Texture0);
+            GetLevelDebugShader().SetSamplerTextureUnit("texture0", TextureUnit.Texture0);
+
+            GL.UniformMatrix4(GL.GetUniformLocation(GetLevelDebugShader().Handle, "model"), false, ref display.Model);
+            GL.UniformMatrix4(GL.GetUniformLocation(GetLevelDebugShader().Handle, "view"), false, ref display.View);
+            GL.UniformMatrix4(GL.GetUniformLocation(GetLevelDebugShader().Handle, "proj"), false, ref display.Projection);
 
         }
 
