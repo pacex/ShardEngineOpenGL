@@ -235,7 +235,7 @@ namespace Shard.Shard.Graphics
 
         private static Node FindRootNode(Node n)
         {
-            if (n.Name.Equals("Pelvis"))
+            if (n.Name.Equals("Root"))
                 return n;
             foreach (Node c in n.Children)
             {
