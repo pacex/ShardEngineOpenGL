@@ -70,6 +70,18 @@ namespace Shard.Shard.Physics
             }
         }
 
+        public Intersection RayCast(Ray ray)
+        {
+            return null;
+        }
+
+        private List<Vector3i> getIntersectingCells(Ray ray)
+        {
+            List<Vector3i> cells = new List<Vector3i>();
+
+            return cells;
+        }
+
         public bool IntersectsStatic(Collider collider)
         {
             Box3i cells = getIntersectingCells(collider.TranslatedBounds());
@@ -162,7 +174,6 @@ namespace Shard.Shard.Physics
             Vector3i nonClamped = (Vector3i)(((p - bounds.Min) / bounds.Size) * (Vector3)cellCounts);
             return new Vector3i(Math.Clamp(nonClamped.X, 0, cellCounts.X - 1), Math.Clamp(nonClamped.Y, 0, cellCounts.Y - 1), Math.Clamp(nonClamped.Z, 0, cellCounts.Z - 1));
         }
-
 
 
         public void DebugDraw()

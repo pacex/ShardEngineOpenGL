@@ -13,7 +13,7 @@ namespace Shard.Shard.Physics
     class ColliderCuboid : Collider
     {
 
-        public ColliderCuboid(Box3 bounds, uint mask = 0xFFFFFFFF)
+        public ColliderCuboid(Box3 bounds, ColliderMask mask = ColliderMask.Player)
         {
             this.bounds = bounds;
             Position = Vector3.Zero;

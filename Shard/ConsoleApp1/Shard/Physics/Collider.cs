@@ -7,13 +7,20 @@ using System.Threading.Tasks;
 
 namespace Shard.Shard.Physics
 {
+    enum ColliderMask
+    {
+        None = 0b0000,
+        Player = 0b0001,
+        Camera = 0b0010
+    }
+
     abstract class Collider
     {
         public Box3 Bounds { get => bounds; }
         protected Box3 bounds;
 
-        public uint Mask { get => mask; }
-        protected uint mask;
+        public ColliderMask Mask { get => mask; }
+        protected ColliderMask mask;
 
         public Vector3 Position;
 

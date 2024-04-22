@@ -14,7 +14,7 @@ namespace Shard.Shard.Physics
         private Vector3[] p;
         private Vector3 n;
 
-        public ColliderTriangle(Vector3 p1, Vector3 p2, Vector3 p3, uint mask = 0xFFFFFFFF) 
+        public ColliderTriangle(Vector3 p1, Vector3 p2, Vector3 p3, ColliderMask mask = ColliderMask.Player) 
         {
             p = new Vector3[] {p1, p2, p3};
             n = Vector3.Cross(p2 - p1, p3 - p1).Normalized();
@@ -37,7 +37,7 @@ namespace Shard.Shard.Physics
 
         public override bool Intersects(Collider other)
         {
-            if (TranslatedBounds().Contains(other.TranslatedBounds()) && (Mask & other.Mask) > 0)
+            if (TranslatedBounds().Contains(other.TranslatedBounds()) && (Mask & other.Mask) != 0x0)
             {
                 if (other is ColliderCuboid)
                 {
