@@ -40,7 +40,7 @@ namespace Shard.GLTest
 
             // GameObjects
             player = new Player();
-            player.Transform.Translation = new Vector3(-4.0f, 1.0f, 0.0f);
+            player.Transform.Translation = new Vector3(0.0f, 0.0f, 0.0f);
             GameObjectManager.CreateGameObject(player);
 
             Mesh colMesh = ObjLoader.LoadMeshObj("GLTest\\level2_3.obj");
@@ -52,13 +52,14 @@ namespace Shard.GLTest
             level.Transform.Translation = new Vector3(0.0f, 0.0f, 0.0f);
             GameObjectManager.CreateGameObject(level);
 
-            
+            /*
             AnimatedMesh gltfTest = ObjLoader.LoadAnimatedMesh("GLTest\\Character\\RobotC.fbx", 0);
             character = new VisualGameObject(gltfTest,
                 new Texture("GLTest\\Character\\GradientC.png", TextureWrapMode.MirroredRepeat, TextureMinFilter.NearestMipmapLinear, TextureMagFilter.Nearest, 0, 3));
             character.Transform.Translation = Vector3.UnitZ * 2.7f;
             character.Transform.Scale = Vector3.One * 0.5f;
             GameObjectManager.CreateGameObject(character);
+            */
 
         }
 
