@@ -91,10 +91,14 @@ namespace Shard.Shard.Physics
             return false;
         }
 
-        public override Vector3 Response(Collider other)
+        public override Vector3 Response(Collider other, out Vector3 normal)
         {
+
             if (!Intersects(other))
+            {
+                normal = Vector3.Zero;
                 return Vector3.Zero;
+            }
 
             if (other is ColliderCuboid)
             {
@@ -115,6 +119,7 @@ namespace Shard.Shard.Physics
                     minProjected = Math.Min(minProjected, projected);
                 }
 
+                normal = n;
                 return -n * minProjected/* + 0.01f * n*/;
             }
             else

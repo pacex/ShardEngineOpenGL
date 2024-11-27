@@ -32,7 +32,7 @@ namespace Shard.Shard.Physics
         {
             Collider c = collider.CopyOffset(v);
             
-            Vector3 response = Bootstrap.Physics.ResponseStatic(c);
+            Vector3 response = Bootstrap.Physics.ResponseStatic(c, ref v);
 
             if (Vector3.CalculateAngle(response, Vector3.UnitZ) < SlideAngle)
                 response = Vector3.UnitZ * response.Length;

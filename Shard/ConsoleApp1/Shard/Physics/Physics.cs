@@ -83,10 +83,8 @@ namespace Shard.Shard.Physics
             return false;
         }
 
-        public Vector3 ResponseStatic(Collider collider, int depth = 0)
+        public Vector3 ResponseStatic(Collider collider, ref Vector3 incident, int depth = 0)
         {
-
-            
             Box3i cells = getIntersectingCells(collider.TranslatedBounds());
             Vector3 response = Vector3.Zero;
 
@@ -98,7 +96,8 @@ namespace Shard.Shard.Physics
 
             foreach(Collider c in l)
             {
-                Vector3 r = c.Response(collider);
+                Vector3 r = c.Response(collider, out Vector3 normal);
+                incident = incident - 2.0f * Vector3.Dot(incident, normal) * normal; // Reflect incident
                 r += EPSILON * r.Normalized();
                 if (r.Length >= float.Epsilon && r.Length < MAX_RESPONSE)
                 {
@@ -113,7 +112,7 @@ namespace Shard.Shard.Physics
             if (response.Length >= float.Epsilon && depth < MAX_DEPTH)
             {
                 Collider afterResponse = collider.CopyOffset(response);
-                response += ResponseStatic(afterResponse, depth + 1);
+                response += ResponseStatic(afterResponse, ref incident, depth + 1);
             }
 
             return response;

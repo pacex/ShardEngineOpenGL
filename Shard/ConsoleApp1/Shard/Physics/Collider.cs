@@ -23,7 +23,7 @@ namespace Shard.Shard.Physics
         }
         public abstract Collider CopyOffset(Vector3 offset);
         public abstract bool Intersects(Collider other);
-        public abstract Vector3 Response(Collider other);
+        public abstract Vector3 Response(Collider other, out Vector3 normal);
         public abstract void Draw(Color4 col);
     }
 }
