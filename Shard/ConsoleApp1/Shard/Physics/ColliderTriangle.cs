@@ -119,7 +119,7 @@ namespace Shard.Shard.Physics
                     minProjected = Math.Min(minProjected, projected);
                 }
 
-                normal = n;
+                normal = -n;
                 return -n * minProjected/* + 0.01f * n*/;
             }
             else

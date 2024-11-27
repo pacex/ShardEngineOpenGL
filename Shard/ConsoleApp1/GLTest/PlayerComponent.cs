@@ -3,6 +3,7 @@ using OpenTK.Mathematics;
 using OpenTK.Windowing.GraphicsLibraryFramework;
 using Shard.Shard.GameObjects;
 using Shard.Shard.Graphics;
+using Shard.Shard.Physics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -40,6 +41,16 @@ namespace Shard.GLTest
 
         public override void Update()
         {
+
+            // Spawn Bouncy Balls
+            if (DisplayOpenGL.GetInstance().Window.IsMouseButtonPressed(MouseButton.Button1))
+            {
+                Ball ball = new Ball();
+                ball.Transform.Translation = camera.Transform.Translation;
+                ball.GetComponent<RigidBody>().AddForce(camera.Transform.Forward * 0.5f);
+                GameObjectManager.CreateGameObject(ball);
+            }
+
             // Interpolate camera position
             Vector3 goal = Host.Transform.Translation + Vector3.UnitZ * height;
             Vector3 current = camera.Transform.Translation;

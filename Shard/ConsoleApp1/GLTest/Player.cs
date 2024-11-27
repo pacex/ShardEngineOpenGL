@@ -15,7 +15,6 @@ namespace Shard.GLTest
 {
     class Player : GameObject
     {
-
         public Player() : base()
         {
             AddComponent(new PlayerComponent(this));

@@ -1,4 +1,5 @@
-﻿using OpenTK.Mathematics;
+﻿using OpenTK.Graphics.ES11;
+using OpenTK.Mathematics;
 using Shard.Shard.Graphics;
 using System;
 using System.Collections.Generic;
@@ -97,7 +98,8 @@ namespace Shard.Shard.Physics
             foreach(Collider c in l)
             {
                 Vector3 r = c.Response(collider, out Vector3 normal);
-                incident = incident - 2.0f * Vector3.Dot(incident, normal) * normal; // Reflect incident
+                if (Vector3.Dot(incident, normal) > 0.0f)
+                    incident = incident - 2.0f * Vector3.Dot(incident, normal) * normal; // Reflect incident
                 r += EPSILON * r.Normalized();
                 if (r.Length >= float.Epsilon && r.Length < MAX_RESPONSE)
                 {

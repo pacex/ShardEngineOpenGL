@@ -87,7 +87,8 @@ namespace Shard.Shard.Graphics
                 }
                 else
                 {
-                    Shader.ApplyLevelDebugShader();
+                    //Shader.ApplyLevelDebugShader();
+                    Shader.ApplyDefaultShader(Texture);
                 }
                     
                 GL.BindVertexArray(vertexArrayObject);

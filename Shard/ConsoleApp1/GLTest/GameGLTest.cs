@@ -19,6 +19,7 @@ namespace Shard.GLTest
         private VisualGameObject level;
         private VisualGameObject character;
         private Player player;
+        private Ball ball;
         private Wall wall;
         private int killCount = 0;
         private int amountToSpawn = 1;

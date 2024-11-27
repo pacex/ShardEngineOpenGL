@@ -69,22 +69,22 @@ namespace Shard.Shard.Physics
                 switch (minIndex)
                 {
                     case 0:
-                        normal = Vector3.UnitX;
+                        normal = -Vector3.UnitX;
                         return -Vector3.UnitX * minElement;
                     case 1:
-                        normal = -Vector3.UnitX;
+                        normal = Vector3.UnitX;
                         return Vector3.UnitX * minElement;
                     case 2:
-                        normal = Vector3.UnitY;
+                        normal = -Vector3.UnitY;
                         return -Vector3.UnitY * minElement;
                     case 3:
-                        normal = -Vector3.UnitY;
+                        normal = Vector3.UnitY;
                         return Vector3.UnitY * minElement;
                     case 4:
-                        normal = Vector3.UnitZ;
+                        normal = -Vector3.UnitZ;
                         return -Vector3.UnitZ * minElement;
                     case 5:
-                        normal = -Vector3.UnitZ;
+                        normal = Vector3.UnitZ;
                         return Vector3.UnitZ * minElement;
                 }
 

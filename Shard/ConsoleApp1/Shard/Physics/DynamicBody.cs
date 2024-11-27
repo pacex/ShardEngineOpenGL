@@ -28,11 +28,12 @@ namespace Shard.Shard.Physics
          * If target position is obstructed, resolve ubstruction.
          * Returns true if collision needs to be resolved.
          * */
-        public bool MoveAndSlide(Vector3 v)
+        public bool MoveAndSlide(Vector3 v, out Vector3 reflected)
         {
             Collider c = collider.CopyOffset(v);
-            
-            Vector3 response = Bootstrap.Physics.ResponseStatic(c, ref v);
+
+            reflected = v;
+            Vector3 response = Bootstrap.Physics.ResponseStatic(c, ref reflected);
 
             if (Vector3.CalculateAngle(response, Vector3.UnitZ) < SlideAngle)
                 response = Vector3.UnitZ * response.Length;
@@ -43,6 +44,12 @@ namespace Shard.Shard.Physics
             collider.Position += v + response;
             Host.Transform.Translation = collider.Position;
             return response.LengthSquared > float.Epsilon;
+        }
+
+        public bool MoveAndSlide(Vector3 v)
+        {
+            Vector3 dc;
+            return MoveAndSlide(v, out dc);
         }
 
         public override void Initialize()
