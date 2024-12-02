@@ -226,11 +226,11 @@ namespace Shard
                     // Execute display predraw
                     displayEngine.PreDraw();
 
-                    // Let Game draw to the screen
-                    runningGame.Draw();
-
                     // Let GameObjects draw to the screen
                     GameObjectManager.GetInstance().Draw();
+
+                    // Let Game draw to the screen
+                    runningGame.Draw();
 
                     // Physics Debug Draw
                     if (physDebug)

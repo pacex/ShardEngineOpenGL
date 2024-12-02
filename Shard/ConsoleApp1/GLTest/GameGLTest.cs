@@ -10,6 +10,7 @@ using OpenTK.Windowing.Common;
 using Shard.Shard.Graphics;
 using Shard.Shard.GameObjects;
 using Shard.Shard.Physics;
+using Shard.Shard.Curves;
 
 namespace Shard.GLTest
 {
@@ -25,6 +26,9 @@ namespace Shard.GLTest
         private int amountToSpawn = 1;
         private float maxSpeed = 0.1125f;
         private int requriedKills = 4;
+
+
+        private HermiteCurve curve;
 
 
         Random rnd = new Random();
@@ -62,6 +66,8 @@ namespace Shard.GLTest
             GameObjectManager.CreateGameObject(character);
             */
 
+            curve = new HermiteCurve(new Vector3(0.0f, 0.0f, 1.0f), Vector3.UnitX, new Vector3(1.0f, 0.0f, 2.0f), Vector3.UnitZ);
+
         }
 
         public override void Update()
@@ -76,7 +82,7 @@ namespace Shard.GLTest
 
         public override void Draw()
         {
-
+            curve.Draw(Color4.Green);
         }
 
         public override void GameEnd()
