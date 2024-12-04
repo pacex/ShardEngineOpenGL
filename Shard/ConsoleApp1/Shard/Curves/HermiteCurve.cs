@@ -19,12 +19,80 @@ namespace Shard.Shard.Curves
             V0 = v0;
             P1 = p1;
             V1 = v1;
+            computeArcDistanceLookup();
+        }
+
+        public HermiteCurve(HermiteCurve before, Vector3 p1, Vector3 v1)
+        {
+            P0 = before.P1;
+            V0 = before.V1;
+            P1 = p1;
+            V1 = v1;
+            computeArcDistanceLookup();
+        }
+
+        public HermiteCurve(Vector3 p0, Vector3 v0, HermiteCurve after)
+        {
+            P0 = p0;
+            V0 = v0;
+            P1 = after.P0;
+            V1 = after.V0;
+            computeArcDistanceLookup();
+        }
+
+        public HermiteCurve(HermiteCurve before, HermiteCurve after)
+        {
+            P0 = before.P1;
+            V0 = before.V1;
+            P1 = after.P0;
+            V1 = after.V0;
+            computeArcDistanceLookup();
         }
 
         public Vector3 P0 { get; private set; }
         public Vector3 V0 { get; private set; }
         public Vector3 P1 { get; private set; }
         public Vector3 V1 { get; private set; }
+
+        public float ArcLength { get; private set; }
+
+        private float[] tLookup;
+
+        private void computeArcDistanceLookup(uint n = 64, uint m = 64)
+        {
+            float[] arcDistanceLookup = new float[m];
+            Vector3 pPrev = P0;
+            uint j;
+            for (j = 1; j <= m; j++)
+            {
+                Vector3 p = GetPosition((float)j / (float)m);
+                float step = (p - pPrev).Length;
+                if (j > 1)
+                    arcDistanceLookup[j - 1] = arcDistanceLookup[j - 2] + step;
+                else
+                    arcDistanceLookup[j - 1] = step;
+                pPrev = p;
+            }
+            ArcLength = arcDistanceLookup[m - 1];
+
+            tLookup = new float[n];
+            j = 1;
+            uint i = 1;
+            while (j <= m)
+            {
+                float currentArcDistance = (i * ArcLength) / (float)n;
+                while (arcDistanceLookup[j-1] >= currentArcDistance)
+                {
+                    float arcDPrev = j > 1 ? arcDistanceLookup[j - 2] : 0;
+                    float alpha = (currentArcDistance - arcDPrev) / (arcDistanceLookup[j - 1] - arcDPrev);
+                    tLookup[i - 1] = alpha * ((float)j / (float)m) + (1.0f - alpha) * ((float)(j-1) / (float)m);
+                    i++;
+                    currentArcDistance = (i * ArcLength) / (float)n;
+                }
+
+                j++;
+            }
+        }
 
 
         public Vector3 GetPosition(float t)

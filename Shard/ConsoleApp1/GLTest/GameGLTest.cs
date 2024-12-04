@@ -28,7 +28,7 @@ namespace Shard.GLTest
         private int requriedKills = 4;
 
 
-        private HermiteCurve curve;
+        private HermiteCurve curve, curve2, curve3;
 
 
         Random rnd = new Random();
@@ -66,7 +66,9 @@ namespace Shard.GLTest
             GameObjectManager.CreateGameObject(character);
             */
 
-            curve = new HermiteCurve(new Vector3(0.0f, 0.0f, 1.0f), Vector3.UnitX, new Vector3(1.0f, 0.0f, 2.0f), Vector3.UnitZ);
+            curve = new HermiteCurve(new Vector3(0.0f, 0.0f, 1.0f), 2 * Vector3.UnitX, new Vector3(1.0f, 0.0f, 2.0f), 2 * Vector3.UnitZ);
+            curve2 = new HermiteCurve(curve, new Vector3(1.0f, 1.0f, 3.0f), 2 * Vector3.UnitY);
+            curve3 = new HermiteCurve(curve2, curve);
 
         }
 
@@ -83,6 +85,8 @@ namespace Shard.GLTest
         public override void Draw()
         {
             curve.Draw(Color4.Green);
+            curve2.Draw(Color4.Red);
+            curve3.Draw(Color4.Yellow);
         }
 
         public override void GameEnd()
